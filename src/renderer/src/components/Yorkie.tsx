@@ -1,10 +1,12 @@
 import type { SessionStatus } from '../types'
 import workingSvg from '../assets/yorkie/working.svg'
 import waitingSvg from '../assets/yorkie/waiting.svg'
+import doneSvg from '../assets/yorkie/done.svg'
 
 const SVG_MAP: Partial<Record<SessionStatus, string>> = {
   working: workingSvg,
-  waiting_permission: waitingSvg
+  waiting_permission: waitingSvg,
+  done: doneSvg
 }
 
 const PLACEHOLDER_COLORS: Record<SessionStatus, string> = {
