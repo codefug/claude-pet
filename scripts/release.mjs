@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 
 const bump = process.argv[2]
 if (!['patch', 'minor', 'major'].includes(bump)) {
-  console.error('Usage: pnpm run release <patch|minor|major>')
+  console.error('Usage: npm run release <patch|minor|major>')
   process.exit(1)
 }
 
@@ -19,10 +19,10 @@ const next =
 const run = (cmd) => execSync(cmd, { stdio: 'inherit' })
 
 console.log('\n→ typecheck')
-run('pnpm run typecheck')
+run('npm run typecheck')
 
 console.log('\n→ build')
-run('pnpm run build')
+run('npm run build')
 
 console.log(`\n→ bump ${pkg.version} → ${next}`)
 pkg.version = next
