@@ -1,22 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SessionCard from './components/SessionCard'
+import { sortSessions } from './utils/sortSessions'
 import type { Session } from './types'
+import type { SessionData } from '../../main/sessions/mockSource'
 
 function App(): React.JSX.Element {
   const [sessions, setSessions] = useState<Session[]>([])
 
-  useEffect(() => {
-    window.claudePet.getSessions().then((data) => {
-      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) })))
-    })
-
-    const unsubscribe = window.claudePet.onSessionsUpdate((data) => {
-      console.log('[renderer] sessions-update received:', data.length)
-      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) })))
-    })
-
-    return unsubscribe
+  const update = useCallback((data: SessionData[]): void => {
+    setSessions(sortSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) }))))
   }, [])
+
+  useEffect(() => {
+    window.claudePet.getSessions().then(update)
+    return window.claudePet.onSessionsUpdate(update)
+  }, [update])
 
   return (
     <div
@@ -53,9 +51,20 @@ function App(): React.JSX.Element {
         Claude Sessions
       </div>
       <div style={{ flex: 1, overflowY: 'auto', WebkitAppRegion: 'no-drag' }}>
-        {sessions.map((s) => (
-          <SessionCard key={s.id} session={s} />
-        ))}
+        {sessions.length === 0 ? (
+          <div
+            style={{
+              color: 'rgba(255,255,255,0.25)',
+              fontSize: '12px',
+              textAlign: 'center',
+              marginTop: '40px'
+            }}
+          >
+            아직 Claude Code 세션이 없어요
+          </div>
+        ) : (
+          sessions.map((s) => <SessionCard key={s.id} session={s} />)
+        )}
       </div>
     </div>
   )
