@@ -28,7 +28,7 @@ console.log(`\n→ bump ${pkg.version} → ${next}`)
 pkg.version = next
 writeFileSync('package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 
-run('git add package.json')
+run('git add -A')
 run(`git commit -m "${next}"`)
 run(`git tag v${next}`)
 run(`git push origin main v${next}`)
