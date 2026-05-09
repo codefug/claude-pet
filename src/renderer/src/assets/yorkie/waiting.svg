@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- 전체 15도 기울임 -->
+  <g transform="rotate(12, 100, 110)">
+
+  <!-- 몸통 베이스 -->
+  <ellipse cx="100" cy="132" rx="44" ry="33" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="134" rx="37" ry="27" fill="#8B6914"/>
+  <ellipse cx="100" cy="136" rx="29" ry="21" fill="#B8860B"/>
+
+  <!-- 몸통 털 결 -->
+  <path d="M70 117 Q80 110 90 117" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M80 114 Q90 107 100 114" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M90 112 Q100 105 110 112" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M100 113 Q110 106 120 113" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M65 127 Q75 122 85 127" stroke="#9A7520" stroke-width="1" fill="none"/>
+  <path d="M115 127 Q125 122 135 127" stroke="#9A7520" stroke-width="1" fill="none"/>
+
+  <!-- 가슴팍 -->
+  <ellipse cx="100" cy="147" rx="17" ry="13" fill="#D4A820"/>
+  <path d="M89 142 Q95 137 101 142" stroke="#E8C040" stroke-width="1" fill="none"/>
+  <path d="M92 146 Q98 141 104 146" stroke="#E8C040" stroke-width="1" fill="none"/>
+
+  <!-- 뒷다리 -->
+  <ellipse cx="79" cy="159" rx="11" ry="7" fill="#3D2B1A"/>
+  <ellipse cx="121" cy="159" rx="11" ry="7" fill="#3D2B1A"/>
+  <ellipse cx="79" cy="161" rx="8" ry="5" fill="#5C3D1E"/>
+  <ellipse cx="121" cy="161" rx="8" ry="5" fill="#5C3D1E"/>
+
+  <!-- 앞발 (바닥에 얌전히) -->
+  <path d="M84 148 Q80 155 78 162" stroke="#3D2B1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M84 148 Q80 155 78 162" stroke="#5C3D1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="77" cy="163" rx="7" ry="4" fill="#4A3018"/>
+  <path d="M73 161 Q75 158 77 161" stroke="#2A1A08" stroke-width="1" fill="none"/>
+  <path d="M76 160 Q78 157 80 160" stroke="#2A1A08" stroke-width="1" fill="none"/>
+
+  <path d="M116 148 Q120 155 122 162" stroke="#3D2B1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M116 148 Q120 155 122 162" stroke="#5C3D1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="123" cy="163" rx="7" ry="4" fill="#4A3018"/>
+  <path d="M119 161 Q121 158 123 161" stroke="#2A1A08" stroke-width="1" fill="none"/>
+  <path d="M122 160 Q124 157 126 160" stroke="#2A1A08" stroke-width="1" fill="none"/>
+
+  <!-- 목 -->
+  <ellipse cx="100" cy="102" rx="19" ry="15" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="102" rx="14" ry="11" fill="#5C3D1E"/>
+
+  <!-- 머리 베이스 -->
+  <ellipse cx="100" cy="80" rx="30" ry="27" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="74" rx="26" ry="21" fill="#8B6914"/>
+  <ellipse cx="100" cy="76" rx="22" ry="17" fill="#B8860B"/>
+
+  <!-- 머리 털 결 -->
+  <path d="M78 70 Q88 64 98 70" stroke="#C8960C" stroke-width="1" fill="none"/>
+  <path d="M82 65 Q92 59 102 65" stroke="#D4A820" stroke-width="1" fill="none"/>
+  <path d="M88 61 Q98 56 108 61" stroke="#C8960C" stroke-width="1" fill="none"/>
+  <path d="M102 64 Q112 59 120 65" stroke="#C8960C" stroke-width="1" fill="none"/>
+
+  <!-- 얼굴 아랫부분 -->
+  <ellipse cx="100" cy="86" rx="20" ry="16" fill="#C8960C"/>
+  <ellipse cx="100" cy="88" rx="16" ry="13" fill="#D4A820"/>
+
+  <!-- 왼쪽 귀 (살짝 들림) -->
+  <path d="M72 74 Q58 46 66 34 Q74 48 80 70 Z" fill="#2A1A08"/>
+  <path d="M73 72 Q61 48 68 38 Q75 51 79 69 Z" fill="#3D2B1A"/>
+  <path d="M67 64 Q63 53 66 44" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M70 66 Q67 55 69 46" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M73 67 Q71 57 72 48" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+
+  <!-- 오른쪽 귀 (더 많이 들림 — 갸우뚱) -->
+  <path d="M128 70 Q142 40 136 28 Q126 44 120 67 Z" fill="#2A1A08"/>
+  <path d="M127 68 Q140 42 134 31 Q125 46 121 66 Z" fill="#3D2B1A"/>
+  <path d="M133 60 Q137 50 135 41" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M130 62 Q133 52 132 43" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M127 63 Q129 53 128 45" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+
+  <!-- 눈썹 (호기심) -->
+  <path d="M84 73 Q90 70 96 73" stroke="#1A0E00" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M104 71 Q110 68 116 71" stroke="#1A0E00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- 눈 (크고 또렷 — 호기심) -->
+  <!-- 왼쪽 눈 -->
+  <ellipse cx="88" cy="80" rx="7.5" ry="7" fill="#1A0E00"/>
+  <ellipse cx="88" cy="80" rx="6" ry="5.5" fill="#3D1A00"/>
+  <ellipse cx="88" cy="80" rx="4.5" ry="4" fill="#1A0800"/>
+  <ellipse cx="88" cy="80" rx="3" ry="3" fill="#5C2800"/>
+  <ellipse cx="88" cy="80" rx="2" ry="2" fill="#000"/>
+  <circle cx="90.5" cy="77.5" r="1.5" fill="white" opacity="0.95"/>
+  <circle cx="85.5" cy="82" r="0.7" fill="white" opacity="0.5"/>
+
+  <!-- 오른쪽 눈 (약간 더 크게) -->
+  <ellipse cx="113" cy="79" rx="8" ry="7.5" fill="#1A0E00"/>
+  <ellipse cx="113" cy="79" rx="6.5" ry="6" fill="#3D1A00"/>
+  <ellipse cx="113" cy="79" rx="5" ry="4.5" fill="#1A0800"/>
+  <ellipse cx="113" cy="79" rx="3.5" ry="3" fill="#5C2800"/>
+  <ellipse cx="113" cy="79" rx="2" ry="2" fill="#000"/>
+  <circle cx="115.5" cy="76.5" r="1.6" fill="white" opacity="0.95"/>
+  <circle cx="110.5" cy="81.5" r="0.7" fill="white" opacity="0.5"/>
+
+  <!-- 코 -->
+  <ellipse cx="100" cy="90" rx="5" ry="3.5" fill="#1A0E00"/>
+  <ellipse cx="100" cy="89.5" rx="4" ry="2.5" fill="#2D1A0A"/>
+  <circle cx="98.5" cy="88" r="0.8" fill="white" opacity="0.6"/>
+
+  <!-- 입 (약간 벌어진 호기심) -->
+  <path d="M95 95 Q100 98 105 95" stroke="#1A0E00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- 머리 상단 긴 털 -->
+  <path d="M85 60 Q88 50 90 44 Q92 52 94 60" fill="#8B6914" opacity="0.9"/>
+  <path d="M90 58 Q93 46 95 40 Q97 50 98 58" fill="#B8860B" opacity="0.9"/>
+  <path d="M95 57 Q98 45 100 39 Q102 49 103 57" fill="#C8960C" opacity="0.9"/>
+  <path d="M100 58 Q103 46 105 40 Q107 50 108 58" fill="#B8860B" opacity="0.9"/>
+  <path d="M105 60 Q108 50 110 44 Q112 52 114 60" fill="#8B6914" opacity="0.9"/>
+
+  </g>
+
+  <!-- 물음표 (기울임 밖에 배치) -->
+  <text x="148" y="58" font-size="28" font-weight="bold" fill="#F5813A" opacity="0.95" font-family="serif">?</text>
+  <circle cx="156" cy="68" r="3" fill="#F5813A" opacity="0.95"/>
+</svg>
