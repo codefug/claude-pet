@@ -1,21 +1,13 @@
 import { readdirSync, statSync } from 'fs'
-import { join } from 'path'
+import { join, basename } from 'path'
 import { homedir } from 'os'
 import type { SessionData } from './mockSource'
 import { parseJsonl } from './parseJsonl'
 import { classifyStatus } from './classify'
 import { loadSettings } from '../settings'
+import { decodeProjectPath } from './formatProject'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
-
-function decodeProjectDir(dirName: string): string {
-  return dirName.replace(/-/g, '/').replace(/^\//, '')
-}
-
-function projectName(decoded: string): string {
-  const parts = decoded.split('/')
-  return parts[parts.length - 1] || decoded
-}
 
 export function scanProjects(): SessionData[] {
   let dirs: string[]
@@ -44,8 +36,7 @@ export function scanProjects(): SessionData[] {
       continue
     }
 
-    const decoded = decodeProjectDir(dir)
-    const name = projectName(decoded)
+    const projectPath = decodeProjectPath(dir)
 
     for (const file of files) {
       const filePath = join(dirPath, file)
@@ -59,21 +50,25 @@ export function scanProjects(): SessionData[] {
       if (mtime < cutoff) continue
 
       const parsed = parseJsonl(filePath)
+      const projectName = parsed.cwd ? basename(parsed.cwd) : dir
       const lastMessageAt = parsed.lastMessageAt ?? new Date(mtime).toISOString()
 
-      // 실제 마지막 메시지 시각 기준으로 5시간 필터 재적용
       if (new Date(lastMessageAt).getTime() < cutoff) continue
 
-      const status = classifyStatus(parsed)
-      const summary = parsed.aiTitle ?? parsed.lastPrompt ?? null
+      const status = classifyStatus(parsed, projectName)
+      const pendingTool =
+        status === 'waiting_permission' && parsed.lastAssistant?.lastToolName
+          ? { name: parsed.lastAssistant.lastToolName, input: parsed.lastAssistant.lastToolInput ?? {} }
+          : null
 
       sessions.push({
         id: `${dir}/${file}`,
-        projectName: name,
-        projectPath: decoded,
+        projectName,
+        projectPath,
         status,
         lastMessageAt,
-        summary
+        summary: parsed.aiTitle ?? parsed.lastPrompt ?? null,
+        pendingTool
       })
     }
   }

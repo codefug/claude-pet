@@ -35,8 +35,6 @@ export function readNewLines(filePath: string): string[] {
   }
 
   offsets.set(filePath, size)
-  console.log(`[tailReader] read ${length} bytes from offset ${start} — ${filePath.split('/').pop()}`)
-
   return buf.toString('utf-8').split('\n').filter(Boolean)
 }
 

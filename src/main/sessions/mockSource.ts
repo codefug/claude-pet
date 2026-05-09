@@ -1,6 +1,9 @@
-import { BrowserWindow } from 'electron'
-
 export type SessionStatus = 'working' | 'waiting_permission' | 'done' | 'aborted'
+
+export interface PendingTool {
+  name: string
+  input: Record<string, unknown>
+}
 
 export interface SessionData {
   id: string
@@ -9,10 +12,5 @@ export interface SessionData {
   status: SessionStatus
   lastMessageAt: string
   summary: string | null
-}
-
-export function startMockSource(win: BrowserWindow, getSessions: () => SessionData[]): void {
-  setInterval(() => {
-    win.webContents.send('sessions-update', getSessions())
-  }, 5000)
+  pendingTool: PendingTool | null
 }

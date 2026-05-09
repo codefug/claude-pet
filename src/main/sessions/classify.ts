@@ -1,13 +1,12 @@
 import type { ParsedSession } from './parseJsonl'
 import type { SessionStatus } from './mockSource'
-import { isToolAllowed } from './permissionChecker'
+import { isToolAllowed, isToolIgnoredForProject } from './permissionChecker'
 
-const ABORTED_THRESHOLD_MS = 5 * 60 * 1000 // 5분
+const ABORTED_THRESHOLD_MS = 5 * 60 * 1000
 
-export function classifyStatus(parsed: ParsedSession): SessionStatus {
+export function classifyStatus(parsed: ParsedSession, projectName: string): SessionStatus {
   const { lastAssistant, interrupted, pendingToolResult, awaitingAssistant } = parsed
 
-  // tool_result 없이 interrupted = 권한 거절
   if (interrupted && pendingToolResult) return 'waiting_permission'
   if (interrupted) return 'aborted'
   if (awaitingAssistant) return 'working'
@@ -19,16 +18,11 @@ export function classifyStatus(parsed: ParsedSession): SessionStatus {
   if (stop_reason === 'tool_use' || stop_reason === 'max_tokens') {
     if (elapsed > ABORTED_THRESHOLD_MS) return 'aborted'
     if (lastAssistant.lastToolName === 'AskUserQuestion') return 'waiting_permission'
-
-    // settings.json allow 목록에 없는 tool이 pending → permission 대기
     if (pendingToolResult && lastAssistant.lastToolName) {
-      const allowed = isToolAllowed({
-        name: lastAssistant.lastToolName,
-        input: lastAssistant.lastToolInput ?? {}
-      })
-      if (!allowed) return 'waiting_permission'
+      const tool = { name: lastAssistant.lastToolName, input: lastAssistant.lastToolInput ?? {} }
+      if (isToolAllowed(tool) || isToolIgnoredForProject(tool, projectName)) return 'working'
+      return 'waiting_permission'
     }
-
     return 'working'
   }
 

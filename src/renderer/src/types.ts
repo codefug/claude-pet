@@ -1,5 +1,10 @@
 export type SessionStatus = 'working' | 'waiting_permission' | 'done' | 'aborted'
 
+export interface PendingTool {
+  name: string
+  input: Record<string, unknown>
+}
+
 export interface Session {
   id: string
   projectName: string
@@ -7,4 +12,5 @@ export interface Session {
   status: SessionStatus
   lastMessageAt: Date
   summary: string | null
+  pendingTool: PendingTool | null
 }

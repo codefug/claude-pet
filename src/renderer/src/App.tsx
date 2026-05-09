@@ -16,7 +16,11 @@ function App(): React.JSX.Element {
   })
 
   const update = useCallback((data: SessionData[]): void => {
-    setSessions(sortSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) }))))
+    setSessions(
+      sortSessions(
+        data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt), pendingTool: s.pendingTool ?? null }))
+      )
+    )
   }, [])
 
   useEffect(() => {
@@ -28,10 +32,11 @@ function App(): React.JSX.Element {
     window.claudePet.getSettings().then((s) => setCharacterImages(s.characterImages))
   }, [])
 
-  const handleIgnore = useCallback((id: string): void => {
-    window.claudePet.ignoreSession(id)
+  const handleIgnore = useCallback((session: Session): void => {
+    if (!session.pendingTool) return
+    window.claudePet.ignoreSession(session.projectName, session.pendingTool.name, session.pendingTool.input)
     setSessions((prev) =>
-      sortSessions(prev.map((s) => (s.id === id ? { ...s, status: 'working' } : s)))
+      sortSessions(prev.map((s) => (s.id === session.id ? { ...s, status: 'working' } : s)))
     )
   }, [])
 

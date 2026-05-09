@@ -1,14 +1,33 @@
 import { join, extname } from 'path'
 import { readFileSync } from 'fs'
 import { app, shell, BrowserWindow, ipcMain, screen, dialog } from 'electron'
-
-let isQuitting = false
 import { scanProjects } from './sessions/scanProjects'
 import { startWatcher } from './sessions/watcher'
 import { createTray } from './tray'
 import { loadSettings, saveSettings } from './settings'
-import type { AppSettings } from './settings'
-import { ignoredSessions } from './ignoredSessions'
+import type { AppSettings, IgnoredToolRule } from './settings'
+import { invalidateAllowCache, toolToPattern } from './sessions/permissionChecker'
+
+let mainWin: BrowserWindow | null = null
+let isQuitting = false
+
+function toDataUrl(filePath: string | null): string | null {
+  if (!filePath) return null
+  try {
+    const ext = extname(filePath).slice(1).toLowerCase()
+    const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext === 'jpg' ? 'jpeg' : ext}`
+    const data = readFileSync(filePath).toString('base64')
+    return `data:${mime};base64,${data}`
+  } catch {
+    return null
+  }
+}
+
+function pushSessions(): void {
+  if (mainWin && !mainWin.isDestroyed()) {
+    mainWin.webContents.send('sessions-update', scanProjects())
+  }
+}
 
 function createWindow(): void {
   const isDev = process.env.NODE_ENV === 'development'
@@ -43,7 +62,6 @@ function createWindow(): void {
     createTray(mainWindow)
   })
 
-  // 창 닫기 버튼은 hide로 처리 (트레이에서 quit)
   mainWindow.on('close', (e) => {
     if (!isQuitting) {
       e.preventDefault()
@@ -65,43 +83,28 @@ function createWindow(): void {
   startWatcher(mainWindow)
 }
 
-function buildSessions() {
-  return scanProjects().map((s) => ({
-    ...s,
-    status: ignoredSessions.has(s.id) ? ('working' as const) : s.status
-  }))
-}
-
-let mainWin: BrowserWindow | null = null
-
-function pushSessions(): void {
-  if (mainWin && !mainWin.isDestroyed()) {
-    mainWin.webContents.send('sessions-update', buildSessions())
-  }
-}
-
 app.whenReady().then(() => {
+  ipcMain.handle('get-sessions', () => scanProjects())
 
-  ipcMain.handle('get-sessions', () => buildSessions())
-
-  ipcMain.handle('ignore-session', (_e, id: string) => {
-    ignoredSessions.add(id)
-  })
+  ipcMain.handle(
+    'ignore-session',
+    (_e, projectName: string, toolName: string, toolInput: Record<string, unknown>) => {
+      const pattern = toolToPattern(toolName, toolInput)
+      const settings = loadSettings()
+      const exists = settings.ignoredToolRules.some(
+        (r) => r.projectName === projectName && r.pattern === pattern
+      )
+      if (!exists) {
+        settings.ignoredToolRules = [...settings.ignoredToolRules, { projectName, pattern }]
+        saveSettings(settings)
+        invalidateAllowCache()
+        pushSessions()
+      }
+    }
+  )
 
   ipcMain.handle('get-settings', () => {
     const settings = loadSettings()
-    // 경로를 base64 data URL로 변환해서 반환
-    const toDataUrl = (filePath: string | null): string | null => {
-      if (!filePath) return null
-      try {
-        const ext = extname(filePath).slice(1).toLowerCase()
-        const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext === 'jpg' ? 'jpeg' : ext}`
-        const data = readFileSync(filePath).toString('base64')
-        return `data:${mime};base64,${data}`
-      } catch {
-        return null
-      }
-    }
     return {
       ...settings,
       characterImages: {
@@ -123,17 +126,22 @@ app.whenReady().then(() => {
     const settings = loadSettings()
     settings.characterImages[status as keyof AppSettings['characterImages']] = filePath
     saveSettings(settings)
-    const ext = extname(filePath).slice(1).toLowerCase()
-    const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext === 'jpg' ? 'jpeg' : ext}`
-    const data = readFileSync(filePath).toString('base64')
-    return `data:${mime};base64,${data}`
+    return toDataUrl(filePath)
   })
 
   ipcMain.handle('set-session-window', (_e, hours: number) => {
     const settings = loadSettings()
     settings.sessionWindowHours = hours
     saveSettings(settings)
-    pushSessions()  // 즉시 반영
+    pushSessions()
+  })
+
+  ipcMain.handle('set-ignored-tool-rules', (_e, rules: IgnoredToolRule[]) => {
+    const settings = loadSettings()
+    settings.ignoredToolRules = rules
+    saveSettings(settings)
+    invalidateAllowCache()
+    pushSessions()
   })
 
   ipcMain.handle('clear-character-image', (_e, status: string) => {
@@ -152,7 +160,7 @@ app.whenReady().then(() => {
 })
 
 app.on('before-quit', () => {
-  isQuitting = true // eslint-disable-line
+  isQuitting = true
 })
 
 app.on('window-all-closed', () => {

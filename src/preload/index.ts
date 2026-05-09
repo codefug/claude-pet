@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { SessionData } from '../main/sessions/mockSource'
-import type { AppSettings } from '../main/settings'
+import type { AppSettings, IgnoredToolRule } from '../main/settings'
 
 const claudePet = {
   getSessions: (): Promise<SessionData[]> => ipcRenderer.invoke('get-sessions'),
@@ -9,22 +9,23 @@ const claudePet = {
     ipcRenderer.on('sessions-update', handler)
     return () => ipcRenderer.off('sessions-update', handler)
   },
-  ignoreSession: (id: string): Promise<void> => ipcRenderer.invoke('ignore-session', id),
+  ignoreSession: (
+    projectName: string,
+    toolName: string,
+    toolInput: Record<string, unknown>
+  ): Promise<void> => ipcRenderer.invoke('ignore-session', projectName, toolName, toolInput),
   getSettings: (): Promise<AppSettings> => ipcRenderer.invoke('get-settings'),
   setCharacterImage: (status: string): Promise<string | null> =>
     ipcRenderer.invoke('set-character-image', status),
   clearCharacterImage: (status: string): Promise<void> =>
     ipcRenderer.invoke('clear-character-image', status),
-  setSessionWindow: (hours: number): Promise<void> =>
-    ipcRenderer.invoke('set-session-window', hours)
+  setSessionWindow: (hours: number): Promise<void> => ipcRenderer.invoke('set-session-window', hours),
+  setIgnoredToolRules: (rules: IgnoredToolRule[]): Promise<void> =>
+    ipcRenderer.invoke('set-ignored-tool-rules', rules)
 }
 
 if (process.contextIsolated) {
-  try {
-    contextBridge.exposeInMainWorld('claudePet', claudePet)
-  } catch (error) {
-    console.error(error)
-  }
+  contextBridge.exposeInMainWorld('claudePet', claudePet)
 } else {
   ;(window as any).claudePet = claudePet
 }

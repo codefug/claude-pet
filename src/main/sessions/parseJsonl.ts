@@ -12,6 +12,7 @@ export interface ParsedSession {
   lastMessageAt: string | null
   aiTitle: string | null
   lastPrompt: string | null
+  cwd: string | null
   interrupted: boolean
   pendingToolResult: boolean
   awaitingAssistant: boolean
@@ -20,7 +21,7 @@ export interface ParsedSession {
 const cache = new Map<string, ParsedSession>()
 
 function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
-  let { lastAssistant, aiTitle, lastPrompt, interrupted, pendingToolResult, awaitingAssistant } = session
+  let { lastAssistant, aiTitle, lastPrompt, cwd, interrupted, pendingToolResult, awaitingAssistant } = session
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -48,6 +49,8 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     }
 
     if (entry.type === 'user') {
+      if (!cwd && typeof entry.cwd === 'string') cwd = entry.cwd
+
       const msg = entry.message as Record<string, unknown> | undefined
       const content = msg?.content
       if (Array.isArray(content)) {
@@ -82,6 +85,7 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     lastMessageAt: lastAssistant?.timestamp ?? null,
     aiTitle,
     lastPrompt,
+    cwd,
     interrupted,
     pendingToolResult,
     awaitingAssistant
@@ -93,6 +97,7 @@ const EMPTY: ParsedSession = {
   lastMessageAt: null,
   aiTitle: null,
   lastPrompt: null,
+  cwd: null,
   interrupted: false,
   pendingToolResult: false,
   awaitingAssistant: false

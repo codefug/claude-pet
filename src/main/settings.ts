@@ -2,8 +2,14 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { app } from 'electron'
 
+export interface IgnoredToolRule {
+  projectName: string
+  pattern: string
+}
+
 export interface AppSettings {
   sessionWindowHours: number
+  ignoredToolRules: IgnoredToolRule[]
   characterImages: {
     working: string | null
     waiting_permission: string | null
@@ -14,6 +20,7 @@ export interface AppSettings {
 
 const DEFAULT_SETTINGS: AppSettings = {
   sessionWindowHours: 5,
+  ignoredToolRules: [],
   characterImages: {
     working: null,
     waiting_permission: null,

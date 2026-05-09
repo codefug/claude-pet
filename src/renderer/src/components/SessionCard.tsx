@@ -12,7 +12,7 @@ const STATUS_CONFIG: Record<SessionStatus, { color: string; label: string }> = {
 
 interface Props {
   session: Session
-  onIgnore: (id: string) => void
+  onIgnore: (session: Session) => void
   customImage?: string | null
 }
 
@@ -75,7 +75,7 @@ export default function SessionCard({ session, onIgnore, customImage }: Props): 
           <div style={{ fontSize: '10px', color }}>{label}</div>
           {session.status === 'waiting_permission' && hovered && (
             <button
-              onClick={() => onIgnore(session.id)}
+              onClick={() => onIgnore(session)}
               style={{
                 fontSize: '9px',
                 color: '#F5C842',
