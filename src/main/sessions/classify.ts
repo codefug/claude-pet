@@ -1,5 +1,5 @@
 import { getLiveState } from '../live-status'
-import type { SessionStatus } from './mockSource'
+import type { SessionStatus } from './types'
 import type { ParsedSession } from './parseJsonl'
 
 const ABORTED_THRESHOLD_MS = 5 * 60 * 1000

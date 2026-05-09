@@ -5,7 +5,7 @@ import { getLiveState } from '../live-status'
 import { loadSettings } from '../settings'
 import { classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
-import type { SessionData } from './mockSource'
+import type { SessionData } from './types'
 import { parseJsonl } from './parseJsonl'
 import { toolToPattern } from './permissionChecker'
 

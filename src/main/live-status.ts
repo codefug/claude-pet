@@ -14,7 +14,3 @@ export function getLiveState(sessionId: string): LiveState | undefined {
 export function setLiveState(sessionId: string, state: LiveState): void {
   liveStatus.set(sessionId, state)
 }
-
-export function getLiveStateForSession(sessionId: string): LiveState | undefined {
-  return liveStatus.get(sessionId)
-}

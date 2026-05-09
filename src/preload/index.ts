@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { SessionData } from '../main/sessions/mockSource'
+import type { SessionData } from '../main/sessions/types'
 import type { AppSettings, IgnoredToolRule } from '../main/settings'
 
 const claudePet = {
