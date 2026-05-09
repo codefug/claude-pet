@@ -1,6 +1,7 @@
 import { join } from 'path'
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { startMockSource, makeSessions } from './sessions/mockSource'
+import { scanProjects } from './sessions/scanProjects'
+import { startWatcher } from './sessions/watcher'
 
 function createWindow(): void {
   const isDev = process.env.NODE_ENV === 'development'
@@ -34,11 +35,11 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  startMockSource(mainWindow)
+  startWatcher(mainWindow)
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle('get-sessions', () => makeSessions())
+  ipcMain.handle('get-sessions', () => scanProjects())
   createWindow()
 
   app.on('activate', () => {

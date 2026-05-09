@@ -10,6 +10,7 @@ export interface ParsedSession {
   lastMessageAt: string | null
   aiTitle: string | null
   lastPrompt: string | null
+  interrupted: boolean
 }
 
 export function parseJsonl(filePath: string): ParsedSession {
@@ -24,6 +25,7 @@ export function parseJsonl(filePath: string): ParsedSession {
   let lastAssistant: AssistantMessage | null = null
   let aiTitle: string | null = null
   let lastPrompt: string | null = null
+  let interrupted = false
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -39,6 +41,24 @@ export function parseJsonl(filePath: string): ParsedSession {
         lastAssistant = {
           stop_reason: msg.stop_reason as string | null,
           timestamp: entry.timestamp as string
+        }
+        interrupted = false
+      }
+    }
+
+    if (entry.type === 'user') {
+      const msg = entry.message as Record<string, unknown> | undefined
+      const content = msg?.content
+      if (Array.isArray(content)) {
+        for (const block of content) {
+          const b = block as Record<string, unknown>
+          if (b.type === 'text' && typeof b.text === 'string') {
+            if (b.text.startsWith('[Request interrupted')) {
+              interrupted = true
+            } else {
+              interrupted = false
+            }
+          }
         }
       }
     }
@@ -56,6 +76,7 @@ export function parseJsonl(filePath: string): ParsedSession {
     lastAssistant,
     lastMessageAt: lastAssistant?.timestamp ?? null,
     aiTitle,
-    lastPrompt
+    lastPrompt,
+    interrupted
   }
 }

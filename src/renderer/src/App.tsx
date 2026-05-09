@@ -11,6 +11,7 @@ function App(): React.JSX.Element {
     })
 
     const unsubscribe = window.claudePet.onSessionsUpdate((data) => {
+      console.log('[renderer] sessions-update received:', data.length)
       setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt), summary: s.summary ?? null })))
     })
 
@@ -22,7 +23,7 @@ function App(): React.JSX.Element {
       style={{
         width: '100%',
         height: '100vh',
-        WebkitAppRegion: 'drag',
+        WebkitAppRegion: 'no-drag',
         background: 'rgba(20, 20, 30, 0.75)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
@@ -42,12 +43,13 @@ function App(): React.JSX.Element {
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
           marginBottom: '10px',
-          paddingLeft: '2px'
+          paddingLeft: '2px',
+          WebkitAppRegion: 'drag'
         }}
       >
         Claude Sessions
       </div>
-      <div style={{ flex: 1, overflowY: 'auto', WebkitAppRegion: 'no-drag' }}>
+      <div style={{ flex: 1, overflowY: 'auto', WebkitAppRegion: 'no-drag', cursor: 'default' }}>
         {sessions.map((s) => (
           <SessionCard key={s.id} session={s} />
         ))}

@@ -4,8 +4,10 @@ import type { SessionStatus } from './mockSource'
 const ABORTED_THRESHOLD_MS = 5 * 60 * 1000 // 5분
 
 export function classifyStatus(parsed: ParsedSession): SessionStatus {
-  const { lastAssistant } = parsed
+  const { lastAssistant, interrupted } = parsed
   if (!lastAssistant) return 'done'
+
+  if (interrupted) return 'aborted'
 
   const { stop_reason, timestamp } = lastAssistant
   const elapsed = Date.now() - new Date(timestamp).getTime()
