@@ -1,4 +1,6 @@
-const headerStyle: React.CSSProperties = {
+import type { CSSProperties, JSX } from 'react'
+
+const headerStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   marginBottom: '10px',
@@ -8,7 +10,7 @@ const headerStyle: React.CSSProperties = {
   cursor: 'grab'
 }
 
-const titleStyle: React.CSSProperties = {
+const titleStyle: CSSProperties = {
   flex: 1,
   fontSize: '11px',
   fontWeight: 700,
@@ -18,7 +20,7 @@ const titleStyle: React.CSSProperties = {
   paddingLeft: '2px'
 }
 
-const settingsBtnStyle: React.CSSProperties = {
+const settingsBtnStyle: CSSProperties = {
   WebkitAppRegion: 'no-drag',
   background: 'none',
   border: 'none',
@@ -33,7 +35,7 @@ interface Props {
   onSettingsClick: () => void
 }
 
-export default function AppHeader({ onSettingsClick }: Props): React.JSX.Element {
+export default function AppHeader({ onSettingsClick }: Props): JSX.Element {
   return (
     <div style={headerStyle}>
       <div style={titleStyle}>Claude Sessions</div>

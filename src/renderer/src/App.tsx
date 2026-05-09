@@ -1,11 +1,9 @@
-import { useState } from 'react'
+import { type CSSProperties, type JSX, useState } from 'react'
 import AppHeader from './components/AppHeader'
 import SessionList from './components/SessionList'
 import SettingsPanel from './components/SettingsPanel'
-import { useCharacterImages } from './hooks/useCharacterImages'
-import { useSessions } from './hooks/useSessions'
 
-const containerStyle: React.CSSProperties = {
+const containerStyle: CSSProperties = {
   width: '100%',
   height: '100vh',
   WebkitAppRegion: 'no-drag',
@@ -21,25 +19,21 @@ const containerStyle: React.CSSProperties = {
   position: 'relative'
 }
 
-const scrollStyle: React.CSSProperties = {
+const scrollStyle: CSSProperties = {
   flex: 1,
   overflowY: 'auto',
   WebkitAppRegion: 'no-drag'
 }
 
-export default function App(): React.JSX.Element {
-  const { sessions, handleIgnore } = useSessions()
-  const { images, setImages } = useCharacterImages()
+export default function App(): JSX.Element {
   const [showSettings, setShowSettings] = useState(false)
 
   return (
     <div style={containerStyle}>
-      {showSettings && (
-        <SettingsPanel onClose={() => setShowSettings(false)} onImagesChange={setImages} />
-      )}
+      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
       <AppHeader onSettingsClick={() => setShowSettings(true)} />
       <div style={scrollStyle}>
-        <SessionList sessions={sessions} characterImages={images} onIgnore={handleIgnore} />
+        <SessionList />
       </div>
     </div>
   )

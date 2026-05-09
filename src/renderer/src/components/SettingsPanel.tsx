@@ -1,4 +1,3 @@
-import type { CharacterImages } from '../hooks/useCharacterImages'
 import { useSettings } from '../hooks/useSettings'
 import CharacterImageSection from './CharacterImageSection'
 import IgnoredSessionsSection from './IgnoredSessionsSection'
@@ -43,10 +42,9 @@ const closeBtnStyle: React.CSSProperties = {
 
 interface Props {
   onClose: () => void
-  onImagesChange: (images: CharacterImages) => void
 }
 
-export default function SettingsPanel({ onClose, onImagesChange }: Props): React.JSX.Element {
+export default function SettingsPanel({ onClose }: Props): React.JSX.Element {
   const {
     images,
     sessionWindowHours,
@@ -55,7 +53,7 @@ export default function SettingsPanel({ onClose, onImagesChange }: Props): React
     handlePick,
     handleClear,
     handleRulesChange
-  } = useSettings(onImagesChange)
+  } = useSettings()
 
   return (
     <div style={overlayStyle}>

@@ -5,9 +5,9 @@ import { getLiveState } from '../live-status'
 import { loadSettings } from '../settings'
 import { classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
-import type { SessionData } from './types'
 import { parseJsonl } from './parseJsonl'
 import { toolToPattern } from './permissionChecker'
+import type { SessionData } from './types'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
 

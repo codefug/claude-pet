@@ -1,9 +1,9 @@
 import { join } from 'node:path'
-import { BrowserWindow, app, shell, screen } from 'electron'
-import { startHookServer } from './hook-server'
+import { BrowserWindow, app, screen, shell } from 'electron'
 import { installHooks } from './hook-installer'
-import { startWatcher } from './sessions/watcher'
+import { startHookServer } from './hook-server'
 import { registerIpcHandlers } from './ipc-handlers'
+import { startWatcher } from './sessions/watcher'
 import { createTray } from './tray'
 
 let isQuitting = false

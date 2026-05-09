@@ -1,47 +1,47 @@
-import * as fs from 'node:fs'
-import * as path from 'node:path'
-import { app } from 'electron'
+import ElectronStoreModule from 'electron-store'
+const ElectronStore =
+  (ElectronStoreModule as unknown as { default: typeof ElectronStoreModule }).default ??
+  ElectronStoreModule
+import { AppSettingsSchema } from '../shared/schemas/settings'
+import type { AppSettings } from '../shared/schemas/settings'
 
-export interface IgnoredToolRule {
-  projectName: string
-  pattern: string
-}
+export type { IgnoredToolRule, AppSettings } from '../shared/schemas/settings'
 
-export interface AppSettings {
-  sessionWindowHours: number
-  ignoredToolRules: IgnoredToolRule[]
-  characterImages: {
-    working: string | null
-    waiting_permission: string | null
-    done: string | null
-    aborted: string | null
-  }
-}
-
-const DEFAULT_SETTINGS: AppSettings = {
+const DEFAULTS: AppSettings = {
   sessionWindowHours: 5,
   ignoredToolRules: [],
-  characterImages: {
-    working: null,
-    waiting_permission: null,
-    done: null,
-    aborted: null
-  }
+  characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
 }
 
-function getSettingsPath(): string {
-  return path.join(app.getPath('userData'), 'settings.json')
-}
+const store = new ElectronStore<AppSettings>({
+  schema: {
+    sessionWindowHours: { type: 'number', default: DEFAULTS.sessionWindowHours },
+    ignoredToolRules: { type: 'array', default: DEFAULTS.ignoredToolRules },
+    characterImages: {
+      type: 'object',
+      properties: {
+        working: { type: ['string', 'null'], default: null },
+        waiting_permission: { type: ['string', 'null'], default: null },
+        done: { type: ['string', 'null'], default: null },
+        aborted: { type: ['string', 'null'], default: null }
+      },
+      default: DEFAULTS.characterImages
+    }
+  },
+  migrations: {}
+})
 
 export function loadSettings(): AppSettings {
-  try {
-    const raw = fs.readFileSync(getSettingsPath(), 'utf-8')
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) }
-  } catch {
-    return DEFAULT_SETTINGS
+  const raw = store.store
+  const merged = {
+    ...DEFAULTS,
+    ...raw,
+    characterImages: { ...DEFAULTS.characterImages, ...raw.characterImages }
   }
+  const result = AppSettingsSchema.safeParse(merged)
+  return result.success ? result.data : DEFAULTS
 }
 
 export function saveSettings(settings: AppSettings): void {
-  fs.writeFileSync(getSettingsPath(), JSON.stringify(settings, null, 2), 'utf-8')
+  store.set(settings)
 }

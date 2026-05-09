@@ -1,20 +1,19 @@
-import type { Session, SessionStatus } from '../types'
+import { useCharacterImages } from '@renderer/hooks/useCharacterImages'
+import { useSessions } from '@renderer/hooks/useSessions'
+import type { CSSProperties, JSX } from 'react'
 import SessionCard from './SessionCard'
 
-const emptyStyle: React.CSSProperties = {
+const emptyStyle: CSSProperties = {
   color: 'rgba(255,255,255,0.25)',
   fontSize: '12px',
   textAlign: 'center',
   marginTop: '40px'
 }
 
-interface Props {
-  sessions: Session[]
-  characterImages: Record<SessionStatus, string | null>
-  onIgnore: (session: Session) => void
-}
+export default function SessionList(): JSX.Element {
+  const { images } = useCharacterImages()
+  const { sessions, handleIgnore } = useSessions()
 
-export default function SessionList({ sessions, characterImages, onIgnore }: Props): React.JSX.Element {
   if (sessions.length === 0) {
     return <div style={emptyStyle}>아직 Claude Code 세션이 없어요</div>
   }
@@ -25,8 +24,8 @@ export default function SessionList({ sessions, characterImages, onIgnore }: Pro
         <SessionCard
           key={s.id}
           session={s}
-          onIgnore={onIgnore}
-          customImage={characterImages[s.status]}
+          onIgnore={handleIgnore}
+          customImage={images[s.status]}
         />
       ))}
     </>

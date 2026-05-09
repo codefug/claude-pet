@@ -1,9 +1,9 @@
-import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { unlinkSync, writeFileSync } from 'node:fs'
+import { type IncomingMessage, type ServerResponse, createServer } from 'node:http'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { type BrowserWindow, app } from 'electron'
-import { getLiveState, setLiveState, type LiveState } from './live-status'
+import { type LiveState, getLiveState, setLiveState } from './live-status'
 import { scanProjects } from './sessions/scanProjects'
 
 export { getLiveState, type LiveState }

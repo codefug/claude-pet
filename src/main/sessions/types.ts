@@ -1,16 +1,6 @@
-export type SessionStatus = 'working' | 'waiting_permission' | 'done' | 'aborted'
-
-export interface PendingTool {
-  name: string
-  input: Record<string, unknown>
-}
-
-export interface SessionData {
-  id: string
-  projectName: string
-  projectPath: string
-  status: SessionStatus
-  lastMessageAt: string
-  summary: string | null
-  pendingTool: PendingTool | null
-}
+export type {
+  SessionStatus,
+  PendingTool,
+  SessionData,
+  Session
+} from '../../shared/schemas/session'
