@@ -12,9 +12,8 @@ function createWindow(): void {
     alwaysOnTop: true,
     resizable: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'darwin'
-      ? { vibrancy: 'under-window', visualEffectState: 'active' }
-      : { transparent: true, backgroundColor: '#00000000' }),
+    transparent: true,
+    backgroundColor: '#00000000',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
