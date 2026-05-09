@@ -21,7 +21,15 @@ export interface ParsedSession {
 const cache = new Map<string, ParsedSession>()
 
 function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
-  let { lastAssistant, aiTitle, lastPrompt, cwd, interrupted, pendingToolResult, awaitingAssistant } = session
+  let {
+    lastAssistant,
+    aiTitle,
+    lastPrompt,
+    cwd,
+    interrupted,
+    pendingToolResult,
+    awaitingAssistant
+  } = session
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -67,7 +75,10 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
         }
         if (hasToolResult) pendingToolResult = false
         if (hasInterrupt) interrupted = true
-        else if (hasNormalText) { interrupted = false; awaitingAssistant = true }
+        else if (hasNormalText) {
+          interrupted = false
+          awaitingAssistant = true
+        }
       }
     }
 

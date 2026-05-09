@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import type { SessionData } from '../../main/sessions/mockSource'
 import SessionCard from './components/SessionCard'
 import SettingsPanel from './components/SettingsPanel'
-import { sortSessions } from './utils/sortSessions'
 import type { Session, SessionStatus } from './types'
-import type { SessionData } from '../../main/sessions/mockSource'
+import { sortSessions } from './utils/sortSessions'
 
 function App(): React.JSX.Element {
   const [sessions, setSessions] = useState<Session[]>([])
@@ -19,7 +19,11 @@ function App(): React.JSX.Element {
   const update = useCallback((data: SessionData[]): void => {
     setSessions(
       sortSessions(
-        data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt), pendingTool: s.pendingTool ?? null }))
+        data.map((s) => ({
+          ...s,
+          lastMessageAt: new Date(s.lastMessageAt),
+          pendingTool: s.pendingTool ?? null
+        }))
       )
     )
   }, [])
@@ -35,7 +39,11 @@ function App(): React.JSX.Element {
 
   const handleIgnore = useCallback((session: Session): void => {
     if (!session.pendingTool) return
-    window.claudePet.ignoreSession(session.projectName, session.pendingTool.name, session.pendingTool.input)
+    window.claudePet.ignoreSession(
+      session.projectName,
+      session.pendingTool.name,
+      session.pendingTool.input
+    )
     setSessions((prev) =>
       sortSessions(prev.map((s) => (s.id === session.id ? { ...s, status: 'working' } : s)))
     )
@@ -95,6 +103,7 @@ function App(): React.JSX.Element {
           Claude Sessions
         </div>
         <button
+          type="button"
           onClick={() => setShowSettings(true)}
           style={{
             WebkitAppRegion: 'no-drag',

@@ -1,9 +1,9 @@
+import { homedir } from 'node:os'
+import { join } from 'node:path'
 import { watch } from 'chokidar'
-import { join } from 'path'
-import { homedir } from 'os'
 import type { BrowserWindow } from 'electron'
-import { scanProjects } from './scanProjects'
 import { invalidateCache } from './parseJsonl'
+import { scanProjects } from './scanProjects'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
 

@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import type { SessionStatus } from '../types'
+import { useEffect, useState } from 'react'
 import type { IgnoredToolRule } from '../../../main/settings'
-import SessionWindowSection from './SessionWindowSection'
+import type { SessionStatus } from '../types'
 import CharacterImageSection from './CharacterImageSection'
 import type { CharacterImages } from './CharacterImageSection'
 import IgnoredSessionsSection from './IgnoredSessionsSection'
+import SessionWindowSection from './SessionWindowSection'
 
 interface Props {
   onClose: () => void
@@ -84,6 +84,7 @@ export default function SettingsPanel({ onClose, onImagesChange }: Props): React
           Settings
         </div>
         <button
+          type="button"
           onClick={onClose}
           style={{
             background: 'none',

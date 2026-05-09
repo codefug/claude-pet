@@ -1,12 +1,12 @@
-import { join, extname } from 'path'
-import { readFileSync } from 'fs'
-import { app, shell, BrowserWindow, ipcMain, screen, dialog } from 'electron'
+import { readFileSync } from 'node:fs'
+import { extname, join } from 'node:path'
+import { BrowserWindow, app, dialog, ipcMain, screen, shell } from 'electron'
+import { invalidateAllowCache, toolToPattern } from './sessions/permissionChecker'
 import { scanProjects } from './sessions/scanProjects'
 import { startWatcher } from './sessions/watcher'
-import { createTray } from './tray'
 import { loadSettings, saveSettings } from './settings'
 import type { AppSettings, IgnoredToolRule } from './settings'
-import { invalidateAllowCache, toolToPattern } from './sessions/permissionChecker'
+import { createTray } from './tray'
 
 let mainWin: BrowserWindow | null = null
 let isQuitting = false
@@ -74,8 +74,8 @@ function createWindow(): void {
     return { action: 'deny' }
   })
 
-  if (isDev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+  if (isDev && process.env.ELECTRON_RENDERER_URL) {
+    mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL)
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }

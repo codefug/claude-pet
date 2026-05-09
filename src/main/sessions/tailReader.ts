@@ -1,4 +1,4 @@
-import { openSync, readSync, statSync, closeSync } from 'fs'
+import { closeSync, openSync, readSync, statSync } from 'node:fs'
 
 const offsets = new Map<string, number>()
 

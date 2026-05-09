@@ -76,6 +76,7 @@ export default function SessionCard({ session, onIgnore, customImage }: Props): 
           <div style={{ fontSize: '10px', color }}>{label}</div>
           {session.status === 'waiting_permission' && hovered && (
             <button
+              type="button"
               onClick={() => onIgnore(session)}
               style={{
                 fontSize: '9px',

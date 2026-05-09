@@ -1,9 +1,9 @@
-import type { SessionStatus } from '../types'
-import workingSvg from '../assets/yorkie/working.svg'
-import waitingSvg from '../assets/yorkie/waiting.svg'
-import doneSvg from '../assets/yorkie/done.svg'
 import abortedSvg from '../assets/yorkie/aborted.svg'
+import doneSvg from '../assets/yorkie/done.svg'
 import interruptedSvg from '../assets/yorkie/interrupted.svg'
+import waitingSvg from '../assets/yorkie/waiting.svg'
+import workingSvg from '../assets/yorkie/working.svg'
+import type { SessionStatus } from '../types'
 
 const DEFAULT_SVG: Record<SessionStatus, string> = {
   working: workingSvg,
@@ -23,6 +23,7 @@ export default function CharacterAvatar({ status, customImage }: Props): React.J
   return (
     <img
       src={src}
+      alt={status}
       width={48}
       height={48}
       style={{ display: 'block', objectFit: 'contain', borderRadius: customImage ? '6px' : 0 }}

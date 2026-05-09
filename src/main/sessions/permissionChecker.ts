@@ -1,6 +1,6 @@
-import * as fs from 'fs'
-import * as os from 'os'
-import * as path from 'path'
+import * as fs from 'node:fs'
+import * as os from 'node:os'
+import * as path from 'node:path'
 import { loadSettings } from '../settings'
 
 interface ToolCall {
@@ -10,42 +10,139 @@ interface ToolCall {
 
 // Commands Claude Code auto-allows regardless of user settings
 const BASH_AUTO_ALLOW_EXACT = new Set([
-  'pwd', 'whoami', 'alias',
-  'claude -h', 'claude --help',
-  'node -v', 'node --version',
-  'python --version', 'python3 --version',
-  'ip addr',
+  'pwd',
+  'whoami',
+  'alias',
+  'claude -h',
+  'claude --help',
+  'node -v',
+  'node --version',
+  'python --version',
+  'python3 --version',
+  'ip addr'
 ])
 
 const BASH_AUTO_ALLOW_COMMANDS = new Set([
-  'cal', 'uptime', 'cat', 'head', 'tail', 'wc', 'stat', 'strings',
-  'hexdump', 'od', 'nl', 'id', 'uname', 'free', 'df', 'du', 'locale',
-  'groups', 'nproc', 'basename', 'dirname', 'realpath', 'cut', 'paste',
-  'tr', 'column', 'tac', 'rev', 'fold', 'expand', 'unexpand', 'fmt',
-  'comm', 'cmp', 'numfmt', 'readlink', 'diff', 'true', 'false', 'sleep',
-  'which', 'type', 'expr', 'test', 'getconf', 'seq', 'tsort', 'pr',
-  'echo', 'printf', 'ls', 'cd', 'find',
+  'cal',
+  'uptime',
+  'cat',
+  'head',
+  'tail',
+  'wc',
+  'stat',
+  'strings',
+  'hexdump',
+  'od',
+  'nl',
+  'id',
+  'uname',
+  'free',
+  'df',
+  'du',
+  'locale',
+  'groups',
+  'nproc',
+  'basename',
+  'dirname',
+  'realpath',
+  'cut',
+  'paste',
+  'tr',
+  'column',
+  'tac',
+  'rev',
+  'fold',
+  'expand',
+  'unexpand',
+  'fmt',
+  'comm',
+  'cmp',
+  'numfmt',
+  'readlink',
+  'diff',
+  'true',
+  'false',
+  'sleep',
+  'which',
+  'type',
+  'expr',
+  'test',
+  'getconf',
+  'seq',
+  'tsort',
+  'pr',
+  'echo',
+  'printf',
+  'ls',
+  'cd',
+  'find',
   // safe with flags validated by Claude Code
-  'xargs', 'file', 'sed', 'sort', 'man', 'help', 'netstat', 'ps',
-  'base64', 'grep', 'egrep', 'fgrep', 'sha256sum', 'sha1sum', 'md5sum',
-  'tree', 'date', 'hostname', 'info', 'lsof', 'pgrep', 'tput', 'ss',
-  'fd', 'fdfind', 'rg', 'jq', 'uniq', 'history', 'arch', 'ifconfig',
-  'pyright',
+  'xargs',
+  'file',
+  'sed',
+  'sort',
+  'man',
+  'help',
+  'netstat',
+  'ps',
+  'base64',
+  'grep',
+  'egrep',
+  'fgrep',
+  'sha256sum',
+  'sha1sum',
+  'md5sum',
+  'tree',
+  'date',
+  'hostname',
+  'info',
+  'lsof',
+  'pgrep',
+  'tput',
+  'ss',
+  'fd',
+  'fdfind',
+  'rg',
+  'jq',
+  'uniq',
+  'history',
+  'arch',
+  'ifconfig',
+  'pyright'
 ])
 
 const GIT_AUTO_ALLOW_SUBCOMMANDS = new Set([
-  'status', 'log', 'diff', 'show', 'blame', 'branch', 'tag', 'remote',
-  'ls-files', 'ls-remote', 'rev-parse', 'describe', 'reflog', 'shortlog',
-  'cat-file', 'for-each-ref', 'worktree', 'stash',
+  'status',
+  'log',
+  'diff',
+  'show',
+  'blame',
+  'branch',
+  'tag',
+  'remote',
+  'ls-files',
+  'ls-remote',
+  'rev-parse',
+  'describe',
+  'reflog',
+  'shortlog',
+  'cat-file',
+  'for-each-ref',
+  'worktree',
+  'stash'
 ])
 
 const GH_AUTO_ALLOW_SUBCOMMANDS = new Set([
-  'pr', 'issue', 'run', 'workflow', 'repo', 'release', 'auth',
+  'pr',
+  'issue',
+  'run',
+  'workflow',
+  'repo',
+  'release',
+  'auth'
 ])
 
-const GH_AUTO_ALLOW_ACTIONS = new Set([
-  'view', 'list', 'diff', 'checks', 'status',
-])
+const GH_AUTO_ALLOW_ACTIONS = new Set(['view', 'list', 'diff', 'checks', 'status'])
 
 function isBashAutoAllowed(cmd: string): boolean {
   if (!cmd) return false
@@ -64,7 +161,8 @@ function isBashAutoAllowed(cmd: string): boolean {
   if (leadCmd === 'git' && GIT_AUTO_ALLOW_SUBCOMMANDS.has(sub)) return true
 
   if (leadCmd === 'gh') {
-    if (GH_AUTO_ALLOW_SUBCOMMANDS.has(sub) && GH_AUTO_ALLOW_ACTIONS.has(tokens[idx + 2] ?? '')) return true
+    if (GH_AUTO_ALLOW_SUBCOMMANDS.has(sub) && GH_AUTO_ALLOW_ACTIONS.has(tokens[idx + 2] ?? ''))
+      return true
     if (sub === 'api') return true // GET only heuristic; good enough
   }
 
@@ -74,9 +172,7 @@ function isBashAutoAllowed(cmd: string): boolean {
 }
 
 // Non-Bash tools Claude Code never prompts for
-const NON_BASH_AUTO_ALLOW = new Set([
-  'Read', 'LS', 'Glob',
-])
+const NON_BASH_AUTO_ALLOW = new Set(['Read', 'LS', 'Glob'])
 
 function parseAllowEntry(entry: string): { tool: string; pattern: string } | null {
   const paren = entry.indexOf('(')
@@ -115,9 +211,10 @@ let cacheTime = 0
 
 function getClaudeAllowList(): Array<{ tool: string; pattern: string }> {
   if (!cachedAllowList || Date.now() - cacheTime > 60_000) {
-    cachedAllowList = loadClaudeAllowList()
-      .map(parseAllowEntry)
-      .filter(Boolean) as Array<{ tool: string; pattern: string }>
+    cachedAllowList = loadClaudeAllowList().map(parseAllowEntry).filter(Boolean) as Array<{
+      tool: string
+      pattern: string
+    }>
     cacheTime = Date.now()
   }
   return cachedAllowList

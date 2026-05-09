@@ -23,6 +23,7 @@ export default function SessionWindowSection({ value, onChange }: Props): React.
       <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
         {WINDOW_OPTIONS.map((h) => (
           <button
+            type="button"
             key={h}
             onClick={() => onChange(h)}
             style={{

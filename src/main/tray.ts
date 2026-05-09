@@ -1,5 +1,5 @@
-import { Tray, Menu, nativeImage, app } from 'electron'
-import { join } from 'path'
+import { join } from 'node:path'
+import { Menu, Tray, app, nativeImage } from 'electron'
 import type { BrowserWindow } from 'electron'
 
 let tray: Tray | null = null

@@ -16,7 +16,13 @@ const STATUS_LABELS: Record<SessionStatus, string> = {
   interrupted: 'Interrupted'
 }
 
-const STATUSES: SessionStatus[] = ['working', 'waiting_permission', 'done', 'aborted', 'interrupted']
+const STATUSES: SessionStatus[] = [
+  'working',
+  'waiting_permission',
+  'done',
+  'aborted',
+  'interrupted'
+]
 
 interface Props {
   images: CharacterImages
@@ -24,7 +30,11 @@ interface Props {
   onClear: (status: SessionStatus) => void
 }
 
-export default function CharacterImageSection({ images, onPick, onClear }: Props): React.JSX.Element {
+export default function CharacterImageSection({
+  images,
+  onPick,
+  onClear
+}: Props): React.JSX.Element {
   return (
     <div style={{ marginBottom: '16px' }}>
       <div
@@ -54,7 +64,8 @@ export default function CharacterImageSection({ images, onPick, onClear }: Props
           >
             {images[status] ? (
               <img
-                src={images[status]!}
+                src={images[status] ?? ''}
+                alt={status}
                 width={32}
                 height={32}
                 style={{ borderRadius: '4px', objectFit: 'cover', flexShrink: 0 }}
@@ -80,6 +91,7 @@ export default function CharacterImageSection({ images, onPick, onClear }: Props
               {STATUS_LABELS[status]}
             </div>
             <button
+              type="button"
               onClick={() => onPick(status)}
               style={{
                 fontSize: '10px',
@@ -95,6 +107,7 @@ export default function CharacterImageSection({ images, onPick, onClear }: Props
             </button>
             {images[status] && (
               <button
+                type="button"
                 onClick={() => onClear(status)}
                 style={{
                   fontSize: '10px',

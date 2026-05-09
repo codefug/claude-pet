@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { IgnoredToolRule } from '../../../main/settings'
 
 interface Props {
@@ -31,7 +31,9 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
   const handleAdd = (): void => {
     const rule = parseLine(input)
     if (!rule) return
-    const exists = rules.some((r) => r.projectName === rule.projectName && r.pattern === rule.pattern)
+    const exists = rules.some(
+      (r) => r.projectName === rule.projectName && r.pattern === rule.pattern
+    )
     if (exists) return
     onRulesChange([...rules, rule])
     setInput('')
@@ -71,6 +73,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
           }}
         />
         <button
+          type="button"
           onClick={handleAdd}
           style={{
             fontSize: '10px',
@@ -87,7 +90,14 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
         </button>
       </div>
 
-      <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.2)', marginBottom: '8px', fontFamily: 'monospace' }}>
+      <div
+        style={{
+          fontSize: '9px',
+          color: 'rgba(255,255,255,0.2)',
+          marginBottom: '8px',
+          fontFamily: 'monospace'
+        }}
+      >
         예: claude-pet pnpm run build
       </div>
 
@@ -99,7 +109,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {rules.map((rule, i) => (
             <div
-              key={i}
+              key={`${rule.projectName}-${rule.pattern}`}
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -121,6 +131,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
                 {rule.projectName} {rule.pattern}
               </div>
               <button
+                type="button"
                 onClick={() => handleRemove(i)}
                 style={{
                   fontSize: '10px',
@@ -140,7 +151,14 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
         </div>
       )}
 
-      <div style={{ marginTop: '8px', fontSize: '9px', color: 'rgba(255,255,255,0.18)', lineHeight: 1.5 }}>
+      <div
+        style={{
+          marginTop: '8px',
+          fontSize: '9px',
+          color: 'rgba(255,255,255,0.18)',
+          lineHeight: 1.5
+        }}
+      >
         프로젝트명 커맨드 형식 · 커맨드가 포함되면 working으로 처리
       </div>
     </div>
