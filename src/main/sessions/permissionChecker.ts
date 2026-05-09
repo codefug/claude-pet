@@ -73,19 +73,14 @@ export function isToolAllowed(tool: ToolCall): boolean {
 }
 
 export function isToolIgnoredForProject(tool: ToolCall, projectName: string): boolean {
+  if (tool.name !== 'Bash') return false
+  const cmd = (tool.input.command as string) ?? ''
   const { ignoredToolRules } = loadSettings()
   return ignoredToolRules
     .filter((r) => r.projectName === projectName)
-    .map((r) => parseAllowEntry(r.pattern))
-    .filter(Boolean)
-    .some((entry) => matchesToolCall(entry!, tool))
+    .some((r) => cmd.includes(r.pattern))
 }
 
-export function toolToPattern(toolName: string, toolInput: Record<string, unknown>): string {
-  if (toolName === 'Bash') {
-    const cmd = (toolInput.command as string) ?? ''
-    return `Bash(${cmd})`
-  }
-  const filePath = (toolInput.file_path as string) ?? ''
-  return filePath ? `${toolName}(${filePath})` : toolName
+export function toolToPattern(_toolName: string, toolInput: Record<string, unknown>): string {
+  return (toolInput.command as string) ?? ''
 }

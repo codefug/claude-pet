@@ -50,13 +50,13 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
     <div style={{ marginBottom: '12px' }}>
       <div style={sectionLabel}>무시할 명령어</div>
 
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
         <input
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="pet Bash(pnpm run build:mac)"
+          placeholder="<프로젝트명> <명령어>"
           style={{
             flex: 1,
             fontSize: '10px',
@@ -87,6 +87,10 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
         </button>
       </div>
 
+      <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.2)', marginBottom: '8px', fontFamily: 'monospace' }}>
+        예: claude-pet pnpm run build
+      </div>
+
       {rules.length === 0 ? (
         <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', padding: '2px 8px' }}>
           없음
@@ -98,7 +102,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
               key={i}
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 gap: '8px',
                 padding: '5px 8px',
                 borderRadius: '8px',
@@ -111,9 +115,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
                   fontSize: '11px',
                   color: 'rgba(245,200,66,0.7)',
                   fontFamily: 'monospace',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  wordBreak: 'break-all'
                 }}
               >
                 {rule.projectName} {rule.pattern}
@@ -139,7 +141,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
       )}
 
       <div style={{ marginTop: '8px', fontSize: '9px', color: 'rgba(255,255,255,0.18)', lineHeight: 1.5 }}>
-        프로젝트명 패턴 형식 · "working으로 무시" 시 자동 추가
+        프로젝트명 커맨드 형식 · 커맨드가 포함되면 working으로 처리
       </div>
     </div>
   )
