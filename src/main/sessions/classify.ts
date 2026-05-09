@@ -1,5 +1,5 @@
-import type { ParsedSession } from './parseJsonl'
 import type { SessionStatus } from './mockSource'
+import type { ParsedSession } from './parseJsonl'
 import { isToolAllowed, isToolIgnoredForProject } from './permissionChecker'
 
 const ABORTED_THRESHOLD_MS = 5 * 60 * 1000
@@ -15,8 +15,9 @@ export function classifyStatus(parsed: ParsedSession, projectName: string): Sess
   const { stop_reason, timestamp } = lastAssistant
   const elapsed = Date.now() - new Date(timestamp).getTime()
 
+  if (elapsed > ABORTED_THRESHOLD_MS) return 'aborted'
+
   if (stop_reason === 'tool_use' || stop_reason === 'max_tokens') {
-    if (elapsed > ABORTED_THRESHOLD_MS) return 'aborted'
     if (lastAssistant.lastToolName === 'AskUserQuestion') return 'waiting_permission'
     if (pendingToolResult && lastAssistant.lastToolName) {
       const tool = { name: lastAssistant.lastToolName, input: lastAssistant.lastToolInput ?? {} }

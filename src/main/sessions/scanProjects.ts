@@ -1,11 +1,11 @@
-import { readdirSync, statSync } from 'fs'
-import { join, basename } from 'path'
-import { homedir } from 'os'
+import { readdirSync, statSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { basename, join } from 'node:path'
+import { loadSettings } from '../settings'
+import { classifyStatus } from './classify'
+import { decodeProjectPath } from './formatProject'
 import type { SessionData } from './mockSource'
 import { parseJsonl } from './parseJsonl'
-import { classifyStatus } from './classify'
-import { loadSettings } from '../settings'
-import { decodeProjectPath } from './formatProject'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
 
@@ -56,9 +56,18 @@ export function scanProjects(): SessionData[] {
       if (new Date(lastMessageAt).getTime() < cutoff) continue
 
       const status = classifyStatus(parsed, projectName)
+
+      if (status === 'aborted') {
+        const lastAt = new Date(lastMessageAt).getTime()
+        if (Date.now() - lastAt > 5 * 60 * 1000) continue
+      }
+
       const pendingTool =
         status === 'waiting_permission' && parsed.lastAssistant?.lastToolName
-          ? { name: parsed.lastAssistant.lastToolName, input: parsed.lastAssistant.lastToolInput ?? {} }
+          ? {
+              name: parsed.lastAssistant.lastToolName,
+              input: parsed.lastAssistant.lastToolInput ?? {}
+            }
           : null
 
       sessions.push({
