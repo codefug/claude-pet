@@ -3,6 +3,7 @@ import { readNewLines, resetOffset } from './tailReader'
 interface AssistantMessage {
   stop_reason: string | null
   timestamp: string
+  lastToolName: string | null
 }
 
 export interface ParsedSession {
@@ -11,12 +12,13 @@ export interface ParsedSession {
   aiTitle: string | null
   lastPrompt: string | null
   interrupted: boolean
+  pendingToolResult: boolean
 }
 
 const cache = new Map<string, ParsedSession>()
 
 function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
-  let { lastAssistant, aiTitle, lastPrompt, interrupted } = session
+  let { lastAssistant, aiTitle, lastPrompt, interrupted, pendingToolResult } = session
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -29,11 +31,15 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     if (entry.type === 'assistant') {
       const msg = entry.message as Record<string, unknown> | undefined
       if (msg?.stop_reason !== undefined) {
+        const content = msg.content as Array<Record<string, unknown>> | undefined
+        const lastTool = content?.filter((b) => b.type === 'tool_use').pop()
         lastAssistant = {
           stop_reason: msg.stop_reason as string | null,
-          timestamp: entry.timestamp as string
+          timestamp: entry.timestamp as string,
+          lastToolName: (lastTool?.name as string) ?? null
         }
         interrupted = false
+        pendingToolResult = msg.stop_reason === 'tool_use'
       }
     }
 
@@ -43,6 +49,9 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
       if (Array.isArray(content)) {
         for (const block of content) {
           const b = block as Record<string, unknown>
+          if (b.type === 'tool_result') {
+            pendingToolResult = false
+          }
           if (b.type === 'text' && typeof b.text === 'string') {
             if (b.text.startsWith('[Request interrupted')) {
               interrupted = true
@@ -68,7 +77,8 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     lastMessageAt: lastAssistant?.timestamp ?? null,
     aiTitle,
     lastPrompt,
-    interrupted
+    interrupted,
+    pendingToolResult
   }
 }
 
@@ -77,7 +87,8 @@ const EMPTY: ParsedSession = {
   lastMessageAt: null,
   aiTitle: null,
   lastPrompt: null,
-  interrupted: false
+  interrupted: false,
+  pendingToolResult: false
 }
 
 export function parseJsonl(filePath: string): ParsedSession {
