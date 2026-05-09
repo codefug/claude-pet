@@ -26,8 +26,8 @@ macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모�
 ### Homebrew
 
 ```bash
-brew tap codefug/claude-pet
-brew install --cask codefug/claude-pet/claude-pet
+brew tap codefug/cask
+brew install --cask claude-pet
 ```
 
 > 첫 실행 시 Gatekeeper 경고가 뜨면 Finder에서 우클릭 → 열기, 또는:

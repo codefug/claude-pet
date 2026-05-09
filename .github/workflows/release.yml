@@ -39,9 +39,9 @@ jobs:
           VERSION=${GITHUB_REF_NAME#v}
           SHA256=$(shasum -a 256 dist/claude-pet-${VERSION}.dmg | awk '{print $1}')
 
-          git clone https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/codefug/homebrew-claude-pet.git /tmp/homebrew-claude-pet
+          git clone https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/codefug/homebrew-cask.git /tmp/homebrew-cask
 
-          cat > /tmp/homebrew-claude-pet/Casks/claude-pet.rb << EOF
+          cat > /tmp/homebrew-cask/Casks/claude-pet.rb << EOF
           cask "claude-pet" do
             version "${VERSION}"
             sha256 "${SHA256}"
@@ -61,7 +61,7 @@ jobs:
           end
           EOF
 
-          cd /tmp/homebrew-claude-pet
+          cd /tmp/homebrew-cask
           git config user.email "github-actions@github.com"
           git config user.name "github-actions"
           git add Casks/claude-pet.rb
