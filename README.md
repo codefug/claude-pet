@@ -23,15 +23,16 @@ macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모�
 
 ## 설치
 
-### DMG에서 직접 설치
+### Homebrew
 
-1. [Releases](https://github.com/codefug/claude-pet/releases)에서 `claude-pet-x.x.x.dmg` 다운로드
-2. DMG를 열고 Claude Pet.app을 Applications 폴더로 드래그
-3. 첫 실행 시 Gatekeeper 경고가 뜨면:
-   ```bash
-   xattr -cr /Applications/Claude\ Pet.app
-   ```
-   또는 Finder에서 우클릭 → 열기
+```bash
+brew install --cask https://raw.githubusercontent.com/codefug/claude-pet/main/docs/claude-pet.rb
+```
+
+> 첫 실행 시 Gatekeeper 경고가 뜨면 Finder에서 우클릭 → 열기, 또는:
+> ```bash
+> xattr -cr /Applications/Claude\ Pet.app
+> ```
 
 ### 소스에서 빌드
 
