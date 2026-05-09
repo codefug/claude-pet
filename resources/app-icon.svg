@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 둥근 배경 -->
+  <rect width="512" height="512" rx="100" ry="100" fill="#2C1810"/>
+
+  <!-- 머리 베이스 (어두운 외곽) -->
+  <ellipse cx="256" cy="288" rx="155" ry="140" fill="#2A1A08"/>
+  <!-- 머리 중간 레이어 -->
+  <ellipse cx="256" cy="268" rx="138" ry="120" fill="#8B6914"/>
+  <!-- 머리 밝은 레이어 -->
+  <ellipse cx="256" cy="274" rx="118" ry="104" fill="#B8860B"/>
+
+  <!-- 얼굴 아랫부분 (주둥이) -->
+  <ellipse cx="256" cy="300" rx="105" ry="82" fill="#C8960C"/>
+  <ellipse cx="256" cy="308" rx="88" ry="66" fill="#D4A820"/>
+
+  <!-- 왼쪽 귀 -->
+  <path d="M118 258 Q60 168 84 80 Q118 168 138 248 Z" fill="#1A0A00"/>
+  <path d="M122 252 Q68 168 90 88 Q122 172 140 242 Z" fill="#2A1A08"/>
+  <path d="M88 200 Q76 160 82 122" stroke="#3D2B1A" stroke-width="6" fill="none"/>
+  <path d="M100 210 Q90 170 96 132" stroke="#3D2B1A" stroke-width="6" fill="none"/>
+  <path d="M112 216 Q104 176 110 138" stroke="#3D2B1A" stroke-width="6" fill="none"/>
+
+  <!-- 오른쪽 귀 -->
+  <path d="M394 258 Q452 168 428 80 Q394 168 374 248 Z" fill="#1A0A00"/>
+  <path d="M390 252 Q444 168 422 88 Q390 172 372 242 Z" fill="#2A1A08"/>
+  <path d="M424 200 Q436 160 430 122" stroke="#3D2B1A" stroke-width="6" fill="none"/>
+  <path d="M412 210 Q422 170 416 132" stroke="#3D2B1A" stroke-width="6" fill="none"/>
+  <path d="M400 216 Q408 176 402 138" stroke="#3D2B1A" stroke-width="6" fill="none"/>
+
+  <!-- 머리 털 결 -->
+  <path d="M160 262 Q196 240 232 262" stroke="#C8960C" stroke-width="5" fill="none"/>
+  <path d="M172 242 Q208 220 244 242" stroke="#D4A820" stroke-width="4" fill="none"/>
+  <path d="M192 228 Q228 208 268 228" stroke="#C8960C" stroke-width="4" fill="none"/>
+  <path d="M230 222 Q268 202 302 222" stroke="#C8960C" stroke-width="4" fill="none"/>
+
+  <!-- 상단 긴 털 -->
+  <path d="M208 162 Q218 118 224 88 Q230 122 234 162" fill="#8B6914" opacity="0.9"/>
+  <path d="M224 156 Q234 108 240 78 Q246 116 250 156" fill="#B8860B" opacity="0.9"/>
+  <path d="M238 152 Q248 104 254 74 Q260 112 264 152" fill="#C8960C" opacity="0.9"/>
+  <path d="M252 154 Q262 106 268 76 Q274 114 278 154" fill="#B8860B" opacity="0.9"/>
+  <path d="M268 160 Q278 116 284 88 Q290 120 294 160" fill="#8B6914" opacity="0.9"/>
+
+  <!-- 눈썹 -->
+  <path d="M178 278 Q210 264 242 278" stroke="#1A0E00" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M270 276 Q302 262 334 276" stroke="#1A0E00" stroke-width="7" fill="none" stroke-linecap="round"/>
+
+  <!-- 왼쪽 눈 -->
+  <ellipse cx="208" cy="306" rx="32" ry="30" fill="#1A0E00"/>
+  <ellipse cx="208" cy="306" rx="24" ry="22" fill="#3D1A00"/>
+  <ellipse cx="208" cy="306" rx="18" ry="17" fill="#1A0800"/>
+  <ellipse cx="208" cy="306" rx="12" ry="11" fill="#000"/>
+  <circle cx="220" cy="294" r="7" fill="white" opacity="0.9"/>
+  <circle cx="196" cy="318" r="3" fill="white" opacity="0.4"/>
+
+  <!-- 오른쪽 눈 -->
+  <ellipse cx="304" cy="306" rx="32" ry="30" fill="#1A0E00"/>
+  <ellipse cx="304" cy="306" rx="24" ry="22" fill="#3D1A00"/>
+  <ellipse cx="304" cy="306" rx="18" ry="17" fill="#1A0800"/>
+  <ellipse cx="304" cy="306" rx="12" ry="11" fill="#000"/>
+  <circle cx="316" cy="294" r="7" fill="white" opacity="0.9"/>
+  <circle cx="292" cy="318" r="3" fill="white" opacity="0.4"/>
+
+  <!-- 코 -->
+  <ellipse cx="256" cy="354" rx="26" ry="18" fill="#1A0E00"/>
+  <ellipse cx="256" cy="352" rx="20" ry="13" fill="#2D1A0A"/>
+  <circle cx="246" cy="346" r="5" fill="white" opacity="0.5"/>
+
+  <!-- 입 -->
+  <path d="M210 378 Q256 408 302 378" stroke="#1A0E00" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M212 380 Q256 410 300 380" fill="#7A1818" opacity="0.4"/>
+</svg>

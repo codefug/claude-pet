@@ -6,11 +6,11 @@ let tray: Tray | null = null
 
 export function createTray(win: BrowserWindow): void {
   const iconPath = app.isPackaged
-    ? join(process.resourcesPath, 'icon.png')
-    : join(__dirname, '../../resources/icon.png')
+    ? join(process.resourcesPath, 'tray-icon.png')
+    : join(__dirname, '../../resources/tray-icon.png')
   const icon = nativeImage.createFromPath(iconPath)
   const trayIcon = icon.resize({ width: 16, height: 16 })
-  trayIcon.setTemplateImage(true)
+  trayIcon.setTemplateImage(false)
 
   tray = new Tray(trayIcon)
   tray.setToolTip('Claude Pet')
