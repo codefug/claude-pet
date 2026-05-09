@@ -7,11 +7,11 @@ function App(): React.JSX.Element {
 
   useEffect(() => {
     window.claudePet.getSessions().then((data) => {
-      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) })))
+      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt), summary: s.summary ?? null })))
     })
 
     const unsubscribe = window.claudePet.onSessionsUpdate((data) => {
-      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) })))
+      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt), summary: s.summary ?? null })))
     })
 
     return unsubscribe

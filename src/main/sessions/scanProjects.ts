@@ -2,6 +2,8 @@ import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
 import { homedir } from 'os'
 import type { SessionData } from './mockSource'
+import { parseJsonl } from './parseJsonl'
+import { classifyStatus } from './classify'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
 const ACTIVE_WINDOW_MS = 5 * 60 * 60 * 1000 // 5시간
@@ -55,11 +57,17 @@ export function scanProjects(): SessionData[] {
 
       if (mtime < cutoff) continue
 
+      const parsed = parseJsonl(filePath)
+      const status = classifyStatus(parsed)
+      const lastMessageAt = parsed.lastMessageAt ?? new Date(mtime).toISOString()
+      const summary = parsed.aiTitle ?? parsed.lastPrompt ?? null
+
       sessions.push({
         id: `${dir}/${file}`,
         projectName: name,
-        status: 'done',
-        lastMessageAt: new Date(mtime).toISOString()
+        status,
+        lastMessageAt,
+        summary
       })
     }
   }

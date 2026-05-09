@@ -33,7 +33,8 @@ export default function SessionCard({ session }: Props): React.JSX.Element {
           height: '10px',
           borderRadius: '50%',
           background: color,
-          flexShrink: 0
+          flexShrink: 0,
+          marginTop: session.summary ? '-8px' : '0'
         }}
       />
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -49,6 +50,20 @@ export default function SessionCard({ session }: Props): React.JSX.Element {
         >
           {session.projectName}
         </div>
+        {session.summary && (
+          <div
+            style={{
+              fontSize: '10px',
+              color: 'rgba(255,255,255,0.5)',
+              marginTop: '2px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {session.summary}
+          </div>
+        )}
         <div style={{ fontSize: '11px', color: color, marginTop: '2px' }}>{label}</div>
       </div>
     </div>

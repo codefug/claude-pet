@@ -5,4 +5,5 @@ export interface Session {
   projectName: string
   status: SessionStatus
   lastMessageAt: Date
+  summary: string | null
 }
