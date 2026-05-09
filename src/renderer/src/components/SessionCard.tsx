@@ -1,4 +1,5 @@
 import type { Session, SessionStatus } from '../types'
+import { relativeTime } from '../utils/relativeTime'
 
 const STATUS_CONFIG: Record<SessionStatus, { color: string; label: string }> = {
   working: { color: '#F5C842', label: 'working' },
@@ -13,13 +14,15 @@ interface Props {
 
 export default function SessionCard({ session }: Props): React.JSX.Element {
   const { color, label } = STATUS_CONFIG[session.status]
+  const isWorking = session.status === 'working'
 
   return (
     <div
+      title={session.projectPath}
       style={{
         WebkitAppRegion: 'no-drag',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         gap: '10px',
         padding: '8px 12px',
         borderRadius: '10px',
@@ -29,32 +32,39 @@ export default function SessionCard({ session }: Props): React.JSX.Element {
     >
       <div
         style={{
-          width: '10px',
-          height: '10px',
+          width: '8px',
+          height: '8px',
           borderRadius: '50%',
           background: color,
           flexShrink: 0,
-          marginTop: session.summary ? '-8px' : '0'
+          marginTop: '4px',
+          animation: isWorking ? 'pulse 0.6s ease-in-out infinite alternate' : 'none'
         }}
       />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div
-          style={{
-            fontSize: '12px',
-            fontWeight: 600,
-            color: '#fff',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap'
-          }}
-        >
-          {session.projectName}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+          <div
+            style={{
+              fontSize: '12px',
+              fontWeight: 600,
+              color: '#fff',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              flex: 1
+            }}
+          >
+            {session.projectName}
+          </div>
+          <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>
+            {relativeTime(session.lastMessageAt)}
+          </div>
         </div>
         {session.summary && (
           <div
             style={{
               fontSize: '10px',
-              color: 'rgba(255,255,255,0.5)',
+              color: 'rgba(255,255,255,0.45)',
               marginTop: '2px',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -64,7 +74,7 @@ export default function SessionCard({ session }: Props): React.JSX.Element {
             {session.summary}
           </div>
         )}
-        <div style={{ fontSize: '11px', color: color, marginTop: '2px' }}>{label}</div>
+        <div style={{ fontSize: '10px', color: color, marginTop: '2px' }}>{label}</div>
       </div>
     </div>
   )

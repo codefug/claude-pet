@@ -65,6 +65,7 @@ export function scanProjects(): SessionData[] {
       sessions.push({
         id: `${dir}/${file}`,
         projectName: name,
+        projectPath: decoded,
         status,
         lastMessageAt,
         summary
