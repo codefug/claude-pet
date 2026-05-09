@@ -13,7 +13,8 @@ macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모�
 | 🟡 working | Claude가 작업 중 | 노란색 |
 | 🟠 permission | Permission 승인 대기 | 주황색 |
 | 🟢 done | 작업 완료 | 초록색 |
-| ⚫ aborted | 중단됨 | 회색 |
+| ⚫ aborted | 5분 이상 응답 없음 | 회색 |
+| 🟣 interrupted | 사용자가 직접 중단 | 보라색 |
 
 - `~/.claude/projects/*/*.jsonl` 실시간 감시 (chokidar)
 - 마지막 메시지의 `stop_reason` 및 tool 상태로 세션 상태 자동 분류
