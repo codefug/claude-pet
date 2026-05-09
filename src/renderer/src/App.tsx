@@ -1,21 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SessionCard from './components/SessionCard'
 import type { Session } from './types'
 
-const DUMMY_SESSIONS: Session[] = [
-  { id: '1', projectName: 'claude-pet', status: 'working', lastMessageAt: new Date() },
-  {
-    id: '2',
-    projectName: 'my-next-app',
-    status: 'waiting_permission',
-    lastMessageAt: new Date()
-  },
-  { id: '3', projectName: 'api-server', status: 'done', lastMessageAt: new Date() },
-  { id: '4', projectName: 'old-project', status: 'aborted', lastMessageAt: new Date() }
-]
-
 function App(): React.JSX.Element {
-  const [sessions] = useState<Session[]>(DUMMY_SESSIONS)
+  const [sessions, setSessions] = useState<Session[]>([])
+
+  useEffect(() => {
+    window.claudePet.getSessions().then((data) => {
+      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) })))
+    })
+
+    const unsubscribe = window.claudePet.onSessionsUpdate((data) => {
+      setSessions(data.map((s) => ({ ...s, lastMessageAt: new Date(s.lastMessageAt) })))
+    })
+
+    return unsubscribe
+  }, [])
 
   return (
     <div

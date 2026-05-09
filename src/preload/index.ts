@@ -1,16 +1,21 @@
-import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron'
+import type { SessionData } from '../main/sessions/mockSource'
+
+const claudePet = {
+  getSessions: (): Promise<SessionData[]> => ipcRenderer.invoke('get-sessions'),
+  onSessionsUpdate: (cb: (sessions: SessionData[]) => void): (() => void) => {
+    const handler = (_: Electron.IpcRendererEvent, sessions: SessionData[]): void => cb(sessions)
+    ipcRenderer.on('sessions-update', handler)
+    return () => ipcRenderer.off('sessions-update', handler)
+  }
+}
 
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', {})
+    contextBridge.exposeInMainWorld('claudePet', claudePet)
   } catch (error) {
     console.error(error)
   }
 } else {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ;(window as any).electron = electronAPI
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ;(window as any).api = {}
+  ;(window as any).claudePet = claudePet
 }

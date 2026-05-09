@@ -1,5 +1,6 @@
 import { join } from 'path'
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { startMockSource, makeSessions } from './sessions/mockSource'
 
 function createWindow(): void {
   const isDev = process.env.NODE_ENV === 'development'
@@ -32,10 +33,12 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  startMockSource(mainWindow)
 }
 
 app.whenReady().then(() => {
-  ipcMain.on('ping', () => console.log('pong'))
+  ipcMain.handle('get-sessions', () => makeSessions())
   createWindow()
 
   app.on('activate', () => {
