@@ -1,11 +1,13 @@
 import { readdirSync, statSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { basename, join } from 'node:path'
+import { getLiveState } from '../live-status'
 import { loadSettings } from '../settings'
 import { classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
 import type { SessionData } from './mockSource'
 import { parseJsonl } from './parseJsonl'
+import { toolToPattern } from './permissionChecker'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
 
@@ -17,7 +19,7 @@ export function scanProjects(): SessionData[] {
     return []
   }
 
-  const { sessionWindowHours } = loadSettings()
+  const { sessionWindowHours, ignoredToolRules } = loadSettings()
   const cutoff = Date.now() - sessionWindowHours * 60 * 60 * 1000
   const sessions: SessionData[] = []
 
@@ -55,20 +57,25 @@ export function scanProjects(): SessionData[] {
 
       if (new Date(lastMessageAt).getTime() < cutoff) continue
 
-      const status = classifyStatus(parsed, projectName)
+      let status = classifyStatus(parsed)
 
       if (status === 'aborted') {
         const lastAt = new Date(lastMessageAt).getTime()
         if (Date.now() - lastAt > 5 * 60 * 1000) continue
       }
 
+      // ignoredToolRules 매칭 시 waiting_permission → working으로 override
+      const live = parsed.sessionId ? getLiveState(parsed.sessionId) : undefined
+      if (status === 'waiting_permission' && live?.pendingTool) {
+        const pattern = toolToPattern(live.pendingTool.name, live.pendingTool.input)
+        const ignored = ignoredToolRules.some(
+          (r) => r.projectName === projectName && pattern.includes(r.pattern)
+        )
+        if (ignored) status = 'working'
+      }
+
       const pendingTool =
-        status === 'waiting_permission' && parsed.lastAssistant?.lastToolName
-          ? {
-              name: parsed.lastAssistant.lastToolName,
-              input: parsed.lastAssistant.lastToolInput ?? {}
-            }
-          : null
+        status === 'waiting_permission' && live?.pendingTool ? live.pendingTool : null
 
       sessions.push({
         id: `${dir}/${file}`,

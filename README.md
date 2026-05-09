@@ -16,8 +16,8 @@ macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모�
 | ⚫ aborted | 5분 이상 응답 없음 | 회색 |
 | 🟣 interrupted | 사용자가 직접 중단 | 보라색 |
 
-- `~/.claude/projects/*/*.jsonl` 실시간 감시 (chokidar)
-- 마지막 메시지의 `stop_reason` 및 tool 상태로 세션 상태 자동 분류
+- Claude Code 공식 Hooks(`PreToolUse`, `Stop`, `PermissionRequest` 등)로 상태를 실시간 수신
+- 앱 첫 실행 시 `~/.claude/settings.json`에 hook 자동 등록 (재시작 1회 필요)
 - 기본 5시간 이내 수정된 세션만 표시 (설정에서 변경 가능)
 - 우선순위 정렬: permission > working > done > aborted
 - `waiting_permission` 세션에 호버 시 **working으로 무시** 버튼 표시
@@ -25,6 +25,14 @@ macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모�
 - 시스템 트레이 아이콘에서 Show / Hide / Quit
 
 ## 설치
+
+### 사전 요구사항
+
+- **Node.js 18+** — hook CLI가 Node.js로 실행됩니다. Claude Code를 사용 중이라면 이미 설치되어 있을 가능성이 높습니다.
+  ```bash
+  node --version  # 확인
+  # 없으면: brew install node
+  ```
 
 ### Homebrew (권장)
 
@@ -37,6 +45,9 @@ brew install --cask claude-pet
 > ```bash
 > xattr -cr /Applications/Claude\ Pet.app
 > ```
+
+> **처음 실행 후 Claude Code를 한 번 재시작**해야 hook이 적용됩니다.
+> 앱이 `~/.claude/settings.json`에 hook을 자동으로 등록하지만, Claude Code는 세션 시작 시 설정을 로드합니다.
 
 ### 소스에서 빌드
 
@@ -74,7 +85,8 @@ npm run release
 - Electron 39 + electron-vite 5
 - React 19 + TypeScript 5
 - UnoCSS
-- chokidar 5 (파일 감시)
+- chokidar 5 (세션 메타데이터 감시)
+- Claude Code Hooks (세션 상태 실시간 수신)
 - Biome (lint/format)
 
 ## 라이선스

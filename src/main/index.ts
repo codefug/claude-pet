@@ -1,8 +1,10 @@
 import { readFileSync } from 'node:fs'
 import { extname, join } from 'node:path'
 import { BrowserWindow, app, dialog, ipcMain, screen, shell } from 'electron'
-import { invalidateAllowCache, toolToPattern } from './sessions/permissionChecker'
+import { startHookServer } from './hook-server'
+import { installHooks } from './hook-installer'
 import { scanProjects } from './sessions/scanProjects'
+import { toolToPattern } from './sessions/permissionChecker'
 import { startWatcher } from './sessions/watcher'
 import { loadSettings, saveSettings } from './settings'
 import type { AppSettings, IgnoredToolRule } from './settings'
@@ -80,6 +82,8 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
+  installHooks()
+  startHookServer(mainWindow)
   startWatcher(mainWindow)
 }
 
@@ -97,7 +101,6 @@ app.whenReady().then(() => {
       if (!exists) {
         settings.ignoredToolRules = [...settings.ignoredToolRules, { projectName, pattern }]
         saveSettings(settings)
-        invalidateAllowCache()
         pushSessions()
       }
     }
@@ -141,7 +144,6 @@ app.whenReady().then(() => {
     const settings = loadSettings()
     settings.ignoredToolRules = rules
     saveSettings(settings)
-    invalidateAllowCache()
     pushSessions()
   })
 
