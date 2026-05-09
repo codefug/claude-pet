@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { readNewLines, resetOffset } from './tailReader'
 
 interface AssistantMessage {
   stop_reason: string | null
@@ -13,19 +13,10 @@ export interface ParsedSession {
   interrupted: boolean
 }
 
-export function parseJsonl(filePath: string): ParsedSession {
-  let content: string
-  try {
-    content = readFileSync(filePath, 'utf-8')
-  } catch {
-    return { lastAssistant: null, lastMessageAt: null, aiTitle: null, lastPrompt: null }
-  }
+const cache = new Map<string, ParsedSession>()
 
-  const lines = content.split('\n').filter(Boolean)
-  let lastAssistant: AssistantMessage | null = null
-  let aiTitle: string | null = null
-  let lastPrompt: string | null = null
-  let interrupted = false
+function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
+  let { lastAssistant, aiTitle, lastPrompt, interrupted } = session
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -79,4 +70,27 @@ export function parseJsonl(filePath: string): ParsedSession {
     lastPrompt,
     interrupted
   }
+}
+
+const EMPTY: ParsedSession = {
+  lastAssistant: null,
+  lastMessageAt: null,
+  aiTitle: null,
+  lastPrompt: null,
+  interrupted: false
+}
+
+export function parseJsonl(filePath: string): ParsedSession {
+  const newLines = readNewLines(filePath)
+  if (newLines.length === 0) return cache.get(filePath) ?? EMPTY
+
+  const base = cache.get(filePath) ?? EMPTY
+  const updated = applyLines(base, newLines)
+  cache.set(filePath, updated)
+  return updated
+}
+
+export function invalidateCache(filePath: string): void {
+  cache.delete(filePath)
+  resetOffset(filePath)
 }
