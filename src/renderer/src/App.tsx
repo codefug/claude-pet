@@ -1,4 +1,22 @@
+import { useState } from 'react'
+import SessionCard from './components/SessionCard'
+import type { Session } from './types'
+
+const DUMMY_SESSIONS: Session[] = [
+  { id: '1', projectName: 'claude-pet', status: 'working', lastMessageAt: new Date() },
+  {
+    id: '2',
+    projectName: 'my-next-app',
+    status: 'waiting_permission',
+    lastMessageAt: new Date()
+  },
+  { id: '3', projectName: 'api-server', status: 'done', lastMessageAt: new Date() },
+  { id: '4', projectName: 'old-project', status: 'aborted', lastMessageAt: new Date() }
+]
+
 function App(): React.JSX.Element {
+  const [sessions] = useState<Session[]>(DUMMY_SESSIONS)
+
   return (
     <div
       style={{
@@ -10,14 +28,30 @@ function App(): React.JSX.Element {
         WebkitBackdropFilter: 'blur(20px)',
         borderRadius: '16px',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontSize: '14px',
+        flexDirection: 'column',
+        padding: '14px 12px',
+        boxSizing: 'border-box',
         userSelect: 'none'
       }}
     >
-      Claude Pet
+      <div
+        style={{
+          fontSize: '11px',
+          fontWeight: 700,
+          color: 'rgba(255,255,255,0.4)',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          marginBottom: '10px',
+          paddingLeft: '2px'
+        }}
+      >
+        Claude Sessions
+      </div>
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        {sessions.map((s) => (
+          <SessionCard key={s.id} session={s} />
+        ))}
+      </div>
     </div>
   )
 }
