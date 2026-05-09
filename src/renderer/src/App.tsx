@@ -47,7 +47,7 @@ function App(): React.JSX.Element {
       >
         Claude Sessions
       </div>
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <div style={{ flex: 1, overflowY: 'auto', WebkitAppRegion: 'no-drag' }}>
         {sessions.map((s) => (
           <SessionCard key={s.id} session={s} />
         ))}
