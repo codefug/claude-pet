@@ -5,10 +5,15 @@ function createWindow(): void {
   const isDev = process.env.NODE_ENV === 'development'
 
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: 280,
+    height: 360,
     show: false,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    resizable: false,
     autoHideMenuBar: true,
+    ...(process.platform === 'darwin' ? { vibrancy: 'under-window' } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
