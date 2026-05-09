@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- 채도 낮춤 필터 -->
+  <defs>
+    <filter id="desaturate">
+      <feColorMatrix type="saturate" values="0.3"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#desaturate)">
+
+  <!-- 몸통 베이스 -->
+  <ellipse cx="100" cy="135" rx="45" ry="32" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="136" rx="38" ry="26" fill="#8B6914"/>
+  <ellipse cx="100" cy="138" rx="30" ry="20" fill="#B8860B"/>
+
+  <!-- 몸통 털 결 -->
+  <path d="M68 128 Q80 122 92 128" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M78 125 Q90 119 102 125" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M90 123 Q102 117 112 123" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M100 124 Q112 118 122 124" stroke="#9A7520" stroke-width="1" fill="none"/>
+  <path d="M62 136 Q74 132 86 136" stroke="#9A7520" stroke-width="1" fill="none"/>
+  <path d="M114 136 Q126 132 136 136" stroke="#9A7520" stroke-width="1" fill="none"/>
+
+  <!-- 가슴팍 -->
+  <ellipse cx="100" cy="149" rx="17" ry="12" fill="#D4A820"/>
+  <path d="M89 145 Q95 141 101 145" stroke="#E8C040" stroke-width="1" fill="none"/>
+  <path d="M91 149 Q97 145 103 149" stroke="#E8C040" stroke-width="1" fill="none"/>
+
+  <!-- 처진 꼬리 (아래로 축 늘어짐) -->
+  <path d="M142 130 Q152 138 154 150 Q150 158 146 162" stroke="#3D2B1A" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M142 130 Q152 138 154 150 Q150 158 146 162" stroke="#6B4C20" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M143 131 Q152 140 153 151 Q150 157 147 161" stroke="#8B6914" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- 뒷다리 -->
+  <ellipse cx="78" cy="160" rx="11" ry="7" fill="#3D2B1A"/>
+  <ellipse cx="122" cy="160" rx="11" ry="7" fill="#3D2B1A"/>
+  <ellipse cx="78" cy="162" rx="8" ry="5" fill="#5C3D1E"/>
+  <ellipse cx="122" cy="162" rx="8" ry="5" fill="#5C3D1E"/>
+
+  <!-- 앞발 (힘없이 앞으로) -->
+  <path d="M84 148 Q78 156 74 164" stroke="#3D2B1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M84 148 Q78 156 74 164" stroke="#5C3D1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="73" cy="165" rx="7" ry="4" fill="#4A3018"/>
+
+  <path d="M116 148 Q122 156 126 164" stroke="#3D2B1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M116 148 Q122 156 126 164" stroke="#5C3D1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="127" cy="165" rx="7" ry="4" fill="#4A3018"/>
+
+  <!-- 목 -->
+  <ellipse cx="100" cy="108" rx="19" ry="14" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="108" rx="14" ry="10" fill="#5C3D1E"/>
+
+  <!-- 머리 (약간 숙임) -->
+  <ellipse cx="100" cy="88" rx="30" ry="26" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="82" rx="26" ry="21" fill="#8B6914"/>
+  <ellipse cx="100" cy="84" rx="22" ry="17" fill="#B8860B"/>
+
+  <!-- 머리 털 결 -->
+  <path d="M80 79 Q90 73 100 79" stroke="#C8960C" stroke-width="1" fill="none"/>
+  <path d="M84 74 Q94 68 104 74" stroke="#D4A820" stroke-width="1" fill="none"/>
+  <path d="M88 70 Q98 65 108 70" stroke="#C8960C" stroke-width="1" fill="none"/>
+
+  <!-- 얼굴 아랫부분 -->
+  <ellipse cx="100" cy="92" rx="20" ry="16" fill="#C8960C"/>
+  <ellipse cx="100" cy="94" rx="16" ry="13" fill="#D4A820"/>
+
+  <!-- 귀 (축 늘어짐) -->
+  <!-- 왼쪽 귀 — 아래로 처짐 -->
+  <path d="M72 84 Q56 94 54 110 Q62 96 72 84 Z" fill="#2A1A08"/>
+  <path d="M73 83 Q58 93 57 108 Q64 95 73 83 Z" fill="#3D2B1A"/>
+  <path d="M61 100 Q59 91 62 84" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M64 103 Q63 94 65 87" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M68 104 Q67 95 69 88" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+
+  <!-- 오른쪽 귀 — 아래로 처짐 -->
+  <path d="M128 84 Q144 94 146 110 Q138 96 128 84 Z" fill="#2A1A08"/>
+  <path d="M127 83 Q142 93 143 108 Q136 95 127 83 Z" fill="#3D2B1A"/>
+  <path d="M139 100 Q141 91 138 84" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M136 103 Q137 94 135 87" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M132 104 Q133 95 131 88" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+
+  <!-- 눈썹 (처짐 — 슬픔) -->
+  <path d="M82 78 Q88 82 94 80" stroke="#1A0E00" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M106 80 Q112 82 118 78" stroke="#1A0E00" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+
+  <!-- 눈 (반쯤 감김 — 풀죽음) -->
+  <!-- 왼쪽 눈 -->
+  <ellipse cx="88" cy="87" rx="6.5" ry="5" fill="#1A0E00"/>
+  <ellipse cx="88" cy="87" rx="5" ry="3.8" fill="#3D1A00"/>
+  <ellipse cx="88" cy="88" rx="3.5" ry="3" fill="#1A0800"/>
+  <ellipse cx="88" cy="88" rx="2.2" ry="2" fill="#000"/>
+  <!-- 무거운 눈꺼풀 -->
+  <path d="M81.5 85 Q88 82 94.5 85" fill="#B8860B"/>
+  <circle cx="90" cy="85.5" r="1" fill="white" opacity="0.6"/>
+
+  <!-- 오른쪽 눈 -->
+  <ellipse cx="112" cy="87" rx="6.5" ry="5" fill="#1A0E00"/>
+  <ellipse cx="112" cy="87" rx="5" ry="3.8" fill="#3D1A00"/>
+  <ellipse cx="112" cy="88" rx="3.5" ry="3" fill="#1A0800"/>
+  <ellipse cx="112" cy="88" rx="2.2" ry="2" fill="#000"/>
+  <!-- 무거운 눈꺼풀 -->
+  <path d="M105.5 85 Q112 82 118.5 85" fill="#B8860B"/>
+  <circle cx="114" cy="85.5" r="1" fill="white" opacity="0.6"/>
+
+  <!-- 코 -->
+  <ellipse cx="100" cy="97" rx="5" ry="3.5" fill="#1A0E00"/>
+  <ellipse cx="100" cy="96.5" rx="4" ry="2.5" fill="#2D1A0A"/>
+  <circle cx="98.5" cy="95.5" r="0.8" fill="white" opacity="0.5"/>
+
+  <!-- 입 (일자 — 풀죽음) -->
+  <path d="M93 103 Q100 103 107 103" stroke="#1A0E00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- 살짝 처진 입꼬리 -->
+  <path d="M93 103 Q91 105 90 106" stroke="#1A0E00" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M107 103 Q109 105 110 106" stroke="#1A0E00" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- 머리 상단 긴 털 -->
+  <path d="M85 68 Q88 58 90 52 Q92 60 94 68" fill="#8B6914" opacity="0.85"/>
+  <path d="M90 66 Q93 54 95 48 Q97 58 98 66" fill="#B8860B" opacity="0.85"/>
+  <path d="M95 65 Q98 53 100 47 Q102 57 103 65" fill="#C8960C" opacity="0.85"/>
+  <path d="M100 66 Q103 54 105 48 Q107 58 108 66" fill="#B8860B" opacity="0.85"/>
+  <path d="M105 68 Q108 58 110 52 Q112 60 114 68" fill="#8B6914" opacity="0.85"/>
+
+  </g>
+</svg>
