@@ -4,7 +4,7 @@ import waitingSvg from '../assets/yorkie/waiting.svg'
 import doneSvg from '../assets/yorkie/done.svg'
 import abortedSvg from '../assets/yorkie/aborted.svg'
 
-const SVG_MAP: Record<SessionStatus, string> = {
+const DEFAULT_SVG: Record<SessionStatus, string> = {
   working: workingSvg,
   waiting_permission: waitingSvg,
   done: doneSvg,
@@ -13,8 +13,17 @@ const SVG_MAP: Record<SessionStatus, string> = {
 
 interface Props {
   status: SessionStatus
+  customImage?: string | null
 }
 
-export default function Yorkie({ status }: Props): React.JSX.Element {
-  return <img src={SVG_MAP[status]} width={48} height={48} style={{ display: 'block' }} />
+export default function CharacterAvatar({ status, customImage }: Props): React.JSX.Element {
+  const src = customImage ?? DEFAULT_SVG[status]
+  return (
+    <img
+      src={src}
+      width={48}
+      height={48}
+      style={{ display: 'block', objectFit: 'contain', borderRadius: customImage ? '6px' : 0 }}
+    />
+  )
 }

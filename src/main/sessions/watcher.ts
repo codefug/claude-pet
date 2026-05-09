@@ -4,6 +4,7 @@ import { homedir } from 'os'
 import type { BrowserWindow } from 'electron'
 import { scanProjects } from './scanProjects'
 import { invalidateCache } from './parseJsonl'
+import { ignoredSessions } from '../ignoredSessions'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
 
@@ -16,7 +17,10 @@ export function startWatcher(win: BrowserWindow): void {
   const push = (filePath: string): void => {
     console.log('[watcher] changed:', filePath)
     if (!win.isDestroyed()) {
-      const sessions = scanProjects()
+      const sessions = scanProjects().map((s) => ({
+        ...s,
+        status: ignoredSessions.has(s.id) ? ('working' as const) : s.status
+      }))
       console.log('[watcher] pushing', sessions.length, 'sessions')
       win.webContents.send('sessions-update', sessions)
     }

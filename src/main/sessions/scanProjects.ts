@@ -4,9 +4,9 @@ import { homedir } from 'os'
 import type { SessionData } from './mockSource'
 import { parseJsonl } from './parseJsonl'
 import { classifyStatus } from './classify'
+import { loadSettings } from '../settings'
 
 const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
-const ACTIVE_WINDOW_MS = 5 * 60 * 60 * 1000 // 5시간
 
 function decodeProjectDir(dirName: string): string {
   return dirName.replace(/-/g, '/').replace(/^\//, '')
@@ -25,7 +25,8 @@ export function scanProjects(): SessionData[] {
     return []
   }
 
-  const cutoff = Date.now() - ACTIVE_WINDOW_MS
+  const { sessionWindowHours } = loadSettings()
+  const cutoff = Date.now() - sessionWindowHours * 60 * 60 * 1000
   const sessions: SessionData[] = []
 
   for (const dir of dirs) {
@@ -58,8 +59,12 @@ export function scanProjects(): SessionData[] {
       if (mtime < cutoff) continue
 
       const parsed = parseJsonl(filePath)
-      const status = classifyStatus(parsed)
       const lastMessageAt = parsed.lastMessageAt ?? new Date(mtime).toISOString()
+
+      // 실제 마지막 메시지 시각 기준으로 5시간 필터 재적용
+      if (new Date(lastMessageAt).getTime() < cutoff) continue
+
+      const status = classifyStatus(parsed)
       const summary = parsed.aiTitle ?? parsed.lastPrompt ?? null
 
       sessions.push({

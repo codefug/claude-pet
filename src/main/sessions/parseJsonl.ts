@@ -4,6 +4,7 @@ interface AssistantMessage {
   stop_reason: string | null
   timestamp: string
   lastToolName: string | null
+  lastToolInput: Record<string, unknown> | null
 }
 
 export interface ParsedSession {
@@ -37,7 +38,8 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
         lastAssistant = {
           stop_reason: msg.stop_reason as string | null,
           timestamp: entry.timestamp as string,
-          lastToolName: (lastTool?.name as string) ?? null
+          lastToolName: (lastTool?.name as string) ?? null,
+          lastToolInput: (lastTool?.input as Record<string, unknown>) ?? null
         }
         interrupted = false
         pendingToolResult = msg.stop_reason === 'tool_use'
