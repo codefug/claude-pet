@@ -5,16 +5,18 @@ export interface CharacterImages {
   waiting_permission: string | null
   done: string | null
   aborted: string | null
+  interrupted: string | null
 }
 
 const STATUS_LABELS: Record<SessionStatus, string> = {
   working: 'Working',
   waiting_permission: 'Permission',
   done: 'Done',
-  aborted: 'Aborted'
+  aborted: 'Aborted',
+  interrupted: 'Interrupted'
 }
 
-const STATUSES: SessionStatus[] = ['working', 'waiting_permission', 'done', 'aborted']
+const STATUSES: SessionStatus[] = ['working', 'waiting_permission', 'done', 'aborted', 'interrupted']
 
 interface Props {
   images: CharacterImages

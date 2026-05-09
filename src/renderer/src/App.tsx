@@ -12,7 +12,8 @@ function App(): React.JSX.Element {
     working: null,
     waiting_permission: null,
     done: null,
-    aborted: null
+    aborted: null,
+    interrupted: null
   })
 
   const update = useCallback((data: SessionData[]): void => {

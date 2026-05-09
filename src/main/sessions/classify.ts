@@ -8,7 +8,7 @@ export function classifyStatus(parsed: ParsedSession, projectName: string): Sess
   const { lastAssistant, interrupted, pendingToolResult, awaitingAssistant } = parsed
 
   if (interrupted && pendingToolResult) return 'waiting_permission'
-  if (interrupted) return 'aborted'
+  if (interrupted) return 'interrupted'
   if (awaitingAssistant) return 'working'
   if (!lastAssistant) return 'done'
 

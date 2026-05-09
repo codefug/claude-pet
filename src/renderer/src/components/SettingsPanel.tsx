@@ -16,7 +16,8 @@ export default function SettingsPanel({ onClose, onImagesChange }: Props): React
     working: null,
     waiting_permission: null,
     done: null,
-    aborted: null
+    aborted: null,
+    interrupted: null
   })
   const [sessionWindowHours, setSessionWindowHours] = useState(5)
   const [ignoredToolRules, setIgnoredToolRules] = useState<IgnoredToolRule[]>([])

@@ -15,6 +15,7 @@ export interface AppSettings {
     waiting_permission: string | null
     done: string | null
     aborted: string | null
+    interrupted: string | null
   }
 }
 
@@ -25,7 +26,8 @@ const DEFAULT_SETTINGS: AppSettings = {
     working: null,
     waiting_permission: null,
     done: null,
-    aborted: null
+    aborted: null,
+    interrupted: null
   }
 }
 
