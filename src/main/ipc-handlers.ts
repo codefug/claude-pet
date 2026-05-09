@@ -39,8 +39,7 @@ export function registerIpcHandlers(win: BrowserWindow): void {
         working: toDataUrl(settings.characterImages.working),
         waiting_permission: toDataUrl(settings.characterImages.waiting_permission),
         done: toDataUrl(settings.characterImages.done),
-        aborted: toDataUrl(settings.characterImages.aborted),
-        interrupted: toDataUrl(settings.characterImages.interrupted)
+        aborted: toDataUrl(settings.characterImages.aborted)
       }
     }
   })

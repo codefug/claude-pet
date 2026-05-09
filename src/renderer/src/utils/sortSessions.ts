@@ -3,9 +3,8 @@ import type { Session, SessionStatus } from '../types'
 const PRIORITY: Record<SessionStatus, number> = {
   waiting_permission: 0,
   working: 1,
-  interrupted: 2,
-  done: 3,
-  aborted: 4
+  done: 2,
+  aborted: 3
 }
 
 export function sortSessions(sessions: Session[]): Session[] {

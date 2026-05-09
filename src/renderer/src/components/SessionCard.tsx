@@ -7,8 +7,7 @@ const STATUS_CONFIG: Record<SessionStatus, { color: string; label: string }> = {
   working: { color: '#F5C842', label: 'working' },
   waiting_permission: { color: '#F5813A', label: 'permission' },
   done: { color: '#4CAF7D', label: 'done' },
-  aborted: { color: '#888899', label: 'aborted' },
-  interrupted: { color: '#A78BFA', label: 'interrupted' }
+  aborted: { color: '#888899', label: 'aborted' }
 }
 
 interface Props {

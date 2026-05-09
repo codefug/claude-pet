@@ -1,4 +1,4 @@
-export type SessionStatus = 'working' | 'waiting_permission' | 'done' | 'aborted' | 'interrupted'
+export type SessionStatus = 'working' | 'waiting_permission' | 'done' | 'aborted'
 
 export interface PendingTool {
   name: string

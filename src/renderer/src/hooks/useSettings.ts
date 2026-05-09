@@ -7,8 +7,7 @@ const EMPTY_IMAGES: CharacterImages = {
   working: null,
   waiting_permission: null,
   done: null,
-  aborted: null,
-  interrupted: null
+  aborted: null
 }
 
 export function useSettings(onImagesChange: (images: CharacterImages) => void): {

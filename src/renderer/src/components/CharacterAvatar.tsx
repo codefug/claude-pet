@@ -1,6 +1,5 @@
 import abortedSvg from '../assets/yorkie/aborted.svg'
 import doneSvg from '../assets/yorkie/done.svg'
-import interruptedSvg from '../assets/yorkie/interrupted.svg'
 import waitingSvg from '../assets/yorkie/waiting.svg'
 import workingSvg from '../assets/yorkie/working.svg'
 import type { SessionStatus } from '../types'
@@ -9,8 +8,7 @@ const DEFAULT_SVG: Record<SessionStatus, string> = {
   working: workingSvg,
   waiting_permission: waitingSvg,
   done: doneSvg,
-  aborted: abortedSvg,
-  interrupted: interruptedSvg
+  aborted: abortedSvg
 }
 
 interface Props {
