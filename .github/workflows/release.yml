@@ -31,3 +31,39 @@ jobs:
           files: |
             dist/claude-pet-*.dmg
             dist/claude-pet-*.dmg.blockmap
+
+      - name: Update Homebrew Cask
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          SHA256=$(shasum -a 256 dist/claude-pet-${VERSION}.dmg | awk '{print $1}')
+
+          git clone https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/codefug/homebrew-claude-pet.git /tmp/homebrew-claude-pet
+
+          cat > /tmp/homebrew-claude-pet/Casks/claude-pet.rb << EOF
+          cask "claude-pet" do
+            version "${VERSION}"
+            sha256 "${SHA256}"
+
+            url "https://github.com/codefug/claude-pet/releases/download/v#{version}/claude-pet-#{version}.dmg"
+            name "Claude Pet"
+            desc "Claude Code session status widget"
+            homepage "https://github.com/codefug/claude-pet"
+
+            app "Claude Pet.app"
+
+            zap trash: [
+              "~/Library/Application Support/claude-pet",
+              "~/Library/Logs/claude-pet",
+              "~/Library/Preferences/com.allra.claudepet.plist",
+            ]
+          end
+          EOF
+
+          cd /tmp/homebrew-claude-pet
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
+          git add Casks/claude-pet.rb
+          git commit -m "chore: update claude-pet cask to v${VERSION}"
+          git push
