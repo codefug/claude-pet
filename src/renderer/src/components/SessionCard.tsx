@@ -15,7 +15,6 @@ interface Props {
 
 export default function SessionCard({ session }: Props): React.JSX.Element {
   const { color, label } = STATUS_CONFIG[session.status]
-  const isWorking = session.status === 'working'
 
   return (
     <div
