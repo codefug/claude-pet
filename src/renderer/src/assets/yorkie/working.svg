@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- 몸통 베이스 -->
+  <ellipse cx="100" cy="130" rx="45" ry="35" fill="#3D2B1A"/>
+  <!-- 몸통 골드 겉털 -->
+  <ellipse cx="100" cy="132" rx="38" ry="28" fill="#8B6914"/>
+  <ellipse cx="100" cy="134" rx="30" ry="22" fill="#B8860B"/>
+
+  <!-- 몸통 털 결 -->
+  <path d="M70 115 Q80 108 90 115" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M80 112 Q90 105 100 112" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M90 110 Q100 103 110 110" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M100 111 Q110 104 120 111" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M110 114 Q120 107 130 114" stroke="#C8960C" stroke-width="1.2" fill="none"/>
+  <path d="M65 125 Q75 120 85 125" stroke="#9A7520" stroke-width="1" fill="none"/>
+  <path d="M115 125 Q125 120 135 125" stroke="#9A7520" stroke-width="1" fill="none"/>
+
+  <!-- 가슴팍 밝은 털 -->
+  <ellipse cx="100" cy="145" rx="18" ry="14" fill="#D4A820"/>
+  <path d="M88 140 Q94 135 100 140" stroke="#E8C040" stroke-width="1" fill="none"/>
+  <path d="M92 144 Q98 139 104 144" stroke="#E8C040" stroke-width="1" fill="none"/>
+  <path d="M96 148 Q100 144 104 148" stroke="#E8C040" stroke-width="1" fill="none"/>
+
+  <!-- 뒷다리 -->
+  <ellipse cx="78" cy="158" rx="12" ry="8" fill="#3D2B1A"/>
+  <ellipse cx="122" cy="158" rx="12" ry="8" fill="#3D2B1A"/>
+  <ellipse cx="78" cy="160" rx="9" ry="6" fill="#5C3D1E"/>
+  <ellipse cx="122" cy="160" rx="9" ry="6" fill="#5C3D1E"/>
+
+  <!-- 앞발 들린 포즈 (키보드 위) -->
+  <!-- 왼쪽 앞발 -->
+  <path d="M82 148 Q75 140 72 132" stroke="#3D2B1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M82 148 Q75 140 72 132" stroke="#5C3D1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- 왼발 발톱 -->
+  <ellipse cx="71" cy="130" rx="6" ry="4" fill="#4A3018"/>
+  <path d="M67 128 Q69 125 71 128" stroke="#2A1A08" stroke-width="1" fill="none"/>
+  <path d="M70 127 Q72 124 74 127" stroke="#2A1A08" stroke-width="1" fill="none"/>
+  <path d="M73 128 Q75 125 77 128" stroke="#2A1A08" stroke-width="1" fill="none"/>
+
+  <!-- 오른쪽 앞발 -->
+  <path d="M118 148 Q125 140 128 132" stroke="#3D2B1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M118 148 Q125 140 128 132" stroke="#5C3D1E" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- 오른발 발톱 -->
+  <ellipse cx="129" cy="130" rx="6" ry="4" fill="#4A3018"/>
+  <path d="M123 128 Q125 125 127 128" stroke="#2A1A08" stroke-width="1" fill="none"/>
+  <path d="M126 127 Q128 124 130 127" stroke="#2A1A08" stroke-width="1" fill="none"/>
+  <path d="M129 128 Q131 125 133 128" stroke="#2A1A08" stroke-width="1" fill="none"/>
+
+  <!-- 목 -->
+  <ellipse cx="100" cy="100" rx="20" ry="16" fill="#3D2B1A"/>
+  <ellipse cx="100" cy="100" rx="15" ry="12" fill="#5C3D1E"/>
+
+  <!-- 머리 베이스 -->
+  <ellipse cx="100" cy="78" rx="30" ry="26" fill="#3D2B1A"/>
+  <!-- 머리 골드 상단 -->
+  <ellipse cx="100" cy="72" rx="26" ry="20" fill="#8B6914"/>
+  <!-- 머리 탄 그라데이션 -->
+  <ellipse cx="100" cy="74" rx="22" ry="17" fill="#B8860B"/>
+
+  <!-- 머리 털 결 -->
+  <path d="M78 68 Q88 62 98 68" stroke="#C8960C" stroke-width="1" fill="none"/>
+  <path d="M82 63 Q92 57 102 63" stroke="#D4A820" stroke-width="1" fill="none"/>
+  <path d="M88 59 Q98 54 108 59" stroke="#C8960C" stroke-width="1" fill="none"/>
+  <path d="M102 62 Q112 57 120 63" stroke="#C8960C" stroke-width="1" fill="none"/>
+  <path d="M104 67 Q114 62 122 68" stroke="#B8860B" stroke-width="1" fill="none"/>
+
+  <!-- 얼굴 아랫부분 (밝은 탄색) -->
+  <ellipse cx="100" cy="84" rx="20" ry="16" fill="#C8960C"/>
+  <ellipse cx="100" cy="86" rx="16" ry="13" fill="#D4A820"/>
+
+  <!-- 귀 (집중 포즈 — 쫑긋) -->
+  <!-- 왼쪽 귀 -->
+  <path d="M72 72 Q62 48 70 38 Q76 50 80 68 Z" fill="#2A1A08"/>
+  <path d="M73 70 Q64 50 71 42 Q76 53 79 67 Z" fill="#3D2B1A"/>
+  <!-- 왼귀 털 결 -->
+  <path d="M68 62 Q65 54 68 47" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M71 64 Q68 56 70 49" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M74 65 Q72 57 73 51" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+
+  <!-- 오른쪽 귀 -->
+  <path d="M128 72 Q138 48 130 38 Q124 50 120 68 Z" fill="#2A1A08"/>
+  <path d="M127 70 Q136 50 129 42 Q124 53 121 67 Z" fill="#3D2B1A"/>
+  <!-- 오른귀 털 결 -->
+  <path d="M132 62 Q135 54 132 47" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M129 64 Q132 56 130 49" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+  <path d="M126 65 Q128 57 127 51" stroke="#5C3D1E" stroke-width="0.8" fill="none"/>
+
+  <!-- 눈썹 (집중 — 약간 찌푸림) -->
+  <path d="M84 72 Q90 69 96 72" stroke="#1A0E00" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M104 72 Q110 69 116 72" stroke="#1A0E00" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- 눈 (절반쯤 감김 — 집중) -->
+  <!-- 왼쪽 눈 -->
+  <ellipse cx="88" cy="79" rx="7" ry="5" fill="#1A0E00"/>
+  <ellipse cx="88" cy="79" rx="5.5" ry="3.5" fill="#3D1A00"/>
+  <ellipse cx="88" cy="79" rx="4" ry="3" fill="#1A0800"/>
+  <!-- 눈꺼풀 (절반 감김) -->
+  <path d="M81 77 Q88 74 95 77" fill="#B8860B" stroke="none"/>
+  <!-- 홍채 -->
+  <ellipse cx="88" cy="80" rx="3" ry="2.5" fill="#5C2800"/>
+  <ellipse cx="88" cy="80" rx="2" ry="2" fill="#000"/>
+  <!-- 하이라이트 -->
+  <circle cx="90" cy="78" r="1.2" fill="white" opacity="0.9"/>
+  <circle cx="86" cy="81" r="0.6" fill="white" opacity="0.5"/>
+
+  <!-- 오른쪽 눈 -->
+  <ellipse cx="112" cy="79" rx="7" ry="5" fill="#1A0E00"/>
+  <ellipse cx="112" cy="79" rx="5.5" ry="3.5" fill="#3D1A00"/>
+  <ellipse cx="112" cy="79" rx="4" ry="3" fill="#1A0800"/>
+  <!-- 눈꺼풀 (절반 감김) -->
+  <path d="M105 77 Q112 74 119 77" fill="#B8860B" stroke="none"/>
+  <!-- 홍채 -->
+  <ellipse cx="112" cy="80" rx="3" ry="2.5" fill="#5C2800"/>
+  <ellipse cx="112" cy="80" rx="2" ry="2" fill="#000"/>
+  <!-- 하이라이트 -->
+  <circle cx="114" cy="78" r="1.2" fill="white" opacity="0.9"/>
+  <circle cx="110" cy="81" r="0.6" fill="white" opacity="0.5"/>
+
+  <!-- 코 -->
+  <ellipse cx="100" cy="88" rx="5" ry="3.5" fill="#1A0E00"/>
+  <ellipse cx="100" cy="87.5" rx="4" ry="2.5" fill="#2D1A0A"/>
+  <!-- 코 하이라이트 -->
+  <ellipse cx="98" cy="86.5" rx="1.5" ry="1" fill="#4A3020" opacity="0.8"/>
+  <circle cx="98.5" cy="86" r="0.8" fill="white" opacity="0.6"/>
+
+  <!-- 입 (약간 벌어짐 — 집중) -->
+  <path d="M95 93 Q100 97 105 93" stroke="#1A0E00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M97 94 Q100 98 103 94" fill="#8B2020" opacity="0.7"/>
+  <!-- 혀 살짝 -->
+  <ellipse cx="100" cy="96" rx="3" ry="2" fill="#CC4444" opacity="0.8"/>
+
+  <!-- 머리 상단 긴 털 (요크셔 특유) -->
+  <path d="M85 58 Q88 48 90 42 Q92 50 94 58" fill="#8B6914" opacity="0.9"/>
+  <path d="M90 56 Q93 44 95 38 Q97 48 98 56" fill="#B8860B" opacity="0.9"/>
+  <path d="M95 55 Q98 43 100 37 Q102 47 103 55" fill="#C8960C" opacity="0.9"/>
+  <path d="M100 56 Q103 44 105 38 Q107 48 108 56" fill="#B8860B" opacity="0.9"/>
+  <path d="M105 58 Q108 48 110 42 Q112 50 114 58" fill="#8B6914" opacity="0.9"/>
+
+  <!-- 키보드 (간단한 모티프) -->
+  <rect x="58" y="162" width="84" height="22" rx="4" fill="#2A2A3A" opacity="0.85"/>
+  <rect x="60" y="164" width="80" height="18" rx="3" fill="#1A1A2A" opacity="0.9"/>
+  <!-- 키 -->
+  <rect x="63" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <rect x="73" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <rect x="83" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <rect x="93" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <rect x="103" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <rect x="113" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <rect x="123" y="166" width="8" height="6" rx="1.5" fill="#3A3A50"/>
+  <!-- 스페이스바 -->
+  <rect x="73" y="174" width="54" height="6" rx="1.5" fill="#3A3A50"/>
+
+  <!-- working 애니메이션 (미세 떨림) -->
+  <animateTransform attributeName="transform" type="translate" values="0,0; 0,-1; 0,0" dur="0.6s" repeatCount="indefinite"/>
+</svg>

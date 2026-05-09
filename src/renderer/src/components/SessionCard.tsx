@@ -1,5 +1,6 @@
 import type { Session, SessionStatus } from '../types'
 import { relativeTime } from '../utils/relativeTime'
+import Yorkie from './Yorkie'
 
 const STATUS_CONFIG: Record<SessionStatus, { color: string; label: string }> = {
   working: { color: '#F5C842', label: 'working' },
@@ -30,17 +31,7 @@ export default function SessionCard({ session }: Props): React.JSX.Element {
         marginBottom: '6px'
       }}
     >
-      <div
-        style={{
-          width: '8px',
-          height: '8px',
-          borderRadius: '50%',
-          background: color,
-          flexShrink: 0,
-          marginTop: '4px',
-          animation: isWorking ? 'pulse 0.6s ease-in-out infinite alternate' : 'none'
-        }}
-      />
+      <Yorkie status={session.status} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
           <div

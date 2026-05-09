@@ -13,12 +13,13 @@ export interface ParsedSession {
   lastPrompt: string | null
   interrupted: boolean
   pendingToolResult: boolean
+  awaitingAssistant: boolean
 }
 
 const cache = new Map<string, ParsedSession>()
 
 function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
-  let { lastAssistant, aiTitle, lastPrompt, interrupted, pendingToolResult } = session
+  let { lastAssistant, aiTitle, lastPrompt, interrupted, pendingToolResult, awaitingAssistant } = session
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -40,6 +41,7 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
         }
         interrupted = false
         pendingToolResult = msg.stop_reason === 'tool_use'
+        awaitingAssistant = false
       }
     }
 
@@ -47,19 +49,20 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
       const msg = entry.message as Record<string, unknown> | undefined
       const content = msg?.content
       if (Array.isArray(content)) {
+        let hasToolResult = false
+        let hasInterrupt = false
+        let hasNormalText = false
         for (const block of content) {
           const b = block as Record<string, unknown>
-          if (b.type === 'tool_result') {
-            pendingToolResult = false
-          }
+          if (b.type === 'tool_result') hasToolResult = true
           if (b.type === 'text' && typeof b.text === 'string') {
-            if (b.text.startsWith('[Request interrupted')) {
-              interrupted = true
-            } else {
-              interrupted = false
-            }
+            if (b.text.startsWith('[Request interrupted')) hasInterrupt = true
+            else hasNormalText = true
           }
         }
+        if (hasToolResult) pendingToolResult = false
+        if (hasInterrupt) interrupted = true
+        else if (hasNormalText) { interrupted = false; awaitingAssistant = true }
       }
     }
 
@@ -78,7 +81,8 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     aiTitle,
     lastPrompt,
     interrupted,
-    pendingToolResult
+    pendingToolResult,
+    awaitingAssistant
   }
 }
 
@@ -88,7 +92,8 @@ const EMPTY: ParsedSession = {
   aiTitle: null,
   lastPrompt: null,
   interrupted: false,
-  pendingToolResult: false
+  pendingToolResult: false,
+  awaitingAssistant: false
 }
 
 export function parseJsonl(filePath: string): ParsedSession {
