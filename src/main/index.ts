@@ -9,11 +9,12 @@ function createWindow(): void {
     height: 360,
     show: false,
     frame: false,
-    transparent: true,
     alwaysOnTop: true,
     resizable: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'darwin' ? { vibrancy: 'under-window' } : {}),
+    ...(process.platform === 'darwin'
+      ? { vibrancy: 'under-window', visualEffectState: 'active' }
+      : { transparent: true, backgroundColor: '#00000000' }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
