@@ -70,7 +70,7 @@ function createWindow(): void {
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    if (/^https?:/.test(details.url)) shell.openExternal(details.url)
+    shell.openExternal(details.url)
     return { action: 'deny' }
   })
 
