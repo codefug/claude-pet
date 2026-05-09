@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, screen } from 'electron'
 
 let isQuitting = false
 import { scanProjects } from './sessions/scanProjects'
@@ -8,14 +8,21 @@ import { createTray } from './tray'
 
 function createWindow(): void {
   const isDev = process.env.NODE_ENV === 'development'
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+  const winW = 280
+  const winH = 360
+  const margin = 16
 
   const mainWindow = new BrowserWindow({
-    width: 280,
-    height: 360,
+    width: winW,
+    height: winH,
+    x: width - winW - margin,
+    y: height - winH - margin,
     show: false,
     frame: false,
     alwaysOnTop: true,
     resizable: false,
+    movable: true,
     autoHideMenuBar: true,
     transparent: true,
     backgroundColor: '#00000000',
