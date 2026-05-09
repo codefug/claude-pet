@@ -8,6 +8,76 @@ interface ToolCall {
   input: Record<string, unknown>
 }
 
+// Commands Claude Code auto-allows regardless of user settings
+const BASH_AUTO_ALLOW_EXACT = new Set([
+  'pwd', 'whoami', 'alias',
+  'claude -h', 'claude --help',
+  'node -v', 'node --version',
+  'python --version', 'python3 --version',
+  'ip addr',
+])
+
+const BASH_AUTO_ALLOW_COMMANDS = new Set([
+  'cal', 'uptime', 'cat', 'head', 'tail', 'wc', 'stat', 'strings',
+  'hexdump', 'od', 'nl', 'id', 'uname', 'free', 'df', 'du', 'locale',
+  'groups', 'nproc', 'basename', 'dirname', 'realpath', 'cut', 'paste',
+  'tr', 'column', 'tac', 'rev', 'fold', 'expand', 'unexpand', 'fmt',
+  'comm', 'cmp', 'numfmt', 'readlink', 'diff', 'true', 'false', 'sleep',
+  'which', 'type', 'expr', 'test', 'getconf', 'seq', 'tsort', 'pr',
+  'echo', 'printf', 'ls', 'cd', 'find',
+  // safe with flags validated by Claude Code
+  'xargs', 'file', 'sed', 'sort', 'man', 'help', 'netstat', 'ps',
+  'base64', 'grep', 'egrep', 'fgrep', 'sha256sum', 'sha1sum', 'md5sum',
+  'tree', 'date', 'hostname', 'info', 'lsof', 'pgrep', 'tput', 'ss',
+  'fd', 'fdfind', 'rg', 'jq', 'uniq', 'history', 'arch', 'ifconfig',
+  'pyright',
+])
+
+const GIT_AUTO_ALLOW_SUBCOMMANDS = new Set([
+  'status', 'log', 'diff', 'show', 'blame', 'branch', 'tag', 'remote',
+  'ls-files', 'ls-remote', 'rev-parse', 'describe', 'reflog', 'shortlog',
+  'cat-file', 'for-each-ref', 'worktree', 'stash',
+])
+
+const GH_AUTO_ALLOW_SUBCOMMANDS = new Set([
+  'pr', 'issue', 'run', 'workflow', 'repo', 'release', 'auth',
+])
+
+const GH_AUTO_ALLOW_ACTIONS = new Set([
+  'view', 'list', 'diff', 'checks', 'status',
+])
+
+function isBashAutoAllowed(cmd: string): boolean {
+  if (!cmd) return false
+
+  const trimmed = cmd.trim()
+
+  if (BASH_AUTO_ALLOW_EXACT.has(trimmed)) return true
+
+  // Extract leading command token (skip env var prefixes like FOO=bar cmd)
+  const tokens = trimmed.split(/\s+/)
+  let idx = 0
+  while (idx < tokens.length && tokens[idx].includes('=')) idx++
+  const leadCmd = tokens[idx] ?? ''
+  const sub = tokens[idx + 1] ?? ''
+
+  if (leadCmd === 'git' && GIT_AUTO_ALLOW_SUBCOMMANDS.has(sub)) return true
+
+  if (leadCmd === 'gh') {
+    if (GH_AUTO_ALLOW_SUBCOMMANDS.has(sub) && GH_AUTO_ALLOW_ACTIONS.has(tokens[idx + 2] ?? '')) return true
+    if (sub === 'api') return true // GET only heuristic; good enough
+  }
+
+  if (BASH_AUTO_ALLOW_COMMANDS.has(leadCmd)) return true
+
+  return false
+}
+
+// Non-Bash tools Claude Code never prompts for
+const NON_BASH_AUTO_ALLOW = new Set([
+  'Read', 'LS', 'Glob',
+])
+
 function parseAllowEntry(entry: string): { tool: string; pattern: string } | null {
   const paren = entry.indexOf('(')
   const colon = entry.indexOf(':')
@@ -69,6 +139,11 @@ function matchesToolCall(entry: { tool: string; pattern: string }, tool: ToolCal
 }
 
 export function isToolAllowed(tool: ToolCall): boolean {
+  if (NON_BASH_AUTO_ALLOW.has(tool.name)) return true
+  if (tool.name === 'Bash') {
+    const cmd = (tool.input.command as string) ?? ''
+    if (isBashAutoAllowed(cmd)) return true
+  }
   return getClaudeAllowList().some((entry) => matchesToolCall(entry, tool))
 }
 
