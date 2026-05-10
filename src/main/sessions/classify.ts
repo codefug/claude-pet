@@ -2,7 +2,7 @@ import { getLiveState } from '../live-status'
 import type { ParsedSession } from './parseJsonl'
 import type { SessionStatus } from './types'
 
-const ABORTED_THRESHOLD_MS = 5 * 60 * 1000
+export const ABORTED_THRESHOLD_MS = 5 * 60 * 1000
 
 export function classifyStatus(parsed: ParsedSession): SessionStatus {
   // 1. Hook live state 우선

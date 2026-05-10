@@ -1,28 +1,29 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import type { SessionData } from '../main/sessions/types'
 import type { AppSettings, IgnoredToolRule } from '../main/settings'
+import { IPC_CHANNEL } from '../shared/ipc-channels'
 
 const claudePet = {
-  getSessions: (): Promise<SessionData[]> => ipcRenderer.invoke('get-sessions'),
+  getSessions: (): Promise<SessionData[]> => ipcRenderer.invoke(IPC_CHANNEL.GET_SESSIONS),
   onSessionsUpdate: (cb: (sessions: SessionData[]) => void): (() => void) => {
     const handler = (_: Electron.IpcRendererEvent, sessions: SessionData[]): void => cb(sessions)
-    ipcRenderer.on('sessions-update', handler)
-    return () => ipcRenderer.off('sessions-update', handler)
+    ipcRenderer.on(IPC_CHANNEL.SESSIONS_UPDATE, handler)
+    return () => ipcRenderer.off(IPC_CHANNEL.SESSIONS_UPDATE, handler)
   },
   ignoreSession: (
     projectName: string,
     toolName: string,
     toolInput: Record<string, unknown>
-  ): Promise<void> => ipcRenderer.invoke('ignore-session', projectName, toolName, toolInput),
-  getSettings: (): Promise<AppSettings> => ipcRenderer.invoke('get-settings'),
+  ): Promise<void> => ipcRenderer.invoke(IPC_CHANNEL.IGNORE_SESSION, projectName, toolName, toolInput),
+  getSettings: (): Promise<AppSettings> => ipcRenderer.invoke(IPC_CHANNEL.GET_SETTINGS),
   setCharacterImage: (status: string): Promise<string | null> =>
-    ipcRenderer.invoke('set-character-image', status),
+    ipcRenderer.invoke(IPC_CHANNEL.SET_CHARACTER_IMAGE, status),
   clearCharacterImage: (status: string): Promise<void> =>
-    ipcRenderer.invoke('clear-character-image', status),
+    ipcRenderer.invoke(IPC_CHANNEL.CLEAR_CHARACTER_IMAGE, status),
   setSessionWindow: (hours: number): Promise<void> =>
-    ipcRenderer.invoke('set-session-window', hours),
+    ipcRenderer.invoke(IPC_CHANNEL.SET_SESSION_WINDOW, hours),
   setIgnoredToolRules: (rules: IgnoredToolRule[]): Promise<void> =>
-    ipcRenderer.invoke('set-ignored-tool-rules', rules)
+    ipcRenderer.invoke(IPC_CHANNEL.SET_IGNORED_TOOL_RULES, rules)
 }
 
 if (process.contextIsolated) {

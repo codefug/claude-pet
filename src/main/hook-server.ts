@@ -1,28 +1,23 @@
-import { unlinkSync, writeFileSync } from 'node:fs'
 import { type IncomingMessage, type ServerResponse, createServer } from 'node:http'
-import { homedir } from 'node:os'
-import { join } from 'node:path'
 import { type BrowserWindow, app } from 'electron'
+import { HOOK_EVENT, NOTIFICATION_TYPE } from '../shared/hook-events'
+import { IPC_CHANNEL } from '../shared/ipc-channels'
+import { HookPayloadSchema } from '../shared/schemas/hook-payload'
+import { deletePortFile, writePortFile } from '../shared/port-file'
 import { type LiveState, getLiveState, setLiveState } from './live-status'
 import { scanProjects } from './sessions/scanProjects'
 
 export { getLiveState, type LiveState }
 
 export function startHookServer(win: BrowserWindow): void {
-  const portFile = join(homedir(), '.claude', '.pet-hook-port')
-
   const server = createServer((req, res) => handleRequest(req, res, win))
   server.listen(0, '127.0.0.1', () => {
-    const port = (server.address() as { port: number }).port
-    writeFileSync(portFile, String(port), 'utf-8')
+    const addr = server.address()
+    if (addr && typeof addr === 'object') writePortFile(addr.port)
   })
 
   app.on('before-quit', () => {
-    try {
-      unlinkSync(portFile)
-    } catch {
-      /* noop */
-    }
+    deletePortFile()
     server.close()
   })
 }
@@ -44,7 +39,7 @@ function handleRequest(req: IncomingMessage, res: ServerResponse, win: BrowserWi
     try {
       applyHook(JSON.parse(body))
       if (!win.isDestroyed()) {
-        win.webContents.send('sessions-update', scanProjects())
+        win.webContents.send(IPC_CHANNEL.SESSIONS_UPDATE, scanProjects())
       }
     } catch {
       /* malformed payload — ignore */
@@ -52,23 +47,22 @@ function handleRequest(req: IncomingMessage, res: ServerResponse, win: BrowserWi
   })
 }
 
-function applyHook(payload: Record<string, unknown>): void {
-  const sessionId = payload.session_id as string
-  const event = payload.hook_event_name as string
-  if (!sessionId || !event) return
+function applyHook(raw: unknown): void {
+  const result = HookPayloadSchema.safeParse(raw)
+  if (!result.success) return
 
-  const cwd = payload.cwd as string | undefined
+  const payload = result.data
+  const { session_id: sessionId, cwd, hook_event_name: event } = payload
   const now = Date.now()
 
   switch (event) {
-    case 'PreToolUse':
-    case 'PostToolUse':
+    case HOOK_EVENT.PRE_TOOL_USE:
+    case HOOK_EVENT.POST_TOOL_USE:
       setLiveState(sessionId, { status: 'working', cwd, updatedAt: now })
       break
 
-    case 'PermissionRequest': {
-      const toolName = payload.tool_name as string | undefined
-      const toolInput = (payload.tool_input as Record<string, unknown>) ?? {}
+    case HOOK_EVENT.PERMISSION_REQUEST: {
+      const { tool_name: toolName, tool_input: toolInput = {} } = payload
       setLiveState(sessionId, {
         status: 'waiting_permission',
         pendingTool: toolName ? { name: toolName, input: toolInput } : undefined,
@@ -78,8 +72,8 @@ function applyHook(payload: Record<string, unknown>): void {
       break
     }
 
-    case 'Notification': {
-      if ((payload.notification_type as string) === 'permission_prompt') {
+    case HOOK_EVENT.NOTIFICATION: {
+      if (payload.notification_type === NOTIFICATION_TYPE.PERMISSION_PROMPT) {
         const existing = getLiveState(sessionId)
         setLiveState(sessionId, {
           ...(existing ?? { updatedAt: now, cwd }),
@@ -90,14 +84,11 @@ function applyHook(payload: Record<string, unknown>): void {
       break
     }
 
-    case 'PermissionDenied':
-    case 'Stop':
-    case 'StopFailure':
-    case 'SessionEnd':
-      setLiveState(sessionId, { status: 'done', cwd, updatedAt: now })
-      break
-
-    case 'SessionStart':
+    case HOOK_EVENT.PERMISSION_DENIED:
+    case HOOK_EVENT.STOP:
+    case HOOK_EVENT.STOP_FAILURE:
+    case HOOK_EVENT.SESSION_END:
+    case HOOK_EVENT.SESSION_START:
       setLiveState(sessionId, { status: 'done', cwd, updatedAt: now })
       break
   }

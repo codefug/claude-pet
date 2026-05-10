@@ -1,35 +1,29 @@
-import { readFileSync } from 'node:fs'
 import { request } from 'node:http'
-import { homedir } from 'node:os'
-import { join } from 'node:path'
+import { readPortFile } from '../shared/port-file'
+
+const HOOK_SERVER_HOST = '127.0.0.1'
+const HOOK_SERVER_PATH = '/hook'
+const HOOK_REQUEST_TIMEOUT_MS = 1000
 
 async function main(): Promise<void> {
   let body = ''
   process.stdin.setEncoding('utf-8')
   for await (const chunk of process.stdin) body += chunk
 
-  let port: number
-  try {
-    port = Number.parseInt(
-      readFileSync(join(homedir(), '.claude', '.pet-hook-port'), 'utf-8').trim(),
-      10
-    )
-    if (!port) process.exit(0)
-  } catch {
-    process.exit(0)
-  }
+  const port = readPortFile()
+  if (!port) process.exit(0)
 
   const req = request(
     {
-      host: '127.0.0.1',
+      host: HOOK_SERVER_HOST,
       port,
-      path: '/hook',
+      path: HOOK_SERVER_PATH,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(body)
       },
-      timeout: 1000
+      timeout: HOOK_REQUEST_TIMEOUT_MS
     },
     (res) => {
       res.resume()

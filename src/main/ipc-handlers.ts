@@ -1,6 +1,7 @@
 import { dialog, ipcMain } from 'electron'
 import type { BrowserWindow } from 'electron'
 import { produce } from 'immer'
+import { IPC_CHANNEL } from '../shared/ipc-channels'
 import { SessionStatusSchema } from '../shared/schemas/session'
 import { toolToPattern } from './sessions/permissionChecker'
 import { scanProjects } from './sessions/scanProjects'
@@ -10,7 +11,7 @@ import { toDataUrl } from './utils/image'
 
 function pushSessions(win: BrowserWindow): void {
   if (!win.isDestroyed()) {
-    win.webContents.send('sessions-update', scanProjects())
+    win.webContents.send(IPC_CHANNEL.SESSIONS_UPDATE, scanProjects())
   }
 }
 
@@ -21,10 +22,10 @@ function updateSettings(updater: (draft: AppSettings) => void): AppSettings {
 }
 
 export function registerIpcHandlers(win: BrowserWindow): void {
-  ipcMain.handle('get-sessions', () => scanProjects())
+  ipcMain.handle(IPC_CHANNEL.GET_SESSIONS, () => scanProjects())
 
   ipcMain.handle(
-    'ignore-session',
+    IPC_CHANNEL.IGNORE_SESSION,
     (_e, projectName: string, toolName: string, toolInput: Record<string, unknown>) => {
       const pattern = toolToPattern(toolName, toolInput)
       updateSettings((draft) => {
@@ -37,7 +38,7 @@ export function registerIpcHandlers(win: BrowserWindow): void {
     }
   )
 
-  ipcMain.handle('get-settings', () => {
+  ipcMain.handle(IPC_CHANNEL.GET_SETTINGS, () => {
     const settings = loadSettings()
     return produce(settings, (draft) => {
       draft.characterImages.working = toDataUrl(settings.characterImages.working)
@@ -49,7 +50,7 @@ export function registerIpcHandlers(win: BrowserWindow): void {
     })
   })
 
-  ipcMain.handle('set-character-image', async (_e, status: string) => {
+  ipcMain.handle(IPC_CHANNEL.SET_CHARACTER_IMAGE, async (_e, status: string) => {
     const parsed = SessionStatusSchema.safeParse(status)
     if (!parsed.success) return null
     const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -64,21 +65,21 @@ export function registerIpcHandlers(win: BrowserWindow): void {
     return toDataUrl(filePath)
   })
 
-  ipcMain.handle('set-session-window', (_e, hours: number) => {
+  ipcMain.handle(IPC_CHANNEL.SET_SESSION_WINDOW, (_e, hours: number) => {
     updateSettings((draft) => {
       draft.sessionWindowHours = hours
     })
     pushSessions(win)
   })
 
-  ipcMain.handle('set-ignored-tool-rules', (_e, rules: IgnoredToolRule[]) => {
+  ipcMain.handle(IPC_CHANNEL.SET_IGNORED_TOOL_RULES, (_e, rules: IgnoredToolRule[]) => {
     updateSettings((draft) => {
       draft.ignoredToolRules = rules
     })
     pushSessions(win)
   })
 
-  ipcMain.handle('clear-character-image', (_e, status: string) => {
+  ipcMain.handle(IPC_CHANNEL.CLEAR_CHARACTER_IMAGE, (_e, status: string) => {
     const parsed = SessionStatusSchema.safeParse(status)
     if (!parsed.success) return
     updateSettings((draft) => {

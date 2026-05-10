@@ -1,15 +1,15 @@
 import { readdirSync, statSync } from 'node:fs'
-import { homedir } from 'node:os'
 import { basename, join } from 'node:path'
+import { CLAUDE_PROJECTS_DIR } from '../../shared/claude-paths'
 import { getLiveState } from '../live-status'
 import { loadSettings } from '../settings'
-import { classifyStatus } from './classify'
+import { ABORTED_THRESHOLD_MS, classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
 import { parseJsonl } from './parseJsonl'
 import { toolToPattern } from './permissionChecker'
 import type { SessionData } from './types'
 
-const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
+const PROJECTS_DIR = CLAUDE_PROJECTS_DIR
 
 export function scanProjects(): SessionData[] {
   let dirs: string[]
@@ -61,7 +61,7 @@ export function scanProjects(): SessionData[] {
 
       if (status === 'aborted') {
         const lastAt = new Date(lastMessageAt).getTime()
-        if (Date.now() - lastAt > 5 * 60 * 1000) continue
+        if (Date.now() - lastAt > ABORTED_THRESHOLD_MS) continue
       }
 
       // ignoredToolRules 매칭 시 waiting_permission → working으로 override

@@ -1,11 +1,11 @@
-import { homedir } from 'node:os'
-import { join } from 'node:path'
 import { watch } from 'chokidar'
 import type { BrowserWindow } from 'electron'
+import { CLAUDE_PROJECTS_DIR } from '../../shared/claude-paths'
+import { IPC_CHANNEL } from '../../shared/ipc-channels'
 import { invalidateCache } from './parseJsonl'
 import { scanProjects } from './scanProjects'
 
-const PROJECTS_DIR = join(homedir(), '.claude', 'projects')
+const PROJECTS_DIR = CLAUDE_PROJECTS_DIR
 
 export function startWatcher(win: BrowserWindow): void {
   const watcher = watch(PROJECTS_DIR, {
@@ -15,7 +15,7 @@ export function startWatcher(win: BrowserWindow): void {
 
   const push = (): void => {
     if (win.isDestroyed()) return
-    win.webContents.send('sessions-update', scanProjects())
+    win.webContents.send(IPC_CHANNEL.SESSIONS_UPDATE, scanProjects())
   }
 
   watcher.on('add', push)

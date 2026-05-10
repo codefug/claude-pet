@@ -32,11 +32,14 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     }
 
     if (entry.type === 'assistant') {
-      const msg = entry.message as Record<string, unknown> | undefined
-      if (msg?.stop_reason !== undefined) {
-        lastAssistant = {
-          stop_reason: msg.stop_reason as string | null,
-          timestamp: entry.timestamp as string
+      const msg = entry.message
+      if (msg !== null && typeof msg === 'object' && !Array.isArray(msg)) {
+        const { stop_reason } = msg as Record<string, unknown>
+        if (stop_reason !== undefined && typeof entry.timestamp === 'string') {
+          lastAssistant = {
+            stop_reason: typeof stop_reason === 'string' ? stop_reason : null,
+            timestamp: entry.timestamp
+          }
         }
       }
     }

@@ -1,6 +1,8 @@
+import type { PendingTool, SessionStatus } from '../shared/schemas/session'
+
 export interface LiveState {
-  status: 'working' | 'waiting_permission' | 'done'
-  pendingTool?: { name: string; input: Record<string, unknown> }
+  status: Exclude<SessionStatus, 'aborted'>
+  pendingTool?: PendingTool
   cwd?: string
   updatedAt: number
 }
