@@ -5,7 +5,8 @@ import type { AppSettings } from '../shared/schemas/settings'
 const DEFAULTS: AppSettings = {
   sessionWindowHours: 5,
   opacity: 0.75,
-  characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
+  characterImages: { working: null, waiting_permission: null, done: null, aborted: null },
+  language: 'en'
 }
 
 const conf = new Conf<AppSettings>({ defaults: DEFAULTS })

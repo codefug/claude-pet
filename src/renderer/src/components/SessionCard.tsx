@@ -1,13 +1,14 @@
 import type { JSX } from 'react'
 import type { Session, SessionStatus } from '../../../shared/schemas/session'
+import { useTranslation } from '../i18n/useTranslation'
 import { relativeTime } from '../utils/relativeTime'
 import CharacterAvatar from './CharacterAvatar'
 
-const STATUS_CONFIG: Record<SessionStatus, { color: string; label: string }> = {
-  working: { color: '#F5C842', label: 'working' },
-  waiting_permission: { color: '#F5813A', label: 'permission' },
-  done: { color: '#4CAF7D', label: 'done' },
-  aborted: { color: '#888899', label: 'aborted' }
+const STATUS_COLORS: Record<SessionStatus, string> = {
+  working: '#F5C842',
+  waiting_permission: '#F5813A',
+  done: '#4CAF7D',
+  aborted: '#888899'
 }
 
 interface Props {
@@ -16,7 +17,9 @@ interface Props {
 }
 
 export default function SessionCard({ session, customImage }: Props): JSX.Element {
-  const { color, label } = STATUS_CONFIG[session.status]
+  const t = useTranslation()
+  const color = STATUS_COLORS[session.status]
+  const label = t.status[session.status]
 
   return (
     <button
@@ -33,7 +36,7 @@ export default function SessionCard({ session, customImage }: Props): JSX.Elemen
             {session.projectName}
           </div>
           <div className="text-[10px] text-white/30 shrink-0">
-            {relativeTime(session.lastMessageAt)}
+            {relativeTime(session.lastMessageAt, t)}
           </div>
         </div>
         {session.summary && (

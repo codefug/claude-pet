@@ -4,6 +4,7 @@ import { produce } from 'immer'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
 import { SessionStatusSchema } from '../shared/schemas/session'
 import type { AppSettings } from '../shared/schemas/settings'
+import { LanguageSchema } from '../shared/schemas/settings'
 import { scanProjects } from './sessions/scanProjects'
 import { loadSettings, saveSettings } from './settings'
 import { toDataUrl } from './utils/image'
@@ -80,5 +81,13 @@ export function registerIpcHandlers(win: BrowserWindow): void {
 
   ipcMain.handle(IPC_CHANNEL.OPEN_PATH, (_e, path: string) => {
     shell.showItemInFolder(path)
+  })
+
+  ipcMain.handle(IPC_CHANNEL.SET_LANGUAGE, (_e, language: string) => {
+    const parsed = LanguageSchema.safeParse(language)
+    if (!parsed.success) return
+    updateSettings((draft) => {
+      draft.language = parsed.data
+    })
   })
 }

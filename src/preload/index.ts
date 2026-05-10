@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
 import type { SessionData } from '../shared/schemas/session'
-import type { AppSettings } from '../shared/schemas/settings'
+import type { AppSettings, Language } from '../shared/schemas/settings'
 
 const claudePet = {
   getSessions: (): Promise<SessionData[]> => ipcRenderer.invoke(IPC_CHANNEL.GET_SESSIONS),
@@ -22,7 +22,9 @@ const claudePet = {
     ipcRenderer.invoke(IPC_CHANNEL.SET_LOGIN_ITEM, openAtLogin),
   setOpacity: (opacity: number): Promise<void> =>
     ipcRenderer.invoke(IPC_CHANNEL.SET_OPACITY, opacity),
-  openPath: (path: string): Promise<void> => ipcRenderer.invoke(IPC_CHANNEL.OPEN_PATH, path)
+  openPath: (path: string): Promise<void> => ipcRenderer.invoke(IPC_CHANNEL.OPEN_PATH, path),
+  setLanguage: (language: Language): Promise<void> =>
+    ipcRenderer.invoke(IPC_CHANNEL.SET_LANGUAGE, language)
 }
 
 contextBridge.exposeInMainWorld('claudePet', claudePet)

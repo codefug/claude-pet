@@ -1,34 +1,38 @@
 import type { JSX } from 'react'
+import type { Language } from '../../../shared/schemas/settings'
 import { useTranslation } from '../i18n/useTranslation'
 
-const WINDOW_OPTIONS = [5, 12, 24, 48, 72]
+const LANGUAGE_OPTIONS: { value: Language; label: string }[] = [
+  { value: 'en', label: 'English' },
+  { value: 'ko', label: '한국어' }
+]
 
 interface Props {
-  value: number
-  onChange: (hours: number) => void
+  value: Language
+  onChange: (language: Language) => void
 }
 
-export default function SessionWindowSection({ value, onChange }: Props): JSX.Element {
+export default function LanguageSection({ value, onChange }: Props): JSX.Element {
   const t = useTranslation()
 
   return (
     <div className="mb-4">
       <div className="text-[10px] font-semibold text-white/30 tracking-[0.06em] uppercase mb-2">
-        {t.settings.sessionWindow}
+        {t.settings.language}
       </div>
-      <div className="flex gap-1 flex-wrap">
-        {WINDOW_OPTIONS.map((h) => (
+      <div className="flex gap-1">
+        {LANGUAGE_OPTIONS.map((opt) => (
           <button
             type="button"
-            key={h}
-            onClick={() => onChange(h)}
+            key={opt.value}
+            onClick={() => onChange(opt.value)}
             className={`text-[10px] px-2 py-0.75 rounded-md border-none cursor-pointer ${
-              value === h
+              value === opt.value
                 ? 'bg-[rgba(245,200,66,0.25)] text-[#F5C842] font-bold'
                 : 'bg-white/8 text-white/45 font-normal'
             }`}
           >
-            {h}h
+            {opt.label}
           </button>
         ))}
       </div>

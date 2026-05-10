@@ -2,7 +2,7 @@
 
 import 'react'
 import type { SessionData } from '../../shared/schemas/session'
-import type { AppSettings } from '../../shared/schemas/settings'
+import type { AppSettings, Language } from '../../shared/schemas/settings'
 
 declare module 'react' {
   interface CSSProperties {
@@ -23,6 +23,7 @@ declare global {
       setLoginItem: (openAtLogin: boolean) => Promise<void>
       setOpacity: (opacity: number) => Promise<void>
       openPath: (path: string) => Promise<void>
+      setLanguage: (language: Language) => Promise<void>
     }
   }
 }

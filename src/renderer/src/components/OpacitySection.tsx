@@ -1,4 +1,5 @@
 import type { JSX } from 'react'
+import { useTranslation } from '../i18n/useTranslation'
 
 interface Props {
   value: number
@@ -6,11 +7,13 @@ interface Props {
 }
 
 export default function OpacitySection({ value, onChange }: Props): JSX.Element {
+  const t = useTranslation()
+
   return (
     <div className="mb-4">
       <div className="flex items-center mb-2">
         <div className="flex-1 text-[10px] font-semibold text-white/30 tracking-[0.06em] uppercase">
-          불투명도
+          {t.settings.opacity}
         </div>
         <span className="text-[10px] text-white/40">{Math.round(value * 100)}%</span>
       </div>

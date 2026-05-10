@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { JSX } from 'react'
+import { useTranslation } from '../i18n/useTranslation'
 import { queryKeys } from '../lib/queryClient'
 
 export default function LoginItemSection(): JSX.Element {
   const qc = useQueryClient()
+  const t = useTranslation()
 
   const { data: openAtLogin } = useQuery({
     queryKey: queryKeys.loginItem,
@@ -20,10 +22,10 @@ export default function LoginItemSection(): JSX.Element {
   return (
     <div className="mb-4">
       <div className="text-[10px] font-semibold text-white/30 tracking-[0.06em] uppercase mb-2">
-        시스템
+        {t.settings.system}
       </div>
       <div className="flex items-center justify-between px-2 py-1.5 rounded-lg bg-white/5">
-        <span className="text-[11px] text-white/60">로그인 시 자동 시작</span>
+        <span className="text-[11px] text-white/60">{t.settings.launchAtLogin}</span>
         <button
           type="button"
           onClick={() => mutate(!openAtLogin)}

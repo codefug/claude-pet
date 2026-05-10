@@ -9,5 +9,6 @@ export const IPC_CHANNEL = {
   GET_LOGIN_ITEM: 'get-login-item',
   SET_LOGIN_ITEM: 'set-login-item',
   SET_OPACITY: 'set-opacity',
-  OPEN_PATH: 'open-path'
+  OPEN_PATH: 'open-path',
+  SET_LANGUAGE: 'set-language'
 } as const

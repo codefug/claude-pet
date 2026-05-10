@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { SessionStatus } from '../../../shared/schemas/session'
 import { AppSettingsSchema } from '../../../shared/schemas/settings'
-import type { AppSettings } from '../../../shared/schemas/settings'
+import type { AppSettings, Language } from '../../../shared/schemas/settings'
 import { EMPTY_SETTINGS, makeOptimisticOptions } from '../lib/optimisticOptions'
 import { queryKeys } from '../lib/queryClient'
 
@@ -64,13 +64,38 @@ export function useSettingsStore() {
     })
   })
 
+  const languageMutation = useMutation({
+    mutationFn: (language: Language) => window.claudePet.setLanguage(language),
+    ...makeOptimisticOptions({
+      getQueryData: getSettings,
+      setQueryData: setSettings,
+      updater: (s, language) => ({ ...s, language }),
+      reconcile
+    })
+  })
+
   return {
     images: settings.characterImages,
     sessionWindowHours: settings.sessionWindowHours,
     opacity: settings.opacity,
+    language: settings.language,
     handleWindowChange: (hours: number) => windowMutation.mutateAsync(hours),
     handleOpacityChange: (opacity: number) => opacityMutation.mutate(opacity),
     handlePick: (status: SessionStatus) => pickMutation.mutateAsync(status),
-    handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status)
+    handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status),
+    handleLanguageChange: (language: Language) => languageMutation.mutate(language)
   }
+}
+
+export function useSettingsLanguage(): Language {
+  const { data: settings = EMPTY_SETTINGS } = useQuery({
+    queryKey: queryKeys.settings,
+    queryFn: () =>
+      window.claudePet.getSettings().then((raw) => {
+        const result = AppSettingsSchema.safeParse(raw)
+        if (!result.success) throw new Error(result.error.message)
+        return result.data
+      })
+  })
+  return settings.language
 }
