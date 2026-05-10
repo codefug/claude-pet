@@ -5,9 +5,10 @@ import { queryKeys } from '../lib/queryClient'
 export default function LoginItemSection(): JSX.Element {
   const qc = useQueryClient()
 
-  const { data: openAtLogin = false } = useQuery({
+  const { data: openAtLogin } = useQuery({
     queryKey: queryKeys.loginItem,
-    queryFn: () => window.claudePet.getLoginItem()
+    queryFn: () => window.claudePet.getLoginItem(),
+    initialData: false
   })
 
   const { mutate } = useMutation({
@@ -32,7 +33,7 @@ export default function LoginItemSection(): JSX.Element {
         >
           <span
             className={`absolute left-0 top-0.5 w-3 h-3 rounded-full bg-white transition-transform ${
-              openAtLogin ? 'translate-x-4' : 'translate-x-0.5'
+              openAtLogin ? 'translate-x-4.5' : 'translate-x-0.5'
             }`}
           />
         </button>
