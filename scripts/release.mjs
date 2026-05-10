@@ -30,6 +30,9 @@ console.log(`\n→ bump ${pkg.version} → ${next}`)
 pkg.version = next
 writeFileSync('package.json', `${JSON.stringify(pkg, null, 2)}\n`, 'utf-8')
 
+console.log('\n→ update package-lock.json')
+run('npm install --package-lock-only')
+
 run('git add -A')
 run(`git commit -m "${next}"`)
 run(`git tag v${next}`)
