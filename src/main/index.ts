@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { join } from 'node:path'
 import { BrowserWindow, app, screen, shell } from 'electron'
 import { Conf } from 'electron-conf/main'
@@ -84,7 +85,17 @@ function createWindow(): BrowserWindow {
   return win
 }
 
+function removeQuarantine(): void {
+  if (process.platform !== 'darwin' || !app.isPackaged) return
+  try {
+    execFileSync('xattr', ['-d', 'com.apple.quarantine', app.getPath('exe').replace(/\/Contents\/MacOS\/.*$/, '')])
+  } catch {
+    // already removed or no permission — not a fatal error
+  }
+}
+
 app.whenReady().then(() => {
+  removeQuarantine()
   const win = createWindow()
   registerIpcHandlers(win)
   installHooks()
