@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useMemo } from 'react'
 import type { SessionStatus } from '../../../shared/schemas/session'
 import { AppSettingsSchema } from '../../../shared/schemas/settings'
 import type { AppSettings, IgnoredToolRule } from '../../../shared/schemas/settings'
@@ -9,6 +8,25 @@ const EMPTY_SETTINGS: AppSettings = {
   sessionWindowHours: 5,
   ignoredToolRules: [],
   characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
+}
+
+function makeOptimisticOptions<T>(
+  getQueryData: () => AppSettings | undefined,
+  setQueryData: (data: AppSettings) => void,
+  updater: (prev: AppSettings, variables: T) => AppSettings,
+  reconcile: () => void
+) {
+  return {
+    onMutate: (variables: T) => {
+      const prev = getQueryData()
+      setQueryData(updater(prev ?? EMPTY_SETTINGS, variables))
+      return { prev }
+    },
+    onError: (_err: Error, _variables: T, ctx: { prev: AppSettings | undefined } | undefined) => {
+      setQueryData(ctx?.prev ?? EMPTY_SETTINGS)
+    },
+    onSettled: reconcile
+  }
 }
 
 export function useSettingsStore() {
@@ -24,73 +42,59 @@ export function useSettingsStore() {
       })
   })
 
-  const updateCache = (updater: (prev: AppSettings) => AppSettings) => {
-    qc.setQueryData(queryKeys.settings, (prev: AppSettings = EMPTY_SETTINGS) => updater(prev))
-  }
-
-  const rollbackCache = (prev: AppSettings | undefined) => {
-    qc.setQueryData(queryKeys.settings, prev ?? EMPTY_SETTINGS)
-  }
-
+  const getSettings = () => qc.getQueryData<AppSettings>(queryKeys.settings)
+  const setSettings = (data: AppSettings) => qc.setQueryData(queryKeys.settings, data)
   const reconcile = () => qc.invalidateQueries({ queryKey: queryKeys.settings })
 
-  const windowMutation = useMutation<void, Error, number, { prev: AppSettings | undefined }>({
-    mutationFn: (hours) => window.claudePet.setSessionWindow(hours),
-    onMutate: (hours) => {
-      const prev = qc.getQueryData<AppSettings>(queryKeys.settings)
-      updateCache((s) => ({ ...s, sessionWindowHours: hours }))
-      return { prev }
-    },
-    onError: (_err, _hours, ctx) => rollbackCache(ctx?.prev),
-    onSettled: reconcile
+  const windowMutation = useMutation({
+    mutationFn: (hours: number) => window.claudePet.setSessionWindow(hours),
+    ...makeOptimisticOptions(
+      getSettings,
+      setSettings,
+      (s, hours) => ({ ...s, sessionWindowHours: hours }),
+      reconcile
+    )
   })
 
   const pickMutation = useMutation({
     mutationFn: (status: SessionStatus) => window.claudePet.setCharacterImage(status),
     onSuccess: (dataUrl, status) => {
       if (dataUrl)
-        updateCache((s) => ({ ...s, characterImages: { ...s.characterImages, [status]: dataUrl } }))
+        setSettings({
+          ...settings,
+          characterImages: { ...settings.characterImages, [status]: dataUrl }
+        })
     },
     onSettled: reconcile
   })
 
-  const clearMutation = useMutation<void, Error, SessionStatus, { prev: AppSettings | undefined }>({
-    mutationFn: (status) => window.claudePet.clearCharacterImage(status),
-    onMutate: (status) => {
-      const prev = qc.getQueryData<AppSettings>(queryKeys.settings)
-      updateCache((s) => ({ ...s, characterImages: { ...s.characterImages, [status]: null } }))
-      return { prev }
-    },
-    onError: (_err, _status, ctx) => rollbackCache(ctx?.prev),
-    onSettled: reconcile
+  const clearMutation = useMutation({
+    mutationFn: (status: SessionStatus) => window.claudePet.clearCharacterImage(status),
+    ...makeOptimisticOptions(
+      getSettings,
+      setSettings,
+      (s, status) => ({ ...s, characterImages: { ...s.characterImages, [status]: null } }),
+      reconcile
+    )
   })
 
-  const rulesMutation = useMutation<
-    void,
-    Error,
-    IgnoredToolRule[],
-    { prev: AppSettings | undefined }
-  >({
-    mutationFn: (rules) => window.claudePet.setIgnoredToolRules(rules),
-    onMutate: (rules) => {
-      const prev = qc.getQueryData<AppSettings>(queryKeys.settings)
-      updateCache((s) => ({ ...s, ignoredToolRules: rules }))
-      return { prev }
-    },
-    onError: (_err, _rules, ctx) => rollbackCache(ctx?.prev),
-    onSettled: reconcile
+  const rulesMutation = useMutation({
+    mutationFn: (rules: IgnoredToolRule[]) => window.claudePet.setIgnoredToolRules(rules),
+    ...makeOptimisticOptions(
+      getSettings,
+      setSettings,
+      (s, rules) => ({ ...s, ignoredToolRules: rules }),
+      reconcile
+    )
   })
 
-  return useMemo(
-    () => ({
-      images: settings.characterImages,
-      sessionWindowHours: settings.sessionWindowHours,
-      ignoredToolRules: settings.ignoredToolRules,
-      handleWindowChange: (hours: number) => windowMutation.mutateAsync(hours),
-      handlePick: (status: SessionStatus) => pickMutation.mutateAsync(status),
-      handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status),
-      handleRulesChange: (rules: IgnoredToolRule[]) => rulesMutation.mutateAsync(rules)
-    }),
-    [settings, windowMutation, pickMutation, clearMutation, rulesMutation]
-  )
+  return {
+    images: settings.characterImages,
+    sessionWindowHours: settings.sessionWindowHours,
+    ignoredToolRules: settings.ignoredToolRules,
+    handleWindowChange: (hours: number) => windowMutation.mutateAsync(hours),
+    handlePick: (status: SessionStatus) => pickMutation.mutateAsync(status),
+    handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status),
+    handleRulesChange: (rules: IgnoredToolRule[]) => rulesMutation.mutateAsync(rules)
+  }
 }
