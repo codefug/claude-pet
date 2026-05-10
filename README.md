@@ -83,7 +83,7 @@ npm run release
 
 - Electron 39 + electron-vite 5
 - React 19 + TypeScript 5
-- UnoCSS
+- Tailwind CSS v4
 - chokidar 5 (세션 메타데이터 감시)
 - Claude Code Hooks (세션 상태 실시간 수신)
 - Biome (lint/format)
