@@ -1,5 +1,5 @@
-import type { IgnoredToolRule } from '@renderer/types'
 import { type JSX, type KeyboardEvent, useRef, useState } from 'react'
+import type { IgnoredToolRule } from '../../../shared/schemas/settings'
 
 interface Props {
   rules: IgnoredToolRule[]

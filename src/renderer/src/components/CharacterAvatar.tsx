@@ -1,9 +1,9 @@
 import type { JSX } from 'react'
+import type { SessionStatus } from '../../../shared/schemas/session'
 import abortedSvg from '../assets/yorkie/aborted.svg'
 import doneSvg from '../assets/yorkie/done.svg'
 import waitingSvg from '../assets/yorkie/waiting.svg'
 import workingSvg from '../assets/yorkie/working.svg'
-import type { SessionStatus } from '../types'
 
 const DEFAULT_SVG: Record<SessionStatus, string> = {
   working: workingSvg,

@@ -1,4 +1,4 @@
-import type { Session, SessionStatus } from '../types'
+import type { Session, SessionStatus } from '../../../shared/schemas/session'
 
 const PRIORITY: Record<SessionStatus, number> = {
   waiting_permission: 0,

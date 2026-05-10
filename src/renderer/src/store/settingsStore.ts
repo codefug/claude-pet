@@ -2,32 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { SessionStatus } from '../../../shared/schemas/session'
 import { AppSettingsSchema } from '../../../shared/schemas/settings'
 import type { AppSettings, IgnoredToolRule } from '../../../shared/schemas/settings'
+import { EMPTY_SETTINGS, makeOptimisticOptions } from '../lib/optimisticOptions'
 import { queryKeys } from '../lib/queryClient'
-
-const EMPTY_SETTINGS: AppSettings = {
-  sessionWindowHours: 5,
-  ignoredToolRules: [],
-  characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
-}
-
-function makeOptimisticOptions<T>(
-  getQueryData: () => AppSettings | undefined,
-  setQueryData: (data: AppSettings) => void,
-  updater: (prev: AppSettings, variables: T) => AppSettings,
-  reconcile: () => void
-) {
-  return {
-    onMutate: (variables: T) => {
-      const prev = getQueryData()
-      setQueryData(updater(prev ?? EMPTY_SETTINGS, variables))
-      return { prev }
-    },
-    onError: (_err: Error, _variables: T, ctx: { prev: AppSettings | undefined } | undefined) => {
-      setQueryData(ctx?.prev ?? EMPTY_SETTINGS)
-    },
-    onSettled: reconcile
-  }
-}
 
 export function useSettingsStore() {
   const qc = useQueryClient()

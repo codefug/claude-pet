@@ -1,5 +1,5 @@
 import { type JSX, useState } from 'react'
-import type { Session, SessionStatus } from '../types'
+import type { Session, SessionStatus } from '../../../shared/schemas/session'
 import { relativeTime } from '../utils/relativeTime'
 import CharacterAvatar from './CharacterAvatar'
 

@@ -5,8 +5,6 @@ const ElectronStore =
 import { AppSettingsSchema } from '../shared/schemas/settings'
 import type { AppSettings } from '../shared/schemas/settings'
 
-export type { IgnoredToolRule, AppSettings } from '../shared/schemas/settings'
-
 const DEFAULTS: AppSettings = {
   sessionWindowHours: 5,
   ignoredToolRules: [],

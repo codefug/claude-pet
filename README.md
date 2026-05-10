@@ -2,7 +2,7 @@
 
 macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모서리에서 한눈에 확인.
 
-<img src="./src/renderer/src/assets/yorkie/waiting.svg" width="150" />
+<img src="./src/renderer/src/assets/yorkie/interrupted.svg" width="150" />
 
 ## 기능
 

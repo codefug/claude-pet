@@ -2,8 +2,6 @@ import type { JSX } from 'react'
 import type { SessionStatus } from '../../../shared/schemas/session'
 import type { CharacterImages } from '../../../shared/schemas/settings'
 
-export type { CharacterImages }
-
 const STATUS_LABELS: Record<SessionStatus, string> = {
   working: 'Working',
   waiting_permission: 'Permission',
