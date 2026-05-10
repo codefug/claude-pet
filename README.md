@@ -2,18 +2,18 @@
 
 macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모서리에서 한눈에 확인.
 
-![Yorkie](./src/renderer/src/assets/yorkie/waiting.svg)
+<img src="./src/renderer/src/assets/yorkie/waiting.svg" width="150" />
 
 ## 기능
 
 세션 카드 하나가 Claude Code 프로젝트 하나를 나타냅니다. 4가지 상태를 색상과 캐릭터 이미지로 구분합니다.
 
-| 상태          | 의미                 | 표시   |
-| ------------- | -------------------- | ------ |
-| 🟡 working     | Claude가 작업 중     | 노란색 |
-| 🟠 permission  | Permission 승인 대기 | 주황색 |
-| 🟢 done        | 작업 완료            | 초록색 |
-| ⚫ aborted     | 5분 이상 응답 없음   | 회색   |
+| 상태         | 의미                 | 표시   |
+| ------------ | -------------------- | ------ |
+| 🟡 working    | Claude가 작업 중     | 노란색 |
+| 🟠 permission | Permission 승인 대기 | 주황색 |
+| 🟢 done       | 작업 완료            | 초록색 |
+| ⚫ aborted    | 5분 이상 응답 없음   | 회색   |
 
 - Claude Code 공식 Hooks(`PreToolUse`, `Stop`, `PermissionRequest` 등)로 상태를 실시간 수신
 - 앱 첫 실행 시 `~/.claude/settings.json`에 hook 자동 등록 (재시작 1회 필요)
