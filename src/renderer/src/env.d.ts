@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
 
 import 'react'
-import type { SessionData } from '../../main/sessions/types'
-import type { AppSettings, IgnoredToolRule } from '../../main/settings'
+import type { SessionData } from '../../shared/schemas/session'
+import type { AppSettings, IgnoredToolRule } from '../../shared/schemas/settings'
 
 declare module 'react' {
   interface CSSProperties {

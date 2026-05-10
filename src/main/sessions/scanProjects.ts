@@ -7,7 +7,7 @@ import { ABORTED_THRESHOLD_MS, classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
 import { parseJsonl } from './parseJsonl'
 import { toolToPattern } from './permissionChecker'
-import type { SessionData } from './types'
+import type { SessionData } from '../../shared/schemas/session'
 
 const PROJECTS_DIR = CLAUDE_PROJECTS_DIR
 

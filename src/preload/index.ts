@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
-import type { SessionData } from '../main/sessions/types'
-import type { AppSettings, IgnoredToolRule } from '../main/settings'
+import type { SessionData } from '../shared/schemas/session'
+import type { AppSettings, IgnoredToolRule } from '../shared/schemas/settings'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
 
 const claudePet = {
@@ -26,8 +26,4 @@ const claudePet = {
     ipcRenderer.invoke(IPC_CHANNEL.SET_IGNORED_TOOL_RULES, rules)
 }
 
-if (process.contextIsolated) {
-  contextBridge.exposeInMainWorld('claudePet', claudePet)
-} else {
-  ;(window as unknown as { claudePet: typeof claudePet }).claudePet = claudePet
-}
+contextBridge.exposeInMainWorld('claudePet', claudePet)
