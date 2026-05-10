@@ -1,7 +1,4 @@
-import ElectronStoreModule from 'electron-store'
-const ElectronStore =
-  (ElectronStoreModule as unknown as { default: typeof ElectronStoreModule }).default ??
-  ElectronStoreModule
+import { Conf } from 'electron-conf/main'
 import { AppSettingsSchema } from '../shared/schemas/settings'
 import type { AppSettings } from '../shared/schemas/settings'
 
@@ -11,26 +8,10 @@ const DEFAULTS: AppSettings = {
   characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
 }
 
-const store = new ElectronStore<AppSettings>({
-  schema: {
-    sessionWindowHours: { type: 'number', default: DEFAULTS.sessionWindowHours },
-    opacity: { type: 'number', default: DEFAULTS.opacity },
-    characterImages: {
-      type: 'object',
-      properties: {
-        working: { type: ['string', 'null'], default: null },
-        waiting_permission: { type: ['string', 'null'], default: null },
-        done: { type: ['string', 'null'], default: null },
-        aborted: { type: ['string', 'null'], default: null }
-      },
-      default: DEFAULTS.characterImages
-    }
-  },
-  migrations: {}
-})
+const conf = new Conf<AppSettings>({ defaults: DEFAULTS })
 
 export function loadSettings(): AppSettings {
-  const raw = store.store
+  const raw = conf.store
   const merged = {
     ...DEFAULTS,
     ...raw,
@@ -41,5 +22,5 @@ export function loadSettings(): AppSettings {
 }
 
 export function saveSettings(settings: AppSettings): void {
-  store.set(settings)
+  conf.set(settings)
 }

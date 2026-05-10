@@ -1,16 +1,12 @@
 import { join } from 'node:path'
 import { BrowserWindow, app, screen, shell } from 'electron'
-import ElectronStoreModule from 'electron-store'
+import { Conf } from 'electron-conf/main'
 import { installHooks } from './hook-installer'
 import { startHookServer } from './hook-server'
 import { registerIpcHandlers } from './ipc-handlers'
 import { startWatcher } from './sessions/watcher'
 import { loadSettings } from './settings'
 import { createTray } from './tray'
-
-const ElectronStore =
-  (ElectronStoreModule as unknown as { default: typeof ElectronStoreModule }).default ??
-  ElectronStoreModule
 
 interface WindowBounds {
   x: number
@@ -19,7 +15,7 @@ interface WindowBounds {
   height: number
 }
 
-const boundsStore = new ElectronStore<{ bounds: WindowBounds }>({ name: 'window-bounds' })
+const boundsStore = new Conf<{ bounds: WindowBounds }>({ name: 'window-bounds' })
 
 let isQuitting = false
 
