@@ -67,7 +67,10 @@ export function scanProjects(): SessionData[] {
       // ignoredToolRules 매칭 시 waiting_permission → working으로 override
       const live = parsed.sessionId ? getLiveState(parsed.sessionId) : undefined
       if (status === 'waiting_permission' && live?.pendingTool) {
-        const pattern = toolToPattern(live.pendingTool.name, live.pendingTool.input)
+        const pattern = toolToPattern({
+          toolName: live.pendingTool.name,
+          toolInput: live.pendingTool.input
+        })
         const ignored = ignoredToolRules.some(
           (r) => r.projectName === projectName && pattern.includes(r.pattern)
         )

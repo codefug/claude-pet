@@ -27,7 +27,7 @@ export function registerIpcHandlers(win: BrowserWindow): void {
   ipcMain.handle(
     IPC_CHANNEL.IGNORE_SESSION,
     (_e, projectName: string, toolName: string, toolInput: Record<string, unknown>) => {
-      const pattern = toolToPattern(toolName, toolInput)
+      const pattern = toolToPattern({ toolName, toolInput })
       updateSettings((draft) => {
         const exists = draft.ignoredToolRules.some(
           (r) => r.projectName === projectName && r.pattern === pattern

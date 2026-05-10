@@ -24,12 +24,12 @@ export function useSettingsStore() {
 
   const windowMutation = useMutation({
     mutationFn: (hours: number) => window.claudePet.setSessionWindow(hours),
-    ...makeOptimisticOptions(
-      getSettings,
-      setSettings,
-      (s, hours) => ({ ...s, sessionWindowHours: hours }),
+    ...makeOptimisticOptions({
+      getQueryData: getSettings,
+      setQueryData: setSettings,
+      updater: (s, hours) => ({ ...s, sessionWindowHours: hours }),
       reconcile
-    )
+    })
   })
 
   const pickMutation = useMutation({
@@ -46,22 +46,22 @@ export function useSettingsStore() {
 
   const clearMutation = useMutation({
     mutationFn: (status: SessionStatus) => window.claudePet.clearCharacterImage(status),
-    ...makeOptimisticOptions(
-      getSettings,
-      setSettings,
-      (s, status) => ({ ...s, characterImages: { ...s.characterImages, [status]: null } }),
+    ...makeOptimisticOptions({
+      getQueryData: getSettings,
+      setQueryData: setSettings,
+      updater: (s, status) => ({ ...s, characterImages: { ...s.characterImages, [status]: null } }),
       reconcile
-    )
+    })
   })
 
   const rulesMutation = useMutation({
     mutationFn: (rules: IgnoredToolRule[]) => window.claudePet.setIgnoredToolRules(rules),
-    ...makeOptimisticOptions(
-      getSettings,
-      setSettings,
-      (s, rules) => ({ ...s, ignoredToolRules: rules }),
+    ...makeOptimisticOptions({
+      getQueryData: getSettings,
+      setQueryData: setSettings,
+      updater: (s, rules) => ({ ...s, ignoredToolRules: rules }),
       reconcile
-    )
+    })
   })
 
   return {

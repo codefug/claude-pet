@@ -6,12 +6,19 @@ export const EMPTY_SETTINGS: AppSettings = {
   characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
 }
 
-export function makeOptimisticOptions<T>(
-  getQueryData: () => AppSettings | undefined,
-  setQueryData: (data: AppSettings) => void,
-  updater: (prev: AppSettings, variables: T) => AppSettings,
+interface OptimisticOptionsParams<T> {
+  getQueryData: () => AppSettings | undefined
+  setQueryData: (data: AppSettings) => void
+  updater: (prev: AppSettings, variables: T) => AppSettings
   reconcile: () => void
-) {
+}
+
+export function makeOptimisticOptions<T>({
+  getQueryData,
+  setQueryData,
+  updater,
+  reconcile
+}: OptimisticOptionsParams<T>) {
   return {
     onMutate: (variables: T) => {
       const prev = getQueryData()
