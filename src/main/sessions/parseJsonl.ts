@@ -50,10 +50,19 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     if (entry.type === 'user') {
       if (!cwd && typeof entry.cwd === 'string') cwd = entry.cwd
       const msg = entry.message
-      const content = msg !== null && typeof msg === 'object' && !Array.isArray(msg)
-        ? (msg as Record<string, unknown>).content
-        : entry.content
-      if (Array.isArray(content) && content.some((c) => typeof c === 'object' && c !== null && (c as Record<string, unknown>).type === 'tool_result')) {
+      const content =
+        msg !== null && typeof msg === 'object' && !Array.isArray(msg)
+          ? (msg as Record<string, unknown>).content
+          : entry.content
+      if (
+        Array.isArray(content) &&
+        content.some(
+          (c) =>
+            typeof c === 'object' &&
+            c !== null &&
+            (c as Record<string, unknown>).type === 'tool_result'
+        )
+      ) {
         hasToolResultAfterLastAssistant = true
       }
     }

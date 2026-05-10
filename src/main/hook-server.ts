@@ -9,7 +9,6 @@ import { scanProjects } from './sessions/scanProjects'
 
 export { getLiveState, type LiveState }
 
-
 export function startHookServer(win: BrowserWindow): void {
   const server = createServer((req, res) => handleRequest(req, res, win))
   server.listen(0, '127.0.0.1', () => {
