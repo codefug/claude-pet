@@ -8,76 +8,53 @@ import { ABORTED_THRESHOLD_MS, classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
 import { parseJsonl } from './parseJsonl'
 
-const PROJECTS_DIR = CLAUDE_PROJECTS_DIR
+function safeReadDir(path: string): string[] {
+  try { return readdirSync(path) } catch { return [] }
+}
+
+function safeMtimeMs(path: string): number {
+  try { return statSync(path).mtimeMs } catch { return 0 }
+}
+
+function isDir(path: string): boolean {
+  try { return statSync(path).isDirectory() } catch { return false }
+}
 
 export function scanProjects(): SessionData[] {
-  let dirs: string[]
-  try {
-    dirs = readdirSync(PROJECTS_DIR)
-  } catch {
-    return []
-  }
-
   const { sessionWindowHours } = loadSettings()
   const cutoff = Date.now() - sessionWindowHours * 60 * 60 * 1000
-  const sessions: SessionData[] = []
 
-  for (const dir of dirs) {
-    const dirPath = join(PROJECTS_DIR, dir)
-    try {
-      if (!statSync(dirPath).isDirectory()) continue
-    } catch {
-      continue
-    }
-
-    let files: string[]
-    try {
-      files = readdirSync(dirPath).filter((f) => f.endsWith('.jsonl'))
-    } catch {
-      continue
-    }
+  return safeReadDir(CLAUDE_PROJECTS_DIR).flatMap((dir) => {
+    const dirPath = join(CLAUDE_PROJECTS_DIR, dir)
+    if (!isDir(dirPath)) return []
 
     const projectPath = decodeProjectPath(dir)
 
-    for (const file of files) {
-      const filePath = join(dirPath, file)
-      let mtime: number
-      try {
-        mtime = statSync(filePath).mtimeMs
-      } catch {
-        continue
-      }
+    return safeReadDir(dirPath)
+      .filter((f) => f.endsWith('.jsonl'))
+      .flatMap((file) => {
+        const filePath = join(dirPath, file)
+        if (safeMtimeMs(filePath) < cutoff) return []
 
-      if (mtime < cutoff) continue
+        const parsed = parseJsonl(filePath)
+        const lastMessageAt = parsed.lastMessageAt ?? new Date(safeMtimeMs(filePath)).toISOString()
+        if (new Date(lastMessageAt).getTime() < cutoff) return []
 
-      const parsed = parseJsonl(filePath)
-      const projectName = parsed.cwd ? basename(parsed.cwd) : dir
-      const lastMessageAt = parsed.lastMessageAt ?? new Date(mtime).toISOString()
+        const status = classifyStatus(parsed)
+        if (status === 'aborted' && Date.now() - new Date(lastMessageAt).getTime() > ABORTED_THRESHOLD_MS) return []
 
-      if (new Date(lastMessageAt).getTime() < cutoff) continue
+        const live = parsed.sessionId ? getLiveState(parsed.sessionId) : undefined
+        const pendingTool = status === 'waiting_permission' && live?.pendingTool ? live.pendingTool : null
 
-      const status = classifyStatus(parsed)
-
-      if (status === 'aborted') {
-        const lastAt = new Date(lastMessageAt).getTime()
-        if (Date.now() - lastAt > ABORTED_THRESHOLD_MS) continue
-      }
-
-      const live = parsed.sessionId ? getLiveState(parsed.sessionId) : undefined
-      const pendingTool =
-        status === 'waiting_permission' && live?.pendingTool ? live.pendingTool : null
-
-      sessions.push({
-        id: `${dir}/${file}`,
-        projectName,
-        projectPath,
-        status,
-        lastMessageAt,
-        summary: parsed.aiTitle ?? parsed.lastPrompt ?? null,
-        pendingTool
+        return [{
+          id: `${dir}/${file}`,
+          projectName: parsed.cwd ? basename(parsed.cwd) : dir,
+          projectPath,
+          status,
+          lastMessageAt,
+          summary: parsed.aiTitle ?? parsed.lastPrompt ?? null,
+          pendingTool
+        }]
       })
-    }
-  }
-
-  return sessions
+  })
 }

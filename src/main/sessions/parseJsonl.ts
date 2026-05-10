@@ -15,7 +15,26 @@ export interface ParsedSession {
   hasToolResultAfterLastAssistant: boolean
 }
 
+const EMPTY: ParsedSession = {
+  sessionId: null,
+  lastAssistant: null,
+  lastMessageAt: null,
+  aiTitle: null,
+  lastPrompt: null,
+  cwd: null,
+  hasToolResultAfterLastAssistant: false
+}
+
 const cache = new Map<string, ParsedSession>()
+
+function isObject(v: unknown): v is Record<string, unknown> {
+  return v !== null && typeof v === 'object' && !Array.isArray(v)
+}
+
+function hasToolResult(content: unknown): boolean {
+  return Array.isArray(content) &&
+    content.some((c) => isObject(c) && c.type === 'tool_result')
+}
 
 function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
   let { sessionId, lastAssistant, aiTitle, lastPrompt, cwd } = session
@@ -23,48 +42,27 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
 
   for (const line of lines) {
     let entry: Record<string, unknown>
-    try {
-      entry = JSON.parse(line)
-    } catch {
-      continue
-    }
+    try { entry = JSON.parse(line) } catch { continue }
 
     if (!sessionId && typeof entry.sessionId === 'string') {
       sessionId = entry.sessionId
     }
 
-    if (entry.type === 'assistant') {
-      const msg = entry.message
-      if (msg !== null && typeof msg === 'object' && !Array.isArray(msg)) {
-        const { stop_reason } = msg as Record<string, unknown>
-        if (stop_reason !== undefined && typeof entry.timestamp === 'string') {
-          lastAssistant = {
-            stop_reason: typeof stop_reason === 'string' ? stop_reason : null,
-            timestamp: entry.timestamp
-          }
-          hasToolResultAfterLastAssistant = false
+    if (entry.type === 'assistant' && isObject(entry.message)) {
+      const { stop_reason } = entry.message
+      if (stop_reason !== undefined && typeof entry.timestamp === 'string') {
+        lastAssistant = {
+          stop_reason: typeof stop_reason === 'string' ? stop_reason : null,
+          timestamp: entry.timestamp
         }
+        hasToolResultAfterLastAssistant = false
       }
     }
 
     if (entry.type === 'user') {
       if (!cwd && typeof entry.cwd === 'string') cwd = entry.cwd
-      const msg = entry.message
-      const content =
-        msg !== null && typeof msg === 'object' && !Array.isArray(msg)
-          ? (msg as Record<string, unknown>).content
-          : entry.content
-      if (
-        Array.isArray(content) &&
-        content.some(
-          (c) =>
-            typeof c === 'object' &&
-            c !== null &&
-            (c as Record<string, unknown>).type === 'tool_result'
-        )
-      ) {
-        hasToolResultAfterLastAssistant = true
-      }
+      const content = isObject(entry.message) ? entry.message.content : entry.content
+      if (hasToolResult(content)) hasToolResultAfterLastAssistant = true
     }
 
     if (entry.type === 'ai-title' && typeof entry.aiTitle === 'string') {
@@ -87,22 +85,11 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
   }
 }
 
-const EMPTY: ParsedSession = {
-  sessionId: null,
-  lastAssistant: null,
-  lastMessageAt: null,
-  aiTitle: null,
-  lastPrompt: null,
-  cwd: null,
-  hasToolResultAfterLastAssistant: false
-}
-
 export function parseJsonl(filePath: string): ParsedSession {
   const newLines = readNewLines(filePath)
   if (newLines.length === 0) return cache.get(filePath) ?? EMPTY
 
-  const base = cache.get(filePath) ?? EMPTY
-  const updated = applyLines(base, newLines)
+  const updated = applyLines(cache.get(filePath) ?? EMPTY, newLines)
   cache.set(filePath, updated)
   return updated
 }
