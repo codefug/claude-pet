@@ -1,4 +1,4 @@
-import { app, dialog, ipcMain } from 'electron'
+import { app, dialog, ipcMain, shell } from 'electron'
 import type { BrowserWindow } from 'electron'
 import { produce } from 'immer'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
@@ -69,5 +69,16 @@ export function registerIpcHandlers(win: BrowserWindow): void {
 
   ipcMain.handle(IPC_CHANNEL.SET_LOGIN_ITEM, (_e, openAtLogin: boolean) => {
     app.setLoginItemSettings({ openAtLogin })
+  })
+
+  ipcMain.handle(IPC_CHANNEL.SET_OPACITY, (_e, opacity: number) => {
+    win.setOpacity(opacity)
+    updateSettings((draft) => {
+      draft.opacity = opacity
+    })
+  })
+
+  ipcMain.handle(IPC_CHANNEL.OPEN_PATH, (_e, path: string) => {
+    shell.showItemInFolder(path)
   })
 }

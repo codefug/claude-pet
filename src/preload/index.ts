@@ -19,7 +19,10 @@ const claudePet = {
     ipcRenderer.invoke(IPC_CHANNEL.SET_SESSION_WINDOW, hours),
   getLoginItem: (): Promise<boolean> => ipcRenderer.invoke(IPC_CHANNEL.GET_LOGIN_ITEM),
   setLoginItem: (openAtLogin: boolean): Promise<void> =>
-    ipcRenderer.invoke(IPC_CHANNEL.SET_LOGIN_ITEM, openAtLogin)
+    ipcRenderer.invoke(IPC_CHANNEL.SET_LOGIN_ITEM, openAtLogin),
+  setOpacity: (opacity: number): Promise<void> =>
+    ipcRenderer.invoke(IPC_CHANNEL.SET_OPACITY, opacity),
+  openPath: (path: string): Promise<void> => ipcRenderer.invoke(IPC_CHANNEL.OPEN_PATH, path)
 }
 
 contextBridge.exposeInMainWorld('claudePet', claudePet)

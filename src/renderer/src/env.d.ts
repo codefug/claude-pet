@@ -21,6 +21,8 @@ declare global {
       setSessionWindow: (hours: number) => Promise<void>
       getLoginItem: () => Promise<boolean>
       setLoginItem: (openAtLogin: boolean) => Promise<void>
+      setOpacity: (opacity: number) => Promise<void>
+      openPath: (path: string) => Promise<void>
     }
   }
 }

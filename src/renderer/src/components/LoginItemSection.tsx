@@ -31,7 +31,7 @@ export default function LoginItemSection(): JSX.Element {
           }`}
         >
           <span
-            className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform ${
+            className={`absolute left-0 top-0.5 w-3 h-3 rounded-full bg-white transition-transform ${
               openAtLogin ? 'translate-x-4' : 'translate-x-0.5'
             }`}
           />

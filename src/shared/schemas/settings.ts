@@ -9,6 +9,7 @@ export const CharacterImagesSchema = z.object({
 
 export const AppSettingsSchema = z.object({
   sessionWindowHours: z.number().refine((v) => v > 0 && Number.isFinite(v)),
+  opacity: z.number().min(0.2).max(1).default(0.75),
   characterImages: CharacterImagesSchema
 })
 

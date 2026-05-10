@@ -32,6 +32,16 @@ export function useSettingsStore() {
     })
   })
 
+  const opacityMutation = useMutation({
+    mutationFn: (opacity: number) => window.claudePet.setOpacity(opacity),
+    ...makeOptimisticOptions({
+      getQueryData: getSettings,
+      setQueryData: setSettings,
+      updater: (s, opacity) => ({ ...s, opacity }),
+      reconcile
+    })
+  })
+
   const pickMutation = useMutation({
     mutationFn: (status: SessionStatus) => window.claudePet.setCharacterImage(status),
     onSuccess: (dataUrl, status) => {
@@ -57,7 +67,9 @@ export function useSettingsStore() {
   return {
     images: settings.characterImages,
     sessionWindowHours: settings.sessionWindowHours,
+    opacity: settings.opacity,
     handleWindowChange: (hours: number) => windowMutation.mutateAsync(hours),
+    handleOpacityChange: (opacity: number) => opacityMutation.mutate(opacity),
     handlePick: (status: SessionStatus) => pickMutation.mutateAsync(status),
     handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status)
   }
