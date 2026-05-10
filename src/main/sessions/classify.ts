@@ -22,6 +22,6 @@ export function classifyStatus(parsed: ParsedSession): SessionStatus {
   if (!last) return 'done'
   const elapsed = Date.now() - new Date(last.timestamp).getTime()
   if (elapsed > ABORTED_THRESHOLD_MS) return 'aborted'
-  if (last.stop_reason === 'tool_use') return 'working'
+  if (last.stop_reason === 'tool_use' && !parsed.hasToolResultAfterLastAssistant) return 'working'
   return 'done'
 }
