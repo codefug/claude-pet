@@ -11,6 +11,8 @@ export function classifyStatus(parsed: ParsedSession): SessionStatus {
     if (live) {
       const elapsed = Date.now() - live.updatedAt
       if (live.status === 'done' && elapsed > ABORTED_THRESHOLD_MS) return 'aborted'
+      // PermissionDenied hook is not always fired by Claude Code — fall back to JSONL
+      if (live.status === 'waiting_permission' && parsed.hasToolResultAfterLastAssistant) return 'done'
       return live.status
     }
   }

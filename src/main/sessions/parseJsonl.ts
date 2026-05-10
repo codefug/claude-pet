@@ -12,12 +12,14 @@ export interface ParsedSession {
   aiTitle: string | null
   lastPrompt: string | null
   cwd: string | null
+  hasToolResultAfterLastAssistant: boolean
 }
 
 const cache = new Map<string, ParsedSession>()
 
 function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
   let { sessionId, lastAssistant, aiTitle, lastPrompt, cwd } = session
+  let hasToolResultAfterLastAssistant = session.hasToolResultAfterLastAssistant
 
   for (const line of lines) {
     let entry: Record<string, unknown>
@@ -40,12 +42,20 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
             stop_reason: typeof stop_reason === 'string' ? stop_reason : null,
             timestamp: entry.timestamp
           }
+          hasToolResultAfterLastAssistant = false
         }
       }
     }
 
     if (entry.type === 'user') {
       if (!cwd && typeof entry.cwd === 'string') cwd = entry.cwd
+      const msg = entry.message
+      const content = msg !== null && typeof msg === 'object' && !Array.isArray(msg)
+        ? (msg as Record<string, unknown>).content
+        : entry.content
+      if (Array.isArray(content) && content.some((c) => typeof c === 'object' && c !== null && (c as Record<string, unknown>).type === 'tool_result')) {
+        hasToolResultAfterLastAssistant = true
+      }
     }
 
     if (entry.type === 'ai-title' && typeof entry.aiTitle === 'string') {
@@ -63,7 +73,8 @@ function applyLines(session: ParsedSession, lines: string[]): ParsedSession {
     lastMessageAt: lastAssistant?.timestamp ?? null,
     aiTitle,
     lastPrompt,
-    cwd
+    cwd,
+    hasToolResultAfterLastAssistant
   }
 }
 
@@ -73,7 +84,8 @@ const EMPTY: ParsedSession = {
   lastMessageAt: null,
   aiTitle: null,
   lastPrompt: null,
-  cwd: null
+  cwd: null,
+  hasToolResultAfterLastAssistant: false
 }
 
 export function parseJsonl(filePath: string): ParsedSession {
