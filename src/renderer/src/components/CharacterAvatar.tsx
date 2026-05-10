@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import abortedSvg from '../assets/yorkie/aborted.svg'
 import doneSvg from '../assets/yorkie/done.svg'
 import waitingSvg from '../assets/yorkie/waiting.svg'
@@ -16,7 +17,7 @@ interface Props {
   customImage?: string | null
 }
 
-export default function CharacterAvatar({ status, customImage }: Props): React.JSX.Element {
+export default function CharacterAvatar({ status, customImage }: Props): JSX.Element {
   const src = customImage ?? DEFAULT_SVG[status]
   return (
     <img

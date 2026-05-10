@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { type JSX, useState } from 'react'
 import type { Session, SessionStatus } from '../types'
 import { relativeTime } from '../utils/relativeTime'
 import CharacterAvatar from './CharacterAvatar'
@@ -16,7 +16,7 @@ interface Props {
   customImage?: string | null
 }
 
-export default function SessionCard({ session, onIgnore, customImage }: Props): React.JSX.Element {
+export default function SessionCard({ session, onIgnore, customImage }: Props): JSX.Element {
   const { color, label } = STATUS_CONFIG[session.status]
   const [hovered, setHovered] = useState(false)
 

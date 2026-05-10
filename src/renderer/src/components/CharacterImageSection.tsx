@@ -1,11 +1,8 @@
-import type { SessionStatus } from '../types'
+import type { CharacterImages } from '../../../shared/schemas/settings'
+import type { SessionStatus } from '../../../shared/schemas/session'
+import type { JSX } from 'react'
 
-export interface CharacterImages {
-  working: string | null
-  waiting_permission: string | null
-  done: string | null
-  aborted: string | null
-}
+export type { CharacterImages }
 
 const STATUS_LABELS: Record<SessionStatus, string> = {
   working: 'Working',
@@ -22,11 +19,7 @@ interface Props {
   onClear: (status: SessionStatus) => void
 }
 
-export default function CharacterImageSection({
-  images,
-  onPick,
-  onClear
-}: Props): React.JSX.Element {
+export default function CharacterImageSection({ images, onPick, onClear }: Props): JSX.Element {
   return (
     <div style={{ marginBottom: '16px' }}>
       <div

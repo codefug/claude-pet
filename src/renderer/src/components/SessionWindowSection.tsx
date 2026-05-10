@@ -1,3 +1,5 @@
+import type { JSX } from 'react'
+
 const WINDOW_OPTIONS = [5, 12, 24, 48, 72]
 
 interface Props {
@@ -5,7 +7,7 @@ interface Props {
   onChange: (hours: number) => void
 }
 
-export default function SessionWindowSection({ value, onChange }: Props): React.JSX.Element {
+export default function SessionWindowSection({ value, onChange }: Props): JSX.Element {
   return (
     <div style={{ marginBottom: '16px' }}>
       <div

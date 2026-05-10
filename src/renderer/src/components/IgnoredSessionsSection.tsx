@@ -1,12 +1,12 @@
-import { useRef, useState } from 'react'
-import type { IgnoredToolRule } from '../../../main/settings'
+import type { IgnoredToolRule } from '@renderer/types'
+import { type CSSProperties, type JSX, type KeyboardEvent, useRef, useState } from 'react'
 
 interface Props {
   rules: IgnoredToolRule[]
   onRulesChange: (rules: IgnoredToolRule[]) => void
 }
 
-const sectionLabel: React.CSSProperties = {
+const sectionLabel: CSSProperties = {
   fontSize: '10px',
   fontWeight: 600,
   color: 'rgba(255,255,255,0.3)',
@@ -24,7 +24,7 @@ function parseLine(line: string): IgnoredToolRule | null {
   return { projectName, pattern }
 }
 
-export default function IgnoredSessionsSection({ rules, onRulesChange }: Props): React.JSX.Element {
+export default function IgnoredSessionsSection({ rules, onRulesChange }: Props): JSX.Element {
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -40,7 +40,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
     inputRef.current?.focus()
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') handleAdd()
   }
 

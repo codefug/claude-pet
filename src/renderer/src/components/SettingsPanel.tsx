@@ -1,9 +1,10 @@
-import { useSettings } from '../hooks/useSettings'
+import type { CSSProperties, JSX } from 'react'
+import { useSettingsStore } from '../store/settingsStore'
 import CharacterImageSection from './CharacterImageSection'
 import IgnoredSessionsSection from './IgnoredSessionsSection'
 import SessionWindowSection from './SessionWindowSection'
 
-const overlayStyle: React.CSSProperties = {
+const overlayStyle: CSSProperties = {
   position: 'absolute',
   inset: 0,
   background: 'rgba(14,14,22,0.97)',
@@ -15,13 +16,13 @@ const overlayStyle: React.CSSProperties = {
   zIndex: 10
 }
 
-const headerStyle: React.CSSProperties = {
+const headerStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   marginBottom: '14px'
 }
 
-const titleStyle: React.CSSProperties = {
+const titleStyle: CSSProperties = {
   flex: 1,
   fontSize: '11px',
   fontWeight: 700,
@@ -30,7 +31,7 @@ const titleStyle: React.CSSProperties = {
   textTransform: 'uppercase'
 }
 
-const closeBtnStyle: React.CSSProperties = {
+const closeBtnStyle: CSSProperties = {
   background: 'none',
   border: 'none',
   color: 'rgba(255,255,255,0.4)',
@@ -44,7 +45,7 @@ interface Props {
   onClose: () => void
 }
 
-export default function SettingsPanel({ onClose }: Props): React.JSX.Element {
+export default function SettingsPanel({ onClose }: Props): JSX.Element {
   const {
     images,
     sessionWindowHours,
@@ -53,7 +54,7 @@ export default function SettingsPanel({ onClose }: Props): React.JSX.Element {
     handlePick,
     handleClear,
     handleRulesChange
-  } = useSettings()
+  } = useSettingsStore()
 
   return (
     <div style={overlayStyle}>
