@@ -11,5 +11,6 @@ export const queryClient = new QueryClient({
 
 export const queryKeys = {
   sessions: ['sessions'] as const,
-  settings: ['settings'] as const
+  settings: ['settings'] as const,
+  loginItem: ['loginItem'] as const
 }

@@ -25,6 +25,8 @@ declare global {
       clearCharacterImage: (status: string) => Promise<void>
       setSessionWindow: (hours: number) => Promise<void>
       setIgnoredToolRules: (rules: IgnoredToolRule[]) => Promise<void>
+      getLoginItem: () => Promise<boolean>
+      setLoginItem: (openAtLogin: boolean) => Promise<void>
     }
   }
 }

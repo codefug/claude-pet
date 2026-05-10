@@ -24,7 +24,10 @@ const claudePet = {
   setSessionWindow: (hours: number): Promise<void> =>
     ipcRenderer.invoke(IPC_CHANNEL.SET_SESSION_WINDOW, hours),
   setIgnoredToolRules: (rules: IgnoredToolRule[]): Promise<void> =>
-    ipcRenderer.invoke(IPC_CHANNEL.SET_IGNORED_TOOL_RULES, rules)
+    ipcRenderer.invoke(IPC_CHANNEL.SET_IGNORED_TOOL_RULES, rules),
+  getLoginItem: (): Promise<boolean> => ipcRenderer.invoke(IPC_CHANNEL.GET_LOGIN_ITEM),
+  setLoginItem: (openAtLogin: boolean): Promise<void> =>
+    ipcRenderer.invoke(IPC_CHANNEL.SET_LOGIN_ITEM, openAtLogin)
 }
 
 contextBridge.exposeInMainWorld('claudePet', claudePet)

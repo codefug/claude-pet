@@ -2,6 +2,7 @@ import type { JSX } from 'react'
 import { useSettingsStore } from '../store/settingsStore'
 import CharacterImageSection from './CharacterImageSection'
 import IgnoredSessionsSection from './IgnoredSessionsSection'
+import LoginItemSection from './LoginItemSection'
 import SessionWindowSection from './SessionWindowSection'
 
 interface Props {
@@ -34,6 +35,7 @@ export default function SettingsPanel({ onClose }: Props): JSX.Element {
         </button>
       </div>
       <div className="flex-1 overflow-y-auto">
+        <LoginItemSection />
         <SessionWindowSection value={sessionWindowHours} onChange={handleWindowChange} />
         <CharacterImageSection images={images} onPick={handlePick} onClear={handleClear} />
         <IgnoredSessionsSection rules={ignoredToolRules} onRulesChange={handleRulesChange} />

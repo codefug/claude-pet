@@ -1,4 +1,4 @@
-import { dialog, ipcMain } from 'electron'
+import { app, dialog, ipcMain } from 'electron'
 import type { BrowserWindow } from 'electron'
 import { produce } from 'immer'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
@@ -85,5 +85,11 @@ export function registerIpcHandlers(win: BrowserWindow): void {
     updateSettings((draft) => {
       draft.characterImages[parsed.data] = null
     })
+  })
+
+  ipcMain.handle(IPC_CHANNEL.GET_LOGIN_ITEM, () => app.getLoginItemSettings().openAtLogin)
+
+  ipcMain.handle(IPC_CHANNEL.SET_LOGIN_ITEM, (_e, openAtLogin: boolean) => {
+    app.setLoginItemSettings({ openAtLogin })
   })
 }
