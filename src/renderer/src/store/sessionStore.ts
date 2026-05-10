@@ -35,19 +35,5 @@ export function useSessions() {
     })
   }, [qc])
 
-  const ignoreSession = (session: Session) => {
-    if (!session.pendingTool) return
-    window.claudePet.ignoreSession(
-      session.projectName,
-      session.pendingTool.name,
-      session.pendingTool.input
-    )
-    qc.setQueryData(queryKeys.sessions, (prev: Session[] = []) =>
-      sortSessions(
-        prev.map((s) => (s.id === session.id ? { ...s, status: 'working' as const } : s))
-      )
-    )
-  }
-
-  return { sessions, ignoreSession }
+  return { sessions }
 }

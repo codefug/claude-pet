@@ -7,14 +7,12 @@ import type { AppSettings } from '../shared/schemas/settings'
 
 const DEFAULTS: AppSettings = {
   sessionWindowHours: 5,
-  ignoredToolRules: [],
   characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
 }
 
 const store = new ElectronStore<AppSettings>({
   schema: {
     sessionWindowHours: { type: 'number', default: DEFAULTS.sessionWindowHours },
-    ignoredToolRules: { type: 'array', default: DEFAULTS.ignoredToolRules },
     characterImages: {
       type: 'object',
       properties: {

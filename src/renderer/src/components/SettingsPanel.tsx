@@ -1,7 +1,6 @@
 import type { JSX } from 'react'
 import { useSettingsStore } from '../store/settingsStore'
 import CharacterImageSection from './CharacterImageSection'
-import IgnoredSessionsSection from './IgnoredSessionsSection'
 import LoginItemSection from './LoginItemSection'
 import SessionWindowSection from './SessionWindowSection'
 
@@ -10,15 +9,8 @@ interface Props {
 }
 
 export default function SettingsPanel({ onClose }: Props): JSX.Element {
-  const {
-    images,
-    sessionWindowHours,
-    ignoredToolRules,
-    handleWindowChange,
-    handlePick,
-    handleClear,
-    handleRulesChange
-  } = useSettingsStore()
+  const { images, sessionWindowHours, handleWindowChange, handlePick, handleClear } =
+    useSettingsStore()
 
   return (
     <div className="absolute inset-0 bg-[rgba(14,14,22,0.97)] rounded-2xl p-[14px_12px] box-border flex flex-col z-10">
@@ -38,7 +30,6 @@ export default function SettingsPanel({ onClose }: Props): JSX.Element {
         <LoginItemSection />
         <SessionWindowSection value={sessionWindowHours} onChange={handleWindowChange} />
         <CharacterImageSection images={images} onPick={handlePick} onClear={handleClear} />
-        <IgnoredSessionsSection rules={ignoredToolRules} onRulesChange={handleRulesChange} />
       </div>
     </div>
   )

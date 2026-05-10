@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { SessionStatus } from '../../../shared/schemas/session'
 import { AppSettingsSchema } from '../../../shared/schemas/settings'
-import type { AppSettings, IgnoredToolRule } from '../../../shared/schemas/settings'
+import type { AppSettings } from '../../../shared/schemas/settings'
 import { EMPTY_SETTINGS, makeOptimisticOptions } from '../lib/optimisticOptions'
 import { queryKeys } from '../lib/queryClient'
 
@@ -54,23 +54,11 @@ export function useSettingsStore() {
     })
   })
 
-  const rulesMutation = useMutation({
-    mutationFn: (rules: IgnoredToolRule[]) => window.claudePet.setIgnoredToolRules(rules),
-    ...makeOptimisticOptions({
-      getQueryData: getSettings,
-      setQueryData: setSettings,
-      updater: (s, rules) => ({ ...s, ignoredToolRules: rules }),
-      reconcile
-    })
-  })
-
   return {
     images: settings.characterImages,
     sessionWindowHours: settings.sessionWindowHours,
-    ignoredToolRules: settings.ignoredToolRules,
     handleWindowChange: (hours: number) => windowMutation.mutateAsync(hours),
     handlePick: (status: SessionStatus) => pickMutation.mutateAsync(status),
-    handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status),
-    handleRulesChange: (rules: IgnoredToolRule[]) => rulesMutation.mutateAsync(rules)
+    handleClear: (status: SessionStatus) => clearMutation.mutateAsync(status)
   }
 }

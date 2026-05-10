@@ -5,7 +5,7 @@ import SessionCard from './SessionCard'
 
 export default function SessionList(): JSX.Element {
   const { images } = useSettingsStore()
-  const { sessions, ignoreSession } = useSessions()
+  const { sessions } = useSessions()
 
   if (sessions.length === 0) {
     return (
@@ -16,12 +16,7 @@ export default function SessionList(): JSX.Element {
   return (
     <>
       {sessions.map((s) => (
-        <SessionCard
-          key={s.id}
-          session={s}
-          onIgnore={ignoreSession}
-          customImage={images[s.status]}
-        />
+        <SessionCard key={s.id} session={s} customImage={images[s.status]} />
       ))}
     </>
   )

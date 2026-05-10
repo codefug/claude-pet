@@ -3,8 +3,7 @@ import type { BrowserWindow } from 'electron'
 import { produce } from 'immer'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
 import { SessionStatusSchema } from '../shared/schemas/session'
-import type { AppSettings, IgnoredToolRule } from '../shared/schemas/settings'
-import { toolToPattern } from './sessions/permissionChecker'
+import type { AppSettings } from '../shared/schemas/settings'
 import { scanProjects } from './sessions/scanProjects'
 import { loadSettings, saveSettings } from './settings'
 import { toDataUrl } from './utils/image'
@@ -23,20 +22,6 @@ function updateSettings(updater: (draft: AppSettings) => void): AppSettings {
 
 export function registerIpcHandlers(win: BrowserWindow): void {
   ipcMain.handle(IPC_CHANNEL.GET_SESSIONS, () => scanProjects())
-
-  ipcMain.handle(
-    IPC_CHANNEL.IGNORE_SESSION,
-    (_e, projectName: string, toolName: string, toolInput: Record<string, unknown>) => {
-      const pattern = toolToPattern({ toolName, toolInput })
-      updateSettings((draft) => {
-        const exists = draft.ignoredToolRules.some(
-          (r) => r.projectName === projectName && r.pattern === pattern
-        )
-        if (!exists) draft.ignoredToolRules.push({ projectName, pattern })
-      })
-      pushSessions(win)
-    }
-  )
 
   ipcMain.handle(IPC_CHANNEL.GET_SETTINGS, () => {
     const settings = loadSettings()
@@ -68,13 +53,6 @@ export function registerIpcHandlers(win: BrowserWindow): void {
   ipcMain.handle(IPC_CHANNEL.SET_SESSION_WINDOW, (_e, hours: number) => {
     updateSettings((draft) => {
       draft.sessionWindowHours = hours
-    })
-    pushSessions(win)
-  })
-
-  ipcMain.handle(IPC_CHANNEL.SET_IGNORED_TOOL_RULES, (_e, rules: IgnoredToolRule[]) => {
-    updateSettings((draft) => {
-      draft.ignoredToolRules = rules
     })
     pushSessions(win)
   })

@@ -7,7 +7,6 @@ import { loadSettings } from '../settings'
 import { ABORTED_THRESHOLD_MS, classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
 import { parseJsonl } from './parseJsonl'
-import { toolToPattern } from './permissionChecker'
 
 const PROJECTS_DIR = CLAUDE_PROJECTS_DIR
 
@@ -19,7 +18,7 @@ export function scanProjects(): SessionData[] {
     return []
   }
 
-  const { sessionWindowHours, ignoredToolRules } = loadSettings()
+  const { sessionWindowHours } = loadSettings()
   const cutoff = Date.now() - sessionWindowHours * 60 * 60 * 1000
   const sessions: SessionData[] = []
 
@@ -57,26 +56,14 @@ export function scanProjects(): SessionData[] {
 
       if (new Date(lastMessageAt).getTime() < cutoff) continue
 
-      let status = classifyStatus(parsed)
+      const status = classifyStatus(parsed)
 
       if (status === 'aborted') {
         const lastAt = new Date(lastMessageAt).getTime()
         if (Date.now() - lastAt > ABORTED_THRESHOLD_MS) continue
       }
 
-      // ignoredToolRules 매칭 시 waiting_permission → working으로 override
       const live = parsed.sessionId ? getLiveState(parsed.sessionId) : undefined
-      if (status === 'waiting_permission' && live?.pendingTool) {
-        const pattern = toolToPattern({
-          toolName: live.pendingTool.name,
-          toolInput: live.pendingTool.input
-        })
-        const ignored = ignoredToolRules.some(
-          (r) => r.projectName === projectName && pattern.includes(r.pattern)
-        )
-        if (ignored) status = 'working'
-      }
-
       const pendingTool =
         status === 'waiting_permission' && live?.pendingTool ? live.pendingTool : null
 

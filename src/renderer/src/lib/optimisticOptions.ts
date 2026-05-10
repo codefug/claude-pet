@@ -2,7 +2,6 @@ import type { AppSettings } from '../../../shared/schemas/settings'
 
 export const EMPTY_SETTINGS: AppSettings = {
   sessionWindowHours: 5,
-  ignoredToolRules: [],
   characterImages: { working: null, waiting_permission: null, done: null, aborted: null }
 }
 
