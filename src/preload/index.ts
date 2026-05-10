@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
+import { IPC_CHANNEL } from '../shared/ipc-channels'
 import type { SessionData } from '../shared/schemas/session'
 import type { AppSettings, IgnoredToolRule } from '../shared/schemas/settings'
-import { IPC_CHANNEL } from '../shared/ipc-channels'
 
 const claudePet = {
   getSessions: (): Promise<SessionData[]> => ipcRenderer.invoke(IPC_CHANNEL.GET_SESSIONS),
@@ -14,7 +14,8 @@ const claudePet = {
     projectName: string,
     toolName: string,
     toolInput: Record<string, unknown>
-  ): Promise<void> => ipcRenderer.invoke(IPC_CHANNEL.IGNORE_SESSION, projectName, toolName, toolInput),
+  ): Promise<void> =>
+    ipcRenderer.invoke(IPC_CHANNEL.IGNORE_SESSION, projectName, toolName, toolInput),
   getSettings: (): Promise<AppSettings> => ipcRenderer.invoke(IPC_CHANNEL.GET_SETTINGS),
   setCharacterImage: (status: string): Promise<string | null> =>
     ipcRenderer.invoke(IPC_CHANNEL.SET_CHARACTER_IMAGE, status),

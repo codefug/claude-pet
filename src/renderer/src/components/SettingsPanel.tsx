@@ -1,45 +1,8 @@
-import type { CSSProperties, JSX } from 'react'
+import type { JSX } from 'react'
 import { useSettingsStore } from '../store/settingsStore'
 import CharacterImageSection from './CharacterImageSection'
 import IgnoredSessionsSection from './IgnoredSessionsSection'
 import SessionWindowSection from './SessionWindowSection'
-
-const overlayStyle: CSSProperties = {
-  position: 'absolute',
-  inset: 0,
-  background: 'rgba(14,14,22,0.97)',
-  borderRadius: '16px',
-  padding: '14px 12px',
-  boxSizing: 'border-box',
-  display: 'flex',
-  flexDirection: 'column',
-  zIndex: 10
-}
-
-const headerStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: '14px'
-}
-
-const titleStyle: CSSProperties = {
-  flex: 1,
-  fontSize: '11px',
-  fontWeight: 700,
-  color: 'rgba(255,255,255,0.4)',
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase'
-}
-
-const closeBtnStyle: CSSProperties = {
-  background: 'none',
-  border: 'none',
-  color: 'rgba(255,255,255,0.4)',
-  cursor: 'pointer',
-  fontSize: '16px',
-  lineHeight: 1,
-  padding: '0 2px'
-}
 
 interface Props {
   onClose: () => void
@@ -57,14 +20,20 @@ export default function SettingsPanel({ onClose }: Props): JSX.Element {
   } = useSettingsStore()
 
   return (
-    <div style={overlayStyle}>
-      <div style={headerStyle}>
-        <div style={titleStyle}>Settings</div>
-        <button type="button" onClick={onClose} style={closeBtnStyle}>
+    <div className="absolute inset-0 bg-[rgba(14,14,22,0.97)] rounded-2xl p-[14px_12px] box-border flex flex-col z-10">
+      <div className="flex items-center mb-3.5">
+        <div className="flex-1 text-[11px] font-bold text-white/40 tracking-[0.08em] uppercase">
+          Settings
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          className="bg-transparent border-none text-white/40 cursor-pointer text-base leading-none px-0.5"
+        >
           ✕
         </button>
       </div>
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      <div className="flex-1 overflow-y-auto">
         <SessionWindowSection value={sessionWindowHours} onChange={handleWindowChange} />
         <CharacterImageSection images={images} onPick={handlePick} onClear={handleClear} />
         <IgnoredSessionsSection rules={ignoredToolRules} onRulesChange={handleRulesChange} />

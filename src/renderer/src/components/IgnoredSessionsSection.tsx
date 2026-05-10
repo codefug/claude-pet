@@ -1,18 +1,9 @@
 import type { IgnoredToolRule } from '@renderer/types'
-import { type CSSProperties, type JSX, type KeyboardEvent, useRef, useState } from 'react'
+import { type JSX, type KeyboardEvent, useRef, useState } from 'react'
 
 interface Props {
   rules: IgnoredToolRule[]
   onRulesChange: (rules: IgnoredToolRule[]) => void
-}
-
-const sectionLabel: CSSProperties = {
-  fontSize: '10px',
-  fontWeight: 600,
-  color: 'rgba(255,255,255,0.3)',
-  letterSpacing: '0.06em',
-  textTransform: 'uppercase',
-  marginBottom: '8px'
 }
 
 function parseLine(line: string): IgnoredToolRule | null {
@@ -49,100 +40,47 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
   }
 
   return (
-    <div style={{ marginBottom: '12px' }}>
-      <div style={sectionLabel}>무시할 명령어</div>
+    <div className="mb-3">
+      <div className="text-[10px] font-semibold text-white/30 tracking-[0.06em] uppercase mb-2">
+        무시할 명령어
+      </div>
 
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
+      <div className="flex gap-1 mb-1">
         <input
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="<프로젝트명> <명령어>"
-          style={{
-            flex: 1,
-            fontSize: '10px',
-            padding: '4px 8px',
-            borderRadius: '6px',
-            border: '1px solid rgba(255,255,255,0.12)',
-            background: 'rgba(255,255,255,0.06)',
-            color: 'rgba(255,255,255,0.7)',
-            outline: 'none',
-            minWidth: 0,
-            fontFamily: 'monospace'
-          }}
+          className="flex-1 text-[10px] px-2 py-1 rounded-md border border-white/12 bg-white/6 text-white/70 outline-none min-w-0 font-mono"
         />
         <button
           type="button"
           onClick={handleAdd}
-          style={{
-            fontSize: '10px',
-            padding: '4px 8px',
-            borderRadius: '6px',
-            border: 'none',
-            background: 'rgba(245,200,66,0.2)',
-            color: '#F5C842',
-            cursor: 'pointer',
-            flexShrink: 0
-          }}
+          className="text-[10px] px-2 py-1 rounded-md border-none bg-[rgba(245,200,66,0.2)] text-[#F5C842] cursor-pointer shrink-0"
         >
           추가
         </button>
       </div>
 
-      <div
-        style={{
-          fontSize: '9px',
-          color: 'rgba(255,255,255,0.2)',
-          marginBottom: '8px',
-          fontFamily: 'monospace'
-        }}
-      >
-        예: claude-pet pnpm run build
-      </div>
+      <div className="text-[9px] text-white/20 mb-2 font-mono">예: claude-pet pnpm run build</div>
 
       {rules.length === 0 ? (
-        <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.2)', padding: '2px 8px' }}>
-          없음
-        </div>
+        <div className="text-[10px] text-white/20 px-2 py-0.5">없음</div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div className="flex flex-col gap-1">
           {rules.map((rule, i) => (
             <div
               key={`${rule.projectName}-${rule.pattern}`}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '8px',
-                padding: '5px 8px',
-                borderRadius: '8px',
-                background: 'rgba(245,200,66,0.07)'
-              }}
+              className="flex items-start gap-2 px-2 py-1.25 rounded-lg bg-[rgba(245,200,66,0.07)]"
             >
-              <div
-                style={{
-                  flex: 1,
-                  fontSize: '11px',
-                  color: 'rgba(245,200,66,0.7)',
-                  fontFamily: 'monospace',
-                  wordBreak: 'break-all'
-                }}
-              >
+              <div className="flex-1 text-[11px] text-[rgba(245,200,66,0.7)] font-mono break-all">
                 {rule.projectName} {rule.pattern}
               </div>
               <button
                 type="button"
                 onClick={() => handleRemove(i)}
-                style={{
-                  fontSize: '10px',
-                  color: 'rgba(255,80,80,0.7)',
-                  background: 'rgba(255,80,80,0.1)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '2px 6px',
-                  cursor: 'pointer',
-                  flexShrink: 0
-                }}
+                className="text-[10px] text-[rgba(255,80,80,0.7)] bg-[rgba(255,80,80,0.1)] border-none rounded px-1.5 py-0.5 cursor-pointer shrink-0"
               >
                 삭제
               </button>
@@ -151,14 +89,7 @@ export default function IgnoredSessionsSection({ rules, onRulesChange }: Props):
         </div>
       )}
 
-      <div
-        style={{
-          marginTop: '8px',
-          fontSize: '9px',
-          color: 'rgba(255,255,255,0.18)',
-          lineHeight: 1.5
-        }}
-      >
+      <div className="mt-2 text-[9px] text-white/18 leading-relaxed">
         프로젝트명 커맨드 형식 · 커맨드가 포함되면 working으로 처리
       </div>
     </div>

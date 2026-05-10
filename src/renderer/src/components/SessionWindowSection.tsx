@@ -9,35 +9,21 @@ interface Props {
 
 export default function SessionWindowSection({ value, onChange }: Props): JSX.Element {
   return (
-    <div style={{ marginBottom: '16px' }}>
-      <div
-        style={{
-          fontSize: '10px',
-          fontWeight: 600,
-          color: 'rgba(255,255,255,0.3)',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          marginBottom: '8px'
-        }}
-      >
+    <div className="mb-4">
+      <div className="text-[10px] font-semibold text-white/30 tracking-[0.06em] uppercase mb-2">
         세션 표시 기간
       </div>
-      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+      <div className="flex gap-1 flex-wrap">
         {WINDOW_OPTIONS.map((h) => (
           <button
             type="button"
             key={h}
             onClick={() => onChange(h)}
-            style={{
-              fontSize: '10px',
-              padding: '3px 8px',
-              borderRadius: '6px',
-              border: 'none',
-              cursor: 'pointer',
-              background: value === h ? 'rgba(245,200,66,0.25)' : 'rgba(255,255,255,0.08)',
-              color: value === h ? '#F5C842' : 'rgba(255,255,255,0.45)',
-              fontWeight: value === h ? 700 : 400
-            }}
+            className={`text-[10px] px-2 py-0.75 rounded-md border-none cursor-pointer ${
+              value === h
+                ? 'bg-[rgba(245,200,66,0.25)] text-[#F5C842] font-bold'
+                : 'bg-white/8 text-white/45 font-normal'
+            }`}
           >
             {h}h
           </button>

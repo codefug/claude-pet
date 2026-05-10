@@ -1,13 +1,13 @@
 import { readdirSync, statSync } from 'node:fs'
 import { basename, join } from 'node:path'
 import { CLAUDE_PROJECTS_DIR } from '../../shared/claude-paths'
+import type { SessionData } from '../../shared/schemas/session'
 import { getLiveState } from '../live-status'
 import { loadSettings } from '../settings'
 import { ABORTED_THRESHOLD_MS, classifyStatus } from './classify'
 import { decodeProjectPath } from './formatProject'
 import { parseJsonl } from './parseJsonl'
 import { toolToPattern } from './permissionChecker'
-import type { SessionData } from '../../shared/schemas/session'
 
 const PROJECTS_DIR = CLAUDE_PROJECTS_DIR
 

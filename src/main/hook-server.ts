@@ -2,8 +2,8 @@ import { type IncomingMessage, type ServerResponse, createServer } from 'node:ht
 import { type BrowserWindow, app } from 'electron'
 import { HOOK_EVENT, NOTIFICATION_TYPE } from '../shared/hook-events'
 import { IPC_CHANNEL } from '../shared/ipc-channels'
-import { HookPayloadSchema } from '../shared/schemas/hook-payload'
 import { deletePortFile, writePortFile } from '../shared/port-file'
+import { HookPayloadSchema } from '../shared/schemas/hook-payload'
 import { type LiveState, getLiveState, setLiveState } from './live-status'
 import { scanProjects } from './sessions/scanProjects'
 

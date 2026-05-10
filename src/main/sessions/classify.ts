@@ -1,6 +1,6 @@
+import type { SessionStatus } from '../../shared/schemas/session'
 import { getLiveState } from '../live-status'
 import type { ParsedSession } from './parseJsonl'
-import type { SessionStatus } from '../../shared/schemas/session'
 
 export const ABORTED_THRESHOLD_MS = 5 * 60 * 1000
 

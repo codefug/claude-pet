@@ -65,7 +65,12 @@ export function useSettingsStore() {
     onSettled: reconcile
   })
 
-  const rulesMutation = useMutation<void, Error, IgnoredToolRule[], { prev: AppSettings | undefined }>({
+  const rulesMutation = useMutation<
+    void,
+    Error,
+    IgnoredToolRule[],
+    { prev: AppSettings | undefined }
+  >({
     mutationFn: (rules) => window.claudePet.setIgnoredToolRules(rules),
     onMutate: (rules) => {
       const prev = qc.getQueryData<AppSettings>(queryKeys.settings)

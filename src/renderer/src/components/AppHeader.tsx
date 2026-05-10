@@ -1,35 +1,4 @@
-import type { CSSProperties, JSX } from 'react'
-
-const headerStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: '10px',
-  paddingTop: '4px',
-  paddingBottom: '8px',
-  WebkitAppRegion: 'drag',
-  cursor: 'grab'
-}
-
-const titleStyle: CSSProperties = {
-  flex: 1,
-  fontSize: '11px',
-  fontWeight: 700,
-  color: 'rgba(255,255,255,0.4)',
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  paddingLeft: '2px'
-}
-
-const settingsBtnStyle: CSSProperties = {
-  WebkitAppRegion: 'no-drag',
-  background: 'none',
-  border: 'none',
-  color: 'rgba(255,255,255,0.3)',
-  cursor: 'pointer',
-  fontSize: '14px',
-  padding: '0 2px',
-  lineHeight: 1
-}
+import type { JSX } from 'react'
 
 interface Props {
   onSettingsClick: () => void
@@ -37,9 +6,20 @@ interface Props {
 
 export default function AppHeader({ onSettingsClick }: Props): JSX.Element {
   return (
-    <div style={headerStyle}>
-      <div style={titleStyle}>Claude Sessions</div>
-      <button type="button" onClick={onSettingsClick} style={settingsBtnStyle} title="설정">
+    <div
+      style={{ WebkitAppRegion: 'drag' }}
+      className="flex items-center mb-2.5 pt-1 pb-2 cursor-grab"
+    >
+      <div className="flex-1 text-[11px] font-bold text-white/40 tracking-[0.08em] uppercase pl-0.5">
+        Claude Sessions
+      </div>
+      <button
+        type="button"
+        onClick={onSettingsClick}
+        style={{ WebkitAppRegion: 'no-drag' }}
+        className="bg-none border-none text-white/30 cursor-pointer text-[14px] px-0.5 leading-none"
+        title="설정"
+      >
         ⚙️
       </button>
     </div>

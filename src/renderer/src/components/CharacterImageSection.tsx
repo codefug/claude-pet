@@ -1,6 +1,6 @@
-import type { CharacterImages } from '../../../shared/schemas/settings'
-import type { SessionStatus } from '../../../shared/schemas/session'
 import type { JSX } from 'react'
+import type { SessionStatus } from '../../../shared/schemas/session'
+import type { CharacterImages } from '../../../shared/schemas/settings'
 
 export type { CharacterImages }
 
@@ -21,72 +21,31 @@ interface Props {
 
 export default function CharacterImageSection({ images, onPick, onClear }: Props): JSX.Element {
   return (
-    <div style={{ marginBottom: '16px' }}>
-      <div
-        style={{
-          fontSize: '10px',
-          fontWeight: 600,
-          color: 'rgba(255,255,255,0.3)',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          marginBottom: '8px'
-        }}
-      >
+    <div className="mb-4">
+      <div className="text-[10px] font-semibold text-white/30 tracking-[0.06em] uppercase mb-2">
         캐릭터 이미지
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
+      <div className="flex flex-col gap-1.5 mb-2">
         {STATUSES.map((status) => (
-          <div
-            key={status}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 8px',
-              borderRadius: '8px',
-              background: 'rgba(255,255,255,0.05)'
-            }}
-          >
+          <div key={status} className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-white/5">
             {images[status] ? (
               <img
                 src={images[status] ?? ''}
                 alt={status}
                 width={32}
                 height={32}
-                style={{ borderRadius: '4px', objectFit: 'cover', flexShrink: 0 }}
+                className="rounded object-cover shrink-0"
               />
             ) : (
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '4px',
-                  background: 'rgba(255,255,255,0.08)',
-                  flexShrink: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '16px'
-                }}
-              >
+              <div className="w-8 h-8 rounded bg-white/[0.08] shrink-0 flex items-center justify-center text-base">
                 🐾
               </div>
             )}
-            <div style={{ flex: 1, fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
-              {STATUS_LABELS[status]}
-            </div>
+            <div className="flex-1 text-[11px] text-white/60">{STATUS_LABELS[status]}</div>
             <button
               type="button"
               onClick={() => onPick(status)}
-              style={{
-                fontSize: '10px',
-                color: 'rgba(255,255,255,0.5)',
-                background: 'rgba(255,255,255,0.08)',
-                border: 'none',
-                borderRadius: '4px',
-                padding: '2px 6px',
-                cursor: 'pointer'
-              }}
+              className="text-[10px] text-white/50 bg-white/[0.08] border-none rounded px-1.5 py-0.5 cursor-pointer"
             >
               선택
             </button>
@@ -94,15 +53,7 @@ export default function CharacterImageSection({ images, onPick, onClear }: Props
               <button
                 type="button"
                 onClick={() => onClear(status)}
-                style={{
-                  fontSize: '10px',
-                  color: 'rgba(255,80,80,0.7)',
-                  background: 'rgba(255,80,80,0.1)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '2px 6px',
-                  cursor: 'pointer'
-                }}
+                className="text-[10px] text-[rgba(255,80,80,0.7)] bg-[rgba(255,80,80,0.1)] border-none rounded px-1.5 py-0.5 cursor-pointer"
               >
                 초기화
               </button>
@@ -110,7 +61,7 @@ export default function CharacterImageSection({ images, onPick, onClear }: Props
           </div>
         ))}
       </div>
-      <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.2)', lineHeight: 1.5 }}>
+      <div className="text-[9px] text-white/20 leading-relaxed">
         PNG, JPG, GIF, WebP, SVG 지원
         <br />
         설정한 이미지가 없으면 기본 요키 캐릭터 사용

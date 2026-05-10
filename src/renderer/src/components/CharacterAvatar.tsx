@@ -25,7 +25,7 @@ export default function CharacterAvatar({ status, customImage }: Props): JSX.Ele
       alt={status}
       width={48}
       height={48}
-      style={{ display: 'block', objectFit: 'contain', borderRadius: customImage ? '6px' : 0 }}
+      className={`block object-contain ${customImage ? 'rounded-[6px]' : 'rounded-none'}`}
     />
   )
 }

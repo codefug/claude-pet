@@ -1,5 +1,4 @@
-import 'virtual:uno.css'
-import '@unocss/reset/tailwind.css'
+import './assets/index.css'
 
 import { QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'

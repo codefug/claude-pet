@@ -7,9 +7,9 @@ export const HOOK_EVENT = {
   STOP: 'Stop',
   STOP_FAILURE: 'StopFailure',
   SESSION_START: 'SessionStart',
-  SESSION_END: 'SessionEnd',
+  SESSION_END: 'SessionEnd'
 } as const
 
 export const NOTIFICATION_TYPE = {
-  PERMISSION_PROMPT: 'permission_prompt',
+  PERMISSION_PROMPT: 'permission_prompt'
 } as const

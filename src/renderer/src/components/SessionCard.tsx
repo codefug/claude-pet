@@ -25,68 +25,33 @@ export default function SessionCard({ session, onIgnore, customImage }: Props): 
       title={session.projectPath}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        WebkitAppRegion: 'no-drag',
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '10px',
-        padding: '8px 12px',
-        borderRadius: '10px',
-        background: 'rgba(255,255,255,0.06)',
-        marginBottom: '6px',
-        position: 'relative'
-      }}
+      style={{ WebkitAppRegion: 'no-drag' }}
+      className="flex items-start gap-2.5 px-3 py-2 rounded-[10px] bg-white/6 mb-1.5 relative"
     >
       <CharacterAvatar status={session.status} customImage={customImage} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-          <div
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: '#fff',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              flex: 1
-            }}
-          >
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-1.5">
+          <div className="text-xs font-semibold text-white overflow-hidden text-ellipsis whitespace-nowrap flex-1">
             {session.projectName}
           </div>
-          <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', flexShrink: 0 }}>
+          <div className="text-[10px] text-white/30 shrink-0">
             {relativeTime(session.lastMessageAt)}
           </div>
         </div>
         {session.summary && (
-          <div
-            style={{
-              fontSize: '10px',
-              color: 'rgba(255,255,255,0.45)',
-              marginTop: '2px',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap'
-            }}
-          >
+          <div className="text-[10px] text-white/45 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">
             {session.summary}
           </div>
         )}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-          <div style={{ fontSize: '10px', color }}>{label}</div>
+        <div className="flex items-center gap-1.5 mt-0.5">
+          <div style={{ color }} className="text-[10px]">
+            {label}
+          </div>
           {session.status === 'waiting_permission' && hovered && (
             <button
               type="button"
               onClick={() => onIgnore(session)}
-              style={{
-                fontSize: '9px',
-                color: '#F5C842',
-                background: 'rgba(245,200,66,0.15)',
-                border: '1px solid rgba(245,200,66,0.3)',
-                borderRadius: '4px',
-                padding: '1px 5px',
-                cursor: 'pointer',
-                lineHeight: '14px'
-              }}
+              className="text-[9px] text-[#F5C842] bg-[rgba(245,200,66,0.15)] border border-[rgba(245,200,66,0.3)] rounded cursor-pointer px-1.25 py-px leading-3.5"
             >
               working으로 무시
             </button>
