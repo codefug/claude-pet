@@ -49,9 +49,6 @@ function handleRequest(req: IncomingMessage, res: ServerResponse, win: BrowserWi
 }
 
 function applyHook(raw: unknown): void {
-  import('node:fs').then(({ appendFileSync }) => {
-    try { appendFileSync('/tmp/claude-pet-hooks.log', `${JSON.stringify(raw)}\n`) } catch {}
-  })
   const result = HookPayloadSchema.safeParse(raw)
   if (!result.success) return
 
