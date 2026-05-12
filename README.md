@@ -4,6 +4,10 @@ macOS 데스크탑 위젯 — 여러 Claude Code 세션의 상태를 화면 모�
 
 <img src="./src/renderer/src/assets/yorkie/interrupted.svg" width="150" />
 
+## 실제 위젯
+
+<img width="282" height="366" alt="image" src="https://github.com/user-attachments/assets/45a2f4e0-0133-47f8-bf03-7a1ef1261d5b" />
+
 ## 기능
 
 세션 카드 하나가 Claude Code 프로젝트 하나를 나타냅니다. 4가지 상태를 색상과 캐릭터 이미지로 구분합니다.
